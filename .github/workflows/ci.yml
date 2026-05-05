@@ -36,6 +36,7 @@ jobs:
       SENTRY_AUTH_TOKEN: dummy
       GOOGLE_CLIENT_ID: dummy
       GOOGLE_CLIENT_SECRET: dummy
+      GOOGLE_PLACES_API_KEY: dummy
       NEXT_PUBLIC_CLOUDFRONT_URL: "https://dummy.cloudfront.net"
 
     steps:

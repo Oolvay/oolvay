@@ -9,6 +9,7 @@ import { PencilIcon } from "lucide-react"
 import { GatedPageSubheading } from "@/app/(protected)/components/gated-page-subheading"
 import { User } from "@/lib/auth/auth"
 import { BirthdayField } from "@/app/(protected)/profile/personal/components/birthday-field"
+import { LocationField } from "@/app/(protected)/profile/personal/components/location-field"
 
 interface PersonalInfoCardProps {
   user: User
@@ -18,7 +19,8 @@ interface FieldRowProps {
   label: string
   value: string
   placeholder: string
-  onSave: (val: string) => Promise<void>
+  // Updated to expect a boolean return
+  onSave: (val: string) => Promise<boolean>
 }
 
 function FieldRow({ label, value, placeholder, onSave }: FieldRowProps) {
@@ -33,7 +35,12 @@ function FieldRow({ label, value, placeholder, onSave }: FieldRowProps) {
       return
     }
     setEditing(false)
-    await onSave(cleaned)
+
+    // Check if save was successful, revert if not
+    const success = await onSave(cleaned)
+    if (!success) {
+      setCurrent(initial)
+    }
   }
 
   return (
@@ -82,19 +89,23 @@ function FieldRow({ label, value, placeholder, onSave }: FieldRowProps) {
 export function PersonalInfoCard({ user }: PersonalInfoCardProps) {
   const router = useRouter()
 
-  async function handleUpdate(field: string, value: string) {
+  // Updated to return a boolean flag to the child components
+  async function handleUpdate(field: string, value: string): Promise<boolean> {
     const payload: Record<string, unknown> =
       field === "dateOfBirth" && value
         ? { dateOfBirth: new Date(value) }
         : { [field]: value || null }
 
     const { error } = await authClient.updateUser(payload)
+
     if (error) {
       toast.error(error.message || `Failed to update ${field}`)
-      return
+      return false // Tell the child the update failed
     }
+
     toast.success("Profile updated!")
     router.refresh()
+    return true // Tell the child the update succeeded
   }
 
   const dobValue = user.dateOfBirth
@@ -104,17 +115,16 @@ export function PersonalInfoCard({ user }: PersonalInfoCardProps) {
   return (
     <div className="space-y-2">
       <GatedPageSubheading text="Personal" />
-      <Card className="max-w-2xl border-muted/60 shadow-xs">
+      <Card className="max-w-2xl border-muted/60 shadow-xs overflow-visible">
         <CardContent className="px-6 py-2">
           <BirthdayField
             value={dobValue}
             onSave={(val) => handleUpdate("dateOfBirth", val)}
           />
-          <FieldRow
-            label="Location"
+          <LocationField
             value={user.location ?? ""}
-            placeholder="e.g. Mumbai, India"
             onSave={(val) => handleUpdate("location", val)}
+            onError={(msg) => toast.error(msg)}
           />
           <FieldRow
             label="Locale"
