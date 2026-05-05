@@ -12,11 +12,11 @@ import { RoleBadge } from "@/components/role-badge"
 import { Role } from "@/db/types/roles"
 import { GatedPageSubheading } from "@/app/(protected)/components/gated-page-subheading"
 
-interface ProfileInformationProps {
+interface ProfileInformationCardProps {
   user: User
 }
 
-export function ProfileInformation({ user }: ProfileInformationProps) {
+export function ProfileInformationCard({ user }: ProfileInformationCardProps) {
   const defaultName = user.name || siteConfig.users.defaultName
 
   return (

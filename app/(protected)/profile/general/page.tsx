@@ -1,6 +1,6 @@
 import { GatedPageTitle } from "@/app/(protected)/components/gated-page-title"
 import { BioCard } from "@/app/(protected)/profile/general/components/bio-card"
-import { ProfileInformation } from "@/app/(protected)/profile/general/components/profile-information"
+import { ProfileInformationCard } from "@/app/(protected)/profile/general/components/profile-information-card"
 import { siteConfig } from "@/config/site"
 import { getServerSession } from "@/lib/auth/get-server-session"
 import type { Metadata } from "next"
@@ -26,7 +26,7 @@ export default async function ProfileGeneralPage() {
         title="Basic Profile"
         description="Update your basic personal information and bio"
       />
-      <ProfileInformation user={user} />
+      <ProfileInformationCard user={user} />
       <BioCard initialBio={session.user.bio ?? null} />
     </div>
   )
