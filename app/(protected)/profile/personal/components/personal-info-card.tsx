@@ -8,6 +8,7 @@ import toast from "react-hot-toast"
 import { PencilIcon } from "lucide-react"
 import { GatedPageSubheading } from "@/app/(protected)/components/gated-page-subheading"
 import { User } from "@/lib/auth/auth"
+import { BirthdayField } from "@/app/(protected)/profile/personal/components/birthday-field"
 
 interface PersonalInfoCardProps {
   user: User
@@ -82,7 +83,12 @@ export function PersonalInfoCard({ user }: PersonalInfoCardProps) {
   const router = useRouter()
 
   async function handleUpdate(field: string, value: string) {
-    const { error } = await authClient.updateUser({ [field]: value || null })
+    const payload: Record<string, unknown> =
+      field === "dateOfBirth" && value
+        ? { dateOfBirth: new Date(value) }
+        : { [field]: value || null }
+
+    const { error } = await authClient.updateUser(payload)
     if (error) {
       toast.error(error.message || `Failed to update ${field}`)
       return
@@ -100,10 +106,8 @@ export function PersonalInfoCard({ user }: PersonalInfoCardProps) {
       <GatedPageSubheading text="Personal" />
       <Card className="max-w-2xl border-muted/60 shadow-xs">
         <CardContent className="px-6 py-2">
-          <FieldRow
-            label="Date of Birth"
+          <BirthdayField
             value={dobValue}
-            placeholder="YYYY-MM-DD"
             onSave={(val) => handleUpdate("dateOfBirth", val)}
           />
           <FieldRow
