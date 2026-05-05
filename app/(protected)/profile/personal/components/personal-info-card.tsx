@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { authClient } from "@/lib/auth/auth-client"
 import { useRouter } from "next/navigation"
@@ -19,18 +19,21 @@ interface FieldRowProps {
   label: string
   value: string
   placeholder: string
-  // Updated to expect a boolean return
   onSave: (val: string) => Promise<boolean>
 }
 
 function FieldRow({ label, value, placeholder, onSave }: FieldRowProps) {
   const [editing, setEditing] = useState(false)
   const [current, setCurrent] = useState(value)
-  const [initial] = useState(value)
+
+  // Sync local state when the server/parent value changes
+  useEffect(() => {
+    setCurrent(value)
+  }, [value])
 
   async function handleSave() {
     const cleaned = current.trim()
-    if (cleaned === initial) {
+    if (cleaned === value) {
       setEditing(false)
       return
     }
@@ -39,7 +42,7 @@ function FieldRow({ label, value, placeholder, onSave }: FieldRowProps) {
     // Check if save was successful, revert if not
     const success = await onSave(cleaned)
     if (!success) {
-      setCurrent(initial)
+      setCurrent(value)
     }
   }
 
@@ -57,7 +60,7 @@ function FieldRow({ label, value, placeholder, onSave }: FieldRowProps) {
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSave()
             if (e.key === "Escape") {
-              setCurrent(initial)
+              setCurrent(value) // Revert on escape
               setEditing(false)
             }
           }}
@@ -89,7 +92,6 @@ function FieldRow({ label, value, placeholder, onSave }: FieldRowProps) {
 export function PersonalInfoCard({ user }: PersonalInfoCardProps) {
   const router = useRouter()
 
-  // Updated to return a boolean flag to the child components
   async function handleUpdate(field: string, value: string): Promise<boolean> {
     const payload: Record<string, unknown> =
       field === "dateOfBirth" && value

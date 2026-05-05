@@ -9,19 +9,22 @@ const LOCATION_REGEX = /^[a-zA-Z\s,\-'\.]+$/
 interface LocationFieldProps {
   value: string
   onSave: (val: string) => Promise<boolean>
-  // Add the new callback
   onError: (msg: string) => void
 }
 
 export function LocationField({ value, onSave, onError }: LocationFieldProps) {
   const [editing, setEditing] = useState(false)
   const [current, setCurrent] = useState(value)
-  const [initial] = useState(value)
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([])
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  // Sync local state when the server/parent value changes
+  useEffect(() => {
+    setCurrent(value)
+  }, [value])
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -31,12 +34,12 @@ export function LocationField({ value, onSave, onError }: LocationFieldProps) {
       ) {
         setOpen(false)
         setEditing(false)
-        setCurrent(initial)
+        setCurrent(value) // Revert to confirmed value
       }
     }
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [initial])
+  }, [value])
 
   async function handleChange(val: string) {
     setCurrent(val)
@@ -64,11 +67,11 @@ export function LocationField({ value, onSave, onError }: LocationFieldProps) {
     setSuggestions([])
     setEditing(false)
 
-    if (suggestion.description === initial) return
+    if (suggestion.description === value) return
 
     const success = await onSave(suggestion.description)
     if (!success) {
-      setCurrent(initial)
+      setCurrent(value) // Revert on failure
     }
   }
 
@@ -78,25 +81,25 @@ export function LocationField({ value, onSave, onError }: LocationFieldProps) {
 
     if (!cleaned) {
       setEditing(false)
-      if (cleaned === initial) return
+      if (cleaned === value) return
 
       const success = await onSave("")
-      if (!success) setCurrent(initial)
+      if (!success) setCurrent(value) // Revert on failure
       return
     }
 
     if (!LOCATION_REGEX.test(cleaned)) {
-      // Pass the error up to the parent instead of handling it here
+      // Pass the error up to the parent instead of handling it locally
       onError("Only letters, spaces, commas, and hyphens are allowed.")
       return
     }
 
     setEditing(false)
-    if (cleaned === initial) return
+    if (cleaned === value) return
 
     const success = await onSave(cleaned)
     if (!success) {
-      setCurrent(initial)
+      setCurrent(value) // Revert on failure
     }
   }
 
@@ -119,7 +122,7 @@ export function LocationField({ value, onSave, onError }: LocationFieldProps) {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSave()
                 if (e.key === "Escape") {
-                  setCurrent(initial)
+                  setCurrent(value) // Revert on escape
                   setOpen(false)
                   setEditing(false)
                 }

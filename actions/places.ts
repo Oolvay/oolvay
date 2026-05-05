@@ -13,6 +13,16 @@ type GetPlacesResult =
   | { success: true; suggestions: PlaceSuggestion[] }
   | { success: false; error: string }
 
+// Define the shape of the incoming Google API payload
+type GoogleApiSuggestion = {
+  placePrediction?: {
+    placeId?: string
+    text?: {
+      text?: string
+    }
+  }
+}
+
 export async function getPlacesSuggestions(
   input: string
 ): Promise<GetPlacesResult> {
@@ -52,8 +62,9 @@ export async function getPlacesSuggestions(
 
     const data = await res.json()
 
+    // Replace 'any' with our new strict type
     const suggestions: PlaceSuggestion[] = (data.suggestions ?? []).map(
-      (s: any) => ({
+      (s: GoogleApiSuggestion) => ({
         placeId: s.placePrediction?.placeId ?? "",
         description: s.placePrediction?.text?.text ?? "",
       })
