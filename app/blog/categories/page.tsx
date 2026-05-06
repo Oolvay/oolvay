@@ -18,7 +18,7 @@ export default async function CategoriesPage() {
   const categories = await getCategories()
 
   return (
-    <section className="flex flex-col gap-20 mx-auto">
+    <section className="flex flex-col gap-20 mx-auto max-w-6xl px-4 md:px-8 py-10">
       <header className="font-bold text-foreground text-center space-y-4">
         <h1 className="text-4xl/tight md:text-6xl">Categories</h1>
         <h2 className="text-2xl/tight md:text-4xl text-muted-foreground">

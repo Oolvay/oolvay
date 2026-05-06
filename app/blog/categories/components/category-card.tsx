@@ -122,7 +122,7 @@ export function CategoryCard({
   }
 
   return (
-    <div className="flex flex-col gap-4 p-6 border rounded-xl hover:bg-muted/50 transition-colors">
+    <div className="flex flex-col gap-4 p-6 border rounded-xl hover:bg-muted/50 transition-colors shadow-2xl">
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-1 min-w-0 flex-1">
           {editingField === "name" ? (

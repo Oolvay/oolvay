@@ -90,7 +90,7 @@ export function TiptapEditor({
       Markdown.configure({ html: false, transformPastedText: true }),
       Placeholder.configure({ placeholder: "Start writing…" }),
     ],
-    content: initialContent,
+    content: initialContent || null,
     editorProps: {
       attributes: {
         class:
@@ -180,8 +180,22 @@ export function TiptapEditor({
           onClick={() => setLogline(titleCase(logline.toLowerCase()))}
         />
       </div>
-      <div className="[&_.ProseMirror_a]:cursor-pointer [&_.ProseMirror_img]:max-w-full [&_.ProseMirror_img]:rounded-lg [&_.ProseMirror_img]:my-4">
-        <EditorContent editor={editor} placeholder="Start writing…" />
+      <div
+        className="
+    tiptap-editor
+    [&_.ProseMirror_a]:cursor-pointer
+    [&_.ProseMirror_img]:max-w-full
+    [&_.ProseMirror_img]:rounded-lg
+    [&_.ProseMirror_img]:my-4
+
+    [&_.ProseMirror_p.is-editor-empty::before]:content-[attr(data-placeholder)]
+    [&_.ProseMirror_p.is-editor-empty::before]:text-muted-foreground/50
+    [&_.ProseMirror_p.is-editor-empty::before]:pointer-events-none
+    [&_.ProseMirror_p.is-editor-empty::before]:h-0
+    [&_.ProseMirror_p.is-editor-empty::before]:float-left
+  "
+      >
+        <EditorContent editor={editor} />
       </div>
 
       <div

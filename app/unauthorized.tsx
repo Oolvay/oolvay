@@ -12,7 +12,7 @@ import {
 export default function UnauthorizedPage() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-muted/50 p-6 md:p-10">
-      <Card className="w-full max-w-md text-center shadow-sm">
+      <Card className="w-full max-w-md text-center shadow-2xl">
         <CardHeader className="flex flex-col items-center gap-4 pb-6">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
             <ShieldBanIcon className="h-6 w-6 text-muted-foreground" />

@@ -94,7 +94,7 @@ export function ProfessionalInfoCard({ user }: ProfessionalInfoCardProps) {
   return (
     <div className="space-y-2">
       <GatedPageSubheading text="Work" />
-      <Card className="max-w-2xl border-muted/60 shadow-xs">
+      <Card className="max-w-2xl shadow-2xl">
         <CardContent className="px-6 py-2">
           <FieldRow
             label="Job Title"

@@ -3,7 +3,7 @@ import type { PostWithRelations } from "@/actions/get-posts"
 
 export function PostCard({ post }: { post: PostWithRelations }) {
   return (
-    <article className="flex flex-col gap-4 p-6 border rounded-xl hover:bg-muted/50 transition-colors">
+    <article className="flex flex-col gap-4 p-6 border rounded-xl hover:bg-muted/50 transition-colors shadow-2xl">
       {post.category && (
         <Link
           href={`/blog/category/${post.category.slug}`}

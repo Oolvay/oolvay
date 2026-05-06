@@ -109,7 +109,7 @@ export function PersonalInfoCard({ user }: PersonalInfoCardProps) {
     <div className="space-y-2">
       <GatedPageSubheading text="Personal" />
 
-      <Card className="max-w-2xl border-muted/60 shadow-xs overflow-visible">
+      <Card className="max-w-2xl shadow-2xl overflow-visible">
         <CardContent className="px-6 py-2">
           <BirthdayField
             value={dobValue}
