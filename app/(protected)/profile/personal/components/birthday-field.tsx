@@ -47,6 +47,8 @@ export function BirthdayField({ value, onSave }: BirthdayFieldProps) {
     }
   }
 
+  const currentYear = new Date().getFullYear()
+
   return (
     <div className="flex items-center justify-between gap-4 py-3 border-b border-muted/40 last:border-0">
       <span className="text-xs text-muted-foreground uppercase tracking-wide w-28 shrink-0">
@@ -80,7 +82,7 @@ export function BirthdayField({ value, onSave }: BirthdayFieldProps) {
             defaultMonth={selected ?? new Date(1990, 0)}
             captionLayout="dropdown"
             startMonth={new Date(1900, 0)}
-            endMonth={new Date(new Date().getFullYear(), 11)}
+            endMonth={new Date(currentYear, 11)}
             autoFocus
           />
         </PopoverContent>
