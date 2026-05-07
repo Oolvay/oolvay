@@ -50,7 +50,7 @@ export function BirthdayField({ value, onSave }: BirthdayFieldProps) {
   const currentYear = new Date().getFullYear()
 
   return (
-    <div className="flex items-center justify-between gap-4 py-3 border-b border-muted/40 last:border-0">
+    <div className="flex items-center justify-between gap-4 py-3">
       <span className="text-xs text-muted-foreground uppercase tracking-wide w-28 shrink-0">
         Date of Birth
       </span>
@@ -58,7 +58,7 @@ export function BirthdayField({ value, onSave }: BirthdayFieldProps) {
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="cursor-pointer group flex flex-1 items-center justify-between gap-4 rounded-sm outline-none text-left"
+            className="cursor-pointer group flex flex-1 items-center justify-between gap-4 rounded-sm outline-none focus-visible:ring-0  text-left"
             aria-label="Edit Date of Birth"
           >
             <span className="text-sm text-muted-foreground flex-1">

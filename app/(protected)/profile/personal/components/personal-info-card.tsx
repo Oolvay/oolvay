@@ -53,7 +53,7 @@ function LocaleField({ value, onSave }: LocaleFieldProps) {
   }
 
   return (
-    <div className="flex items-center justify-between gap-4 py-3 border-b border-muted/40 last:border-0">
+    <div className="flex items-center justify-between gap-4 py-3">
       <span
         id="locale-label"
         className="text-xs text-muted-foreground uppercase tracking-wide w-28 shrink-0"
@@ -66,7 +66,7 @@ function LocaleField({ value, onSave }: LocaleFieldProps) {
           <SelectValue placeholder="Select locale" />
         </SelectTrigger>
 
-        <SelectContent>
+        <SelectContent className="p-1">
           {LOCALES.map((l) => (
             <SelectItem key={l.value} value={l.value}>
               {l.label}

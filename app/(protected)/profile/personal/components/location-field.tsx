@@ -160,10 +160,7 @@ export function LocationField({ value, onSave, onError }: LocationFieldProps) {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="relative flex flex-col gap-1 py-3 border-b border-muted/40 last:border-0"
-    >
+    <div ref={containerRef} className="relative flex flex-col gap-1 py-3">
       <div className="flex items-center justify-between gap-4">
         <span className="text-xs text-muted-foreground uppercase tracking-wide w-28 shrink-0">
           Location
@@ -185,7 +182,7 @@ export function LocationField({ value, onSave, onError }: LocationFieldProps) {
                   ? `place-${suggestions[selectedIndex].placeId}`
                   : undefined
               }
-              className="flex-1 text-sm bg-transparent border-0 p-0 focus-visible:ring-0 focus-visible:outline-none text-foreground placeholder:text-muted-foreground/50"
+              className="flex-1 text-sm bg-transparent border-0 p-0 outline-none focus-visible:ring-0 focus-visible:outline-none text-foreground placeholder:text-muted-foreground/50"
               placeholder="e.g. Mumbai, India"
             />
             {loading && (
@@ -196,7 +193,7 @@ export function LocationField({ value, onSave, onError }: LocationFieldProps) {
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="group flex flex-1 items-center justify-between gap-4 rounded-sm outline-none text-left cursor-text"
+            className="group flex flex-1 items-center justify-between gap-4 rounded-sm border-0 outline-none focus-visible:ring-0 text-left cursor-text"
             aria-label="Edit Location"
           >
             <span className="text-sm text-muted-foreground flex-1">
