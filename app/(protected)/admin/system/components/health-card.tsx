@@ -93,7 +93,7 @@ export function HealthCard({
   const gradeConfig = grade ? latencyGradeConfig[grade] : null
 
   return (
-    <Card className="shadow-2xl">
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{name}</CardTitle>
         <div className={`p-2 rounded-full ${config.bgClass}`}>

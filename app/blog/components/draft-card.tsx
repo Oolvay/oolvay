@@ -44,7 +44,7 @@ export function DraftCard({ draft, onPublished }: DraftCardProps) {
   const description = draft.logline || draft.excerpt
 
   return (
-    <article className="flex flex-col gap-4 p-6 border rounded-xl hover:bg-muted/50 transition-colors shadow-2xl">
+    <article className="flex flex-col gap-4 p-6 border rounded-xl hover:bg-muted/50 transition-colors">
       <div className="flex flex-col gap-4">
         <Link href={`/blog/edit/${draft.id}`}>
           <h2 className="text-2xl font-bold">{displayTitle}</h2>

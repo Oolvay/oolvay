@@ -129,7 +129,7 @@ export function PreferencesModeToggle({
               key={theme.value}
               onClick={() => handleChange(theme.value)}
               className={cn(
-                "rounded-xl border p-3 text-left hover:bg-muted/50 transition-all cursor-pointer shadow-2xl",
+                "rounded-xl border p-3 text-left hover:bg-muted/50 transition-all cursor-pointer",
                 isSelected
                   ? "border-2 border-primary"
                   : "border border-border hover:border-primary/50"

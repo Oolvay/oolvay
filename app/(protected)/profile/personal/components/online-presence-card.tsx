@@ -132,7 +132,7 @@ export function OnlinePresenceCard({ user }: OnlinePresenceCardProps) {
   return (
     <div className="space-y-2">
       <GatedPageSubheading text="Online Presence" />
-      <Card className="max-w-2xl shadow-2xl">
+      <Card className="max-w-2xl">
         <CardContent className="px-6 py-2">
           <FieldRow
             label="Website"

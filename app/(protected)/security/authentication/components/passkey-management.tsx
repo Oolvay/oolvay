@@ -126,7 +126,7 @@ export function PasskeyManagement({ passkeys }: { passkeys: Passkey[] }) {
       </div>
 
       {passkeys.length === 0 ? (
-        <Card className="shadow-2xl">
+        <Card>
           <CardHeader className="flex flex-col items-center text-center py-10">
             <Fingerprint className="h-10 w-10 text-muted-foreground mb-4" />
             <CardTitle>No passkeys registered</CardTitle>

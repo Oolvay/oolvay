@@ -1,4 +1,6 @@
-import "@/app/globals.css"
+import "@/app/styles/globals.css"
+import "@/app/styles/switch.css"
+import "@/app/styles/theme-transitions.css"
 import type { Metadata } from "next"
 import { baseMetadata } from "@/lib/metadata"
 import { TooltipProvider } from "@/components/ui/tooltip"

@@ -24,7 +24,7 @@ export function ReduceMotionToggle({ initialValue }: ReduceMotionToggleProps) {
   return (
     <div className="space-y-2">
       <GatedPageSubheading text="Motion" />
-      <div className="flex items-center justify-between max-w-2xl rounded-xl border border-border p-4 shadow-2xl">
+      <div className="flex items-center justify-between max-w-2xl rounded-xl border border-border p-4">
         <div className="space-y-0.5">
           <Label htmlFor="reduce-motion" className="text-sm font-medium">
             Reduce motion

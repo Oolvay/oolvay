@@ -67,7 +67,7 @@ export function BioCard({ initialBio }: BioCardProps) {
   return (
     <div className="space-y-2">
       <GatedPageSubheading text="Brief Bio" />
-      <Card className="max-w-2xl shadow-2xl">
+      <Card className="max-w-2xl">
         <CardContent>
           {isEditing ? (
             <>

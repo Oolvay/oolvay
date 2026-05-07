@@ -12,12 +12,7 @@ export async function PreferencesProvider({
   const reduceMotion = cookieStore.get("reduce-motion")?.value === "true"
 
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <style
         dangerouslySetInnerHTML={{
           __html: `

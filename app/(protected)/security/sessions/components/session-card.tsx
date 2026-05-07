@@ -90,7 +90,7 @@ export function SessionCard({
   }
 
   return (
-    <Card className="shadow-2xl">
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-primary/10 rounded-full text-primary">

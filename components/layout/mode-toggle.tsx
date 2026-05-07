@@ -32,13 +32,21 @@ export function ModeToggle({
   function cycleTheme() {
     const next =
       theme === "light" ? "dark" : theme === "dark" ? "system" : "light"
-    setTheme(next)
-    onThemeChange?.(next)
+    applyTheme(next)
+  }
+
+  function applyTheme(value: string) {
+    document.documentElement.classList.add("theme-transitioning")
+    setTheme(value)
+    onThemeChange?.(value)
+    window.setTimeout(() => {
+      document.documentElement.classList.remove("theme-transitioning")
+    }, 500)
   }
 
   if (!mounted) {
     return expanded ? (
-      <div className="h-9 w-[100px] rounded-full bg-sidebar-accent/50 opacity-50" />
+      <div className="h-9 w-25 rounded-full bg-sidebar-accent/50 opacity-50" />
     ) : (
       <Button variant="ghost" size="icon" className="opacity-0" />
     )
@@ -54,9 +62,9 @@ export function ModeToggle({
               value={value}
               className="cursor-pointer rounded-full p-1 data-[state=active]:bg-background"
               aria-label={`Theme: ${value}`}
-              onClick={() => onThemeChange?.(value)}
+              onClick={() => applyTheme(value)}
             >
-              <Icon className="size-[18px]" />
+              <Icon className="size-4.5" />
             </TabsTrigger>
           ))}
         </TabsList>

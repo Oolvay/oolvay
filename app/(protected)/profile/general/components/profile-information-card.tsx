@@ -22,7 +22,7 @@ export function ProfileInformationCard({ user }: ProfileInformationCardProps) {
   return (
     <div className="space-y-2">
       <GatedPageSubheading text="Basic Info" />
-      <Card className="max-w-2xl shadow-2xl">
+      <Card className="max-w-2xl">
         <CardContent className="p-6 md:p-10">
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-12">
             {/* Left Column: Avatar & Badge */}

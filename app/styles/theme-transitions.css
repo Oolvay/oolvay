@@ -1,0 +1,172 @@
+/* ─── THEME TRANSITIONS ───────────────────────────────────────────
+   After pasting a new tweakcn theme, update initial-value in each
+   @property below to match the new :root light-mode color values.
+   The transition list itself never needs to change.
+─────────────────────────────────────────────────────────────────── */
+
+@property --background {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.9491 0.0085 197.0126);
+}
+@property --foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.3772 0.0619 212.664);
+}
+@property --card {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.9724 0.0053 197.0692);
+}
+@property --card-foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.3772 0.0619 212.664);
+}
+@property --popover {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.9724 0.0053 197.0692);
+}
+@property --popover-foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.3772 0.0619 212.664);
+}
+@property --primary {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.5624 0.0947 203.2755);
+}
+@property --primary-foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(1 0 0);
+}
+@property --secondary {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.9244 0.0181 196.845);
+}
+@property --secondary-foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.3772 0.0619 212.664);
+}
+@property --muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.9295 0.0107 196.9723);
+}
+@property --muted-foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.5428 0.0594 201.5662);
+}
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.9021 0.0297 201.8915);
+}
+@property --accent-foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.3772 0.0619 212.664);
+}
+@property --destructive {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.5732 0.1901 25.5409);
+}
+@property --destructive-foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(1 0 0);
+}
+@property --border {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.8931 0.0205 204.4136);
+}
+@property --input {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.9244 0.0181 196.845);
+}
+@property --ring {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.5624 0.0947 203.2755);
+}
+@property --sidebar {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.928 0.0183 205.3151);
+}
+@property --sidebar-foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.3772 0.0619 212.664);
+}
+@property --sidebar-primary {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.5624 0.0947 203.2755);
+}
+@property --sidebar-primary-foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(1 0 0);
+}
+@property --sidebar-accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.9021 0.0297 201.8915);
+}
+@property --sidebar-accent-foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.3772 0.0619 212.664);
+}
+@property --sidebar-border {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.8931 0.0205 204.4136);
+}
+@property --sidebar-ring {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.5624 0.0947 203.2755);
+}
+
+:root {
+  transition:
+    --background 0.4s ease,
+    --foreground 0.4s ease,
+    --card 0.4s ease,
+    --card-foreground 0.4s ease,
+    --popover 0.4s ease,
+    --popover-foreground 0.4s ease,
+    --primary 0.4s ease,
+    --primary-foreground 0.4s ease,
+    --secondary 0.4s ease,
+    --secondary-foreground 0.4s ease,
+    --muted 0.4s ease,
+    --muted-foreground 0.4s ease,
+    --accent 0.4s ease,
+    --accent-foreground 0.4s ease,
+    --destructive 0.4s ease,
+    --destructive-foreground 0.4s ease,
+    --border 0.4s ease,
+    --input 0.4s ease,
+    --ring 0.4s ease,
+    --sidebar 0.4s ease,
+    --sidebar-foreground 0.4s ease,
+    --sidebar-primary 0.4s ease,
+    --sidebar-primary-foreground 0.4s ease,
+    --sidebar-accent 0.4s ease,
+    --sidebar-accent-foreground 0.4s ease,
+    --sidebar-border 0.4s ease,
+    --sidebar-ring 0.4s ease;
+}
