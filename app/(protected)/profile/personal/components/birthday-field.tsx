@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { format, parseISO, isValid } from "date-fns"
+import { formatDate } from "@/lib/date"
 import { CalendarIcon } from "lucide-react"
 import {
   Popover,
@@ -63,7 +64,7 @@ export function BirthdayField({ value, onSave }: BirthdayFieldProps) {
           >
             <span className="text-sm text-muted-foreground flex-1">
               {selected ? (
-                format(selected, "MMMM d, yyyy")
+                formatDate(selected)
               ) : (
                 <span className="text-muted-foreground/40">Pick a date</span>
               )}

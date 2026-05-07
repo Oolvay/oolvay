@@ -107,7 +107,7 @@ export function PersonalInfoCard({ user }: PersonalInfoCardProps) {
 
   return (
     <div className="space-y-2">
-      <GatedPageSubheading text="Personal" />
+      <GatedPageSubheading text="Place, Language, Etc." />
 
       <Card className="max-w-2xl overflow-visible">
         <CardContent className="px-6 py-2">

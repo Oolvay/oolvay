@@ -4,7 +4,6 @@ import { getServerSession } from "@/lib/auth/get-server-session"
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { PersonalInfoCard } from "@/app/(protected)/profile/personal/components/personal-info-card"
-import { OnlinePresenceCard } from "@/app/(protected)/profile/personal/components/online-presence-card"
 
 export const metadata: Metadata = {
   title: siteConfig.seo.metaData.profile.personal.title,
@@ -24,10 +23,9 @@ export default async function ProfilePersonalPage() {
     <div className="container space-y-8">
       <GatedPageTitle
         title="Personal Information"
-        description="Update additional personal information about your profile"
+        description="Update additional personal information about yourself"
       />
       <PersonalInfoCard user={user} />
-      <OnlinePresenceCard user={user} />
     </div>
   )
 }

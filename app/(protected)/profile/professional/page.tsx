@@ -3,7 +3,8 @@ import { siteConfig } from "@/config/site"
 import { getServerSession } from "@/lib/auth/get-server-session"
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
-import { ProfessionalInfoCard } from "@/app/(protected)/profile/personal/components/professional-info-card"
+import { ProfessionalInfoCard } from "@/app/(protected)/profile/professional/components/professional-info-card"
+import { OnlinePresenceCard } from "@/app/(protected)/profile/professional/components/online-presence-card"
 
 export const metadata: Metadata = {
   title: siteConfig.seo.metaData.profile.professional.title,
@@ -26,6 +27,7 @@ export default async function ProfileProfessionalPage() {
         description="Update additional personal information about your profile"
       />
       <ProfessionalInfoCard user={user} />
+      <OnlinePresenceCard user={user} />
     </div>
   )
 }
