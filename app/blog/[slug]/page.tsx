@@ -52,7 +52,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const jsonLd = buildPostJsonLd(post, siteConfig.brand.url)
 
   return (
-    <article className="pb-10">
+    <article className="pb-10 -mt-14">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -63,7 +63,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       />
 
       {/* HERO — full bleed with overlay */}
-      <div className="relative w-full h-[55vh] md:h-[50vh]">
+      <div className="relative w-full h-[65vh] md:h-[60vh]">
         {post.coverImage ? (
           <Image
             src={post.coverImage}
@@ -81,7 +81,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
 
         {/* Breadcrumbs at top */}
-        <div className="absolute top-0 left-0 right-0 px-6 pt-4 md:px-16 max-w-5xl mx-auto">
+        <div className="absolute top-0 left-0 right-0 px-6 pt-18 md:px-16 max-w-5xl mx-auto">
           <div className="rounded-full px-3 py-1 w-fit bg-white/20 backdrop-blur-sm inline-block [&_a]:text-white [&_li]:text-white [&_span]:text-white [&_svg]:text-white">
             <BlogBreadcrumbs postTitle={post.title} className="mb-0" />
           </div>
@@ -115,7 +115,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       alt={post.author.name}
                       width={24}
                       height={24}
-                      className="rounded-full object-cover"
+                      className="rounded-full object-cover w-6! h-6! shrink-0"
                     />
                   )}
                   <Link
