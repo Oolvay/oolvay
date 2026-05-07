@@ -13,6 +13,7 @@ import { siteConfig } from "@/config/site"
 import { JsonLd } from "@/app/json-ld"
 import { PreferencesProvider } from "@/components/providers/preferences-provider"
 import Script from "next/script"
+import { ThemeFlashGuard } from "@/components/layout/theme-flash-guard"
 
 export const metadata: Metadata = baseMetadata
 
@@ -22,7 +23,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="h-full antialiased" suppressHydrationWarning>
+    <html
+      lang="en"
+      className="h-full antialiased no-transitions"
+      suppressHydrationWarning
+    >
       <body className="min-h-full flex flex-col">
         <Script id="theme-sync" strategy="beforeInteractive">
           {`
@@ -39,6 +44,7 @@ export default function RootLayout({
         <ConsentProvider>
           <PostHogProvider>
             <PreferencesProvider>
+              <ThemeFlashGuard />
               <TooltipProvider>
                 {siteConfig.authAndSession.enableSessionWatcher && (
                   <SessionWatcher />
