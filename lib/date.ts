@@ -22,3 +22,10 @@ export function formatRelativeTime(date: Date | string | number) {
 export function formatDateTime(date: Date | string | number) {
   return format(new Date(date), "MMMM d, yyyy, h:mm a zzz")
 }
+
+/**
+ * Filename-safe timestamp: "2026-05-08T14-32-01"
+ */
+export function formatFilenameTimestamp(date: Date | string | number) {
+  return format(new Date(date), "yyyy-MM-dd'T'HH-mm-ss")
+}

@@ -8,6 +8,7 @@ import { exportUserData } from "@/actions/export-user-data"
 import { DownloadIcon } from "lucide-react"
 import { toast } from "react-hot-toast"
 import { LoadingSwap } from "@/components/ui/loading-swap"
+import { formatFilenameTimestamp } from "@/lib/date"
 
 interface ExportDataCardProps {
   username: string
@@ -28,7 +29,7 @@ export function ExportDataCard({ username }: ExportDataCardProps) {
       const url = URL.createObjectURL(blob)
       const a = document.createElement("a")
       a.href = url
-      a.download = `${username}_data_${new Date().toISOString().slice(0, 10)}.json`
+      a.download = `${username}_data_${formatFilenameTimestamp(new Date())}.json`
       a.click()
       URL.revokeObjectURL(url)
       toast.success("Your data has been downloaded.")
