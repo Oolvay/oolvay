@@ -22,7 +22,7 @@ export function NotificationsForm({
     startTransition(async () => {
       const result = await updateNotificationPreferences(updated)
       if (result.error) {
-        toast.error("Failed to save preferences.")
+        toast.error(result.error)
         setPreferences(preferences)
       } else {
         toast.success("Preferences saved.")

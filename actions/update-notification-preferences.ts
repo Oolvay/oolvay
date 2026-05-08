@@ -2,21 +2,21 @@
 
 import { db } from "@/db/drizzle"
 import { user } from "@/db/auth-schema"
-import { getServerSession } from "@/lib/auth/get-server-session"
 import { eq } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
+import { guardAction } from "@/lib/guard-action"
 import type { NotificationPreferences } from "@/db/types/notification-preferences"
 
 export async function updateNotificationPreferences(
   preferences: NotificationPreferences
 ) {
-  const session = await getServerSession()
-  if (!session?.user) return { error: "Unauthorized" }
+  const { error, user: currentUser } = await guardAction()
+  if (error) return { error }
 
   await db
     .update(user)
     .set({ notificationPreferences: preferences })
-    .where(eq(user.id, session.user.id))
+    .where(eq(user.id, currentUser.id))
 
   revalidatePath("/settings/notifications")
   return { success: true }

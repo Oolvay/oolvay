@@ -92,6 +92,10 @@ export const siteConfig = {
           max: 5,
           interval: "15m",
         },
+        serverActions: {
+          max: 20,
+          interval: "1m",
+        },
       },
     },
   },
