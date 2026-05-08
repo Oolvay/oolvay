@@ -12,7 +12,14 @@ export function DataRightsCard() {
         </p>
         <p>
           You can export all your data above. To permanently delete your account
-          and all associated data, use the section below.
+          and all associated data, visit{" "}
+          <Link
+            href="/settings/account"
+            className="text-foreground underline underline-offset-4"
+          >
+            Settings → Account
+          </Link>
+          .
         </p>
         <p>
           For any other data-related requests, please review our{" "}
