@@ -94,14 +94,14 @@ export const siteConfig = {
         },
         serverActions: {
           write: {
-            max: 2,
+            max: 30,
             interval: "1m",
           },
           read: {
-            max: 2,
+            max: 60,
             interval: "1m",
           },
-          autosave: { max: 60, interval: "1m" },
+          autosave: { max: 120, interval: "1m" },
         },
       },
     },
