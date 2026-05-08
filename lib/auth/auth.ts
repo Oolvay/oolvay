@@ -87,6 +87,11 @@ export const auth = betterAuth({
         required: false,
         input: true,
       },
+      notificationPreferences: {
+        type: "string",
+        required: false,
+        input: true,
+      },
     },
   },
   session: {

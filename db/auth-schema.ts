@@ -6,6 +6,7 @@ import { type Socials } from "@/db/types/socials"
 import { relations } from "drizzle-orm"
 import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core"
 import * as t from "drizzle-orm/pg-core"
+import { NotificationPreferences } from "@/db/types/notification-preferences"
 
 export const themeModeEnum = t.pgEnum("theme_mode", [
   MODES.LIGHT,
@@ -31,6 +32,13 @@ export const user = pgTable(
     website: text("website"),
     location: text("location"),
     socials: t.jsonb("socials").$type<Socials>(),
+    notificationPreferences: t
+      .jsonb("notification_preferences")
+      .$type<NotificationPreferences>()
+      .default({
+        securityAlerts: { email: true, inApp: true, web: false },
+        productUpdates: { email: false, inApp: true, web: false },
+      }),
     jobTitle: text("job_title"),
     company: text("company"),
     dateOfBirth: t.date("date_of_birth", { mode: "date" }),

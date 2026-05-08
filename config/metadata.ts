@@ -56,11 +56,20 @@ export const metaData = {
     },
   },
   settings: {
-    title: "Settings",
-    description: "Manage your account settings.",
-    robots: {
-      index: false,
-      follow: false,
+    account: {
+      title: "Account | Settings",
+      description: "Manage your email, connected accounts, and account data.",
+      robots: { index: false, follow: false },
+    },
+    notifications: {
+      title: "Notifications | Settings",
+      description: "Manage your notification preferences.",
+      robots: { index: false, follow: false },
+    },
+    data: {
+      title: "Data | Settings",
+      description: "Export your data and manage your data rights.",
+      robots: { index: false, follow: false },
     },
   },
   login: {

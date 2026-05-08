@@ -1,6 +1,6 @@
 export const SOCIAL_CONFIG = {
   github: { label: "GitHub", placeholder: "e.g. alberteinstein" },
-  twitter: { label: "X/Twitter", placeholder: "e.g. @AlbertEinstein" },
+  twitter: { label: "X (Twitter)", placeholder: "e.g. @AlbertEinstein" },
   linkedin: { label: "LinkedIn", placeholder: "e.g. albert-einstein" },
 } as const
 
