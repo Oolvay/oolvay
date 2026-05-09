@@ -12,6 +12,7 @@ import {
 import { DestructiveActionButton } from "@/components/auth/destructive-action-button"
 import { formatDate } from "@/lib/date"
 import type { ApiKeyItem } from "@/actions/fetch-api-keys"
+import { siteConfig } from "@/config/site"
 
 interface KeyRowProps {
   apiKey: ApiKeyItem
@@ -21,7 +22,8 @@ export function KeyRow({ apiKey }: KeyRowProps) {
   const router = useRouter()
 
   const meta = apiKey.metadata ? JSON.parse(apiKey.metadata) : null
-  const preview = meta?.preview ?? apiKey.prefix ?? "oolway_"
+  const preview =
+    meta?.preview ?? apiKey.prefix ?? siteConfig.brand.name.toLowerCase()
 
   const scopes = apiKey.permissions
     ? Object.keys(JSON.parse(apiKey.permissions))
