@@ -37,7 +37,7 @@ import { getAaguidIcon } from "@/lib/auth/aaguid"
 import { siteConfig } from "@/config/site"
 
 const passkeySchema = z.object({
-  name: z.string().min(1, "Please name your device (e.g., 'Work Laptop')"),
+  name: z.string().min(1, "Please name your device (e.g., ‘Work Laptop’)"),
 })
 
 type PasskeyForm = z.infer<typeof passkeySchema>
@@ -122,7 +122,7 @@ export function PasskeyManagement({
                       {...field}
                       id={field.name}
                       aria-invalid={fieldState.invalid}
-                      placeholder="e.g., Einstein's MacBook Pro"
+                      placeholder="e.g., Einstein’s MacBook Pro"
                     />
                     {fieldState.error && (
                       <FieldError errors={[fieldState.error]} />

@@ -55,11 +55,10 @@ async function seed() {
 
       return {
         id: crypto.randomUUID(),
-        // ✅ Lesson 1 is oldest, Lesson 50 is newest
         createdAt: new Date(Date.now() - (TOTAL - index) * 60 * 1000),
         title: `Scaling SaaS Architectures: Lesson ${postNumber}`,
         logline: `Exploring performance optimization pattern #${postNumber} for modern web applications.`,
-        excerpt: `A brief look into how implementing strategy ${postNumber} can drastically improve your application's reliability and user experience.`,
+        excerpt: `A brief look into how implementing strategy ${postNumber} can drastically improve your application’s reliability and user experience.`,
         slug: `scaling-saas-architectures-lesson-${postNumber}`,
         published: true,
         authorId: existingUser.id,

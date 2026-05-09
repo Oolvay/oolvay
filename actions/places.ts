@@ -62,7 +62,6 @@ export async function getPlacesSuggestions(
 
     const data = await res.json()
 
-    // Replace 'any' with our new strict type
     const suggestions: PlaceSuggestion[] = (data.suggestions ?? []).map(
       (s: GoogleApiSuggestion) => ({
         placeId: s.placePrediction?.placeId ?? "",
