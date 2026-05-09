@@ -18,6 +18,7 @@ const hasSentryToken =
 const cloudfrontUrl = process.env.NEXT_PUBLIC_CLOUDFRONT_URL || ""
 
 const nextConfig: NextConfig = {
+  devIndicators: false,
   experimental: {
     authInterrupts: true,
     serverActions: {
