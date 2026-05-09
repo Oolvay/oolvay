@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import { siteConfig } from "@/config/site"
 import {
@@ -42,6 +43,7 @@ interface AppSidebarProps {
 export function AppSidebar({ user, navItems }: AppSidebarProps) {
   const { handleSignOut } = useAuthActions()
   const pathname = usePathname()
+  const { state } = useSidebar()
 
   return (
     <>
@@ -114,7 +116,7 @@ export function AppSidebar({ user, navItems }: AppSidebarProps) {
 
         <SidebarFooter>
           <div className="flex w-full justify-center pb-2">
-            <ModeToggle expanded />
+            <ModeToggle expanded={state === "expanded"} />
           </div>
           <SidebarMenu>
             <SidebarMenuItem>
