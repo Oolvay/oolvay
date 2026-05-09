@@ -1,0 +1,35 @@
+# Dependencies
+node_modules
+
+# Next.js
+.next
+out
+
+# Build outputs
+dist
+build
+
+# Drizzle generated files
+drizzle
+
+# Package manager
+bun.lock
+bun.lockb
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.*
+
+# Generated / compiled
+*.d.ts
+*.tsbuildinfo
+next-env.d.ts
+
+# CDK
+cdk.out
+
+# Misc
+.DS_Store
+coverage

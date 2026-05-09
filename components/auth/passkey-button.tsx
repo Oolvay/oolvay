@@ -34,6 +34,7 @@ export function PasskeyButton({
 
     if (onSuccess) {
       onSuccess()
+      router.refresh()
     } else {
       router.push(callbackURL ?? siteConfig.authAndSession.callbackAfterLogin)
     }
