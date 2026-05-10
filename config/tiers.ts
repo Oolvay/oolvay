@@ -1,18 +1,31 @@
-export type TierKey = "starter" | "pro" | "business"
+import type { TierKey } from "@/db/types/tier"
+
+export interface TierDisplayPrice {
+  amount: string
+  period: string
+  saving?: string // e.g. "Save 20%" — only relevant for annual
+}
 
 export interface TierConfig {
   key: TierKey
   name: string
   description: string
-  priceId: string | null // null = free tier; otherwise matches a key in PRICE_MAP
-  limits: {
-    seats: number // -1 = unlimited
-    projects: number // -1 = unlimited
-    storageGb: number // -1 = unlimited
-    apiCallsPerMonth: number // -1 = unlimited
+  priceId: {
+    monthly: string | null
+    annual: string | null
   }
-  features: string[] // Marketing bullets for pricing page
-  highlighted: boolean // Shows "Most Popular" badge
+  displayPrice: {
+    monthly: TierDisplayPrice
+    annual: TierDisplayPrice
+  }
+  limits: {
+    seats: number
+    projects: number
+    storageGb: number
+    apiCallsPerMonth: number
+  }
+  features: string[]
+  highlighted: boolean
 }
 
 export const TIERS: Record<TierKey, TierConfig> = {
@@ -20,7 +33,14 @@ export const TIERS: Record<TierKey, TierConfig> = {
     key: "starter",
     name: "Starter",
     description: "Everything you need to get started, free forever.",
-    priceId: null,
+    priceId: {
+      monthly: null,
+      annual: null,
+    },
+    displayPrice: {
+      monthly: { amount: "Free", period: "" },
+      annual: { amount: "Free", period: "" },
+    },
     limits: { seats: 1, projects: 3, storageGb: 1, apiCallsPerMonth: 1000 },
     features: [
       "Up to 3 projects",
@@ -34,7 +54,14 @@ export const TIERS: Record<TierKey, TierConfig> = {
     key: "pro",
     name: "Pro",
     description: "For individuals and small teams moving fast.",
-    priceId: "pro_monthly",
+    priceId: {
+      monthly: "pro_monthly",
+      annual: "pro_yearly",
+    },
+    displayPrice: {
+      monthly: { amount: "$29", period: "/month" },
+      annual: { amount: "$23", period: "/month", saving: "Save 20%" },
+    },
     limits: { seats: 5, projects: 20, storageGb: 20, apiCallsPerMonth: 50000 },
     features: [
       "Up to 20 projects",
@@ -49,7 +76,14 @@ export const TIERS: Record<TierKey, TierConfig> = {
     key: "business",
     name: "Business",
     description: "For growing teams that need scale and control.",
-    priceId: "business_monthly",
+    priceId: {
+      monthly: "business_monthly",
+      annual: "business_yearly",
+    },
+    displayPrice: {
+      monthly: { amount: "$79", period: "/month" },
+      annual: { amount: "$63", period: "/month", saving: "Save 20%" },
+    },
     limits: { seats: 25, projects: -1, storageGb: 100, apiCallsPerMonth: -1 },
     features: [
       "Unlimited projects",
@@ -60,19 +94,4 @@ export const TIERS: Record<TierKey, TierConfig> = {
     ],
     highlighted: false,
   },
-}
-
-export function getTierByPriceId(priceId: string | null): TierConfig {
-  if (!priceId) return TIERS.starter
-  return (
-    Object.values(TIERS).find((t) => t.priceId === priceId) ?? TIERS.starter
-  )
-}
-
-export function tierMeetsMinimum(
-  userTier: TierKey,
-  requiredTier: TierKey
-): boolean {
-  const order: TierKey[] = ["starter", "pro", "business"]
-  return order.indexOf(userTier) >= order.indexOf(requiredTier)
 }
