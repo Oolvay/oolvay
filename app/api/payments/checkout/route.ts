@@ -10,6 +10,7 @@ import { ajAuth } from "@/lib/arcjet"
 import { slidingWindow } from "@arcjet/next"
 import { env } from "@/env"
 import { z } from "zod"
+import { siteConfig } from "@/config/site"
 
 const bodySchema = z.object({
   priceId: z.string().min(1),
@@ -67,7 +68,7 @@ export async function POST(req: NextRequest) {
   const result = await provider.initiateCheckout({
     ...body,
     customerId,
-    successUrl: `${appUrl}/success`,
+    successUrl: `${appUrl}/${siteConfig.authAndSession.callbackAfterLogin}`,
     cancelUrl: `${appUrl}/pricing`,
     metadata: { userId: currentUser.id },
   })

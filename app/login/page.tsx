@@ -27,7 +27,7 @@ export default async function LoginPage({
         <Card className="overflow-hidden p-0">
           <CardContent className="grid p-0 md:grid-cols-2">
             {/* image column — hidden on mobile, visible on md+ */}
-            <div className="relative hidden min-h-[350px] bg-muted md:block">
+            <div className="relative hidden min-h-87.5 bg-muted md:block">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/login-image.svg"

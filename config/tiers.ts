@@ -1,9 +1,14 @@
 import type { TierKey } from "@/db/types/payments/tier"
 
+// The currency symbol displayed on the pricing page.
+// Change this to match your payment provider's billing currency.
+// Examples: "$" for USD, "₹" for INR, "€" for EUR, "£" for GBP
+export const PRICING_CURRENCY = "₹"
+
 export interface TierDisplayPrice {
-  amount: string
+  amount: string // numeric only, e.g. "29" not "$29"
   period: string
-  saving?: string // e.g. "Save 20%" — only relevant for annual
+  saving?: string
 }
 
 export interface TierConfig {
@@ -59,8 +64,8 @@ export const TIERS: Record<TierKey, TierConfig> = {
       annual: "pro_yearly",
     },
     displayPrice: {
-      monthly: { amount: "$29", period: "/month" },
-      annual: { amount: "$23", period: "/month", saving: "Save 20%" },
+      monthly: { amount: "29", period: "/month" },
+      annual: { amount: "23", period: "/month", saving: "Save 20%" },
     },
     limits: { seats: 5, projects: 20, storageGb: 20, apiCallsPerMonth: 50000 },
     features: [
@@ -81,8 +86,8 @@ export const TIERS: Record<TierKey, TierConfig> = {
       annual: "business_yearly",
     },
     displayPrice: {
-      monthly: { amount: "$79", period: "/month" },
-      annual: { amount: "$63", period: "/month", saving: "Save 20%" },
+      monthly: { amount: "79", period: "/month" },
+      annual: { amount: "63", period: "/month", saving: "Save 20%" },
     },
     limits: { seats: 25, projects: -1, storageGb: 100, apiCallsPerMonth: -1 },
     features: [

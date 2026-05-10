@@ -39,6 +39,16 @@ jobs:
       GOOGLE_PLACES_API_KEY: dummy
       NEXT_PUBLIC_CLOUDFRONT_URL: "https://dummy.cloudfront.net"
       PAYMENT_PROVIDER: lemonsqueezy
+      STRIPE_SECRET_KEY: dummy
+      STRIPE_WEBHOOK_SECRET: dummy
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: dummy
+      LEMONSQUEEZY_API_KEY: dummy
+      LEMONSQUEEZY_STORE_ID: dummy
+      LEMONSQUEEZY_WEBHOOK_SECRET: dummy
+      RAZORPAY_KEY_ID: dummy
+      RAZORPAY_KEY_SECRET: dummy
+      RAZORPAY_WEBHOOK_SECRET: dummy
+      NEXT_PUBLIC_RAZORPAY_KEY_ID: dummy
 
     steps:
       - uses: actions/checkout@v4

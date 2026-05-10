@@ -4,12 +4,17 @@ import { useState } from "react"
 import Link from "next/link"
 import { ArrowRight, Check } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { TIERS } from "@/config/tiers"
+import { Button } from "@/components/ui/button"
+import { TIERS, PRICING_CURRENCY } from "@/config/tiers"
 import { CheckoutButton } from "@/app/(main)/pricing/components/checkout-button"
 
 type BillingPeriod = "monthly" | "annual"
 
-export function PricingTable() {
+interface PricingTableProps {
+  isLoggedIn: boolean
+}
+
+export function PricingTable({ isLoggedIn }: PricingTableProps) {
   const [billing, setBilling] = useState<BillingPeriod>("annual")
   const tiers = Object.values(TIERS)
 
@@ -81,8 +86,8 @@ export function PricingTable() {
                 </div>
               )}
 
-              <div>
-                <h2 className="text-xl font-bold text-foreground">
+              <div className="text-center">
+                <h2 className="text-3xl font-bold text-foreground">
                   {tier.name}
                 </h2>
                 <p className="text-muted-foreground text-sm mt-1">
@@ -97,14 +102,17 @@ export function PricingTable() {
                 {billing === "annual" && !isFree && (
                   <span
                     className="text-2xl font-semibold text-muted-foreground/60 line-through decoration-2"
-                    aria-label={`Original monthly price: ${tier.displayPrice.monthly.amount}`}
+                    aria-label={`Original monthly price: ${PRICING_CURRENCY}${tier.displayPrice.monthly.amount}`}
                   >
+                    {PRICING_CURRENCY}
                     {tier.displayPrice.monthly.amount}
                   </span>
                 )}
                 <span className="flex items-baseline">
                   <span className="text-4xl font-bold text-foreground">
-                    {price.amount}
+                    {price.amount === "Free"
+                      ? price.amount
+                      : `${PRICING_CURRENCY}${price.amount}`}
                   </span>
                   {price.period && (
                     <span className="text-muted-foreground text-sm">
@@ -133,27 +141,36 @@ export function PricingTable() {
               </ul>
 
               {isFree ? (
-                <Link
-                  href="/sign-up"
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm border border-border bg-background text-foreground hover:bg-muted transition-colors"
-                  aria-label={`Get started with ${tier.name} for free`}
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="w-full"
+                  aria-label={
+                    isLoggedIn
+                      ? "Go to dashboard"
+                      : `Get started with ${tier.name} for free`
+                  }
                 >
-                  Get started free
-                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                </Link>
+                  <Link href={isLoggedIn ? "/dashboard" : "/login"}>
+                    {isLoggedIn ? "Go to dashboard" : "Get started free"}
+                    <ArrowRight
+                      className="w-4 h-4 shrink-0"
+                      aria-hidden="true"
+                    />
+                  </Link>
+                </Button>
               ) : (
                 <CheckoutButton
-                  priceId={activePriceId!}
+                  priceId={activePriceId}
                   type="subscription"
-                  className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm ${
-                    tier.highlighted
-                      ? "bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
-                      : "border border-border bg-background text-foreground hover:bg-muted transition-colors"
-                  }`}
+                  variant={tier.highlighted ? "default" : "outline"}
+                  size="lg"
+                  className="w-full"
                   aria-label={`Subscribe to ${tier.name}, billed ${billing}`}
                 >
                   Get {tier.name}
-                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                  <ArrowRight className="w-4 h-4 shrink-0" aria-hidden="true" />
                 </CheckoutButton>
               )}
             </div>
