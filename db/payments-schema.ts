@@ -11,8 +11,8 @@ import {
 } from "drizzle-orm/pg-core"
 import * as t from "drizzle-orm/pg-core"
 import { user } from "@/db/auth-schema"
-import type { ProviderName } from "@/db/types/payment-provider"
-import type { NormalizedSubscriptionStatus } from "@/db/types/subscription-status"
+import type { ProviderName } from "@/db/types/payments/payment-provider"
+import type { NormalizedSubscriptionStatus } from "@/db/types/payments/subscription-status"
 
 export const subscriptions = pgTable(
   "subscriptions",

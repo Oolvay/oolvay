@@ -1,4 +1,4 @@
-import type { TierKey } from "@/db/types/tier"
+import type { TierKey } from "@/db/types/payments/tier"
 
 export interface TierDisplayPrice {
   amount: string
