@@ -5,6 +5,7 @@ import Link from "next/link"
 import { ArrowRight, Check } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { TIERS } from "@/config/tiers"
+import { CheckoutButton } from "@/app/(main)/pricing/components/checkout-button"
 
 type BillingPeriod = "monthly" | "annual"
 
@@ -131,23 +132,30 @@ export function PricingTable() {
                 ))}
               </ul>
 
-              {/* TODO Phase 16: replace with <CheckoutButton> for paid tiers */}
-              <Link
-                href={isFree ? "/sign-up" : "/login"}
-                className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm ${
-                  tier.highlighted
-                    ? "bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
-                    : "border border-border bg-background text-foreground hover:bg-muted transition-colors"
-                }`}
-                aria-label={
-                  isFree
-                    ? `Get started with ${tier.name} for free`
-                    : `Subscribe to ${tier.name}, billed ${billing}`
-                }
-              >
-                {isFree ? "Get started free" : `Get ${tier.name}`}
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </Link>
+              {isFree ? (
+                <Link
+                  href="/sign-up"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm border border-border bg-background text-foreground hover:bg-muted transition-colors"
+                  aria-label={`Get started with ${tier.name} for free`}
+                >
+                  Get started free
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+              ) : (
+                <CheckoutButton
+                  priceId={activePriceId!}
+                  type="subscription"
+                  className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm ${
+                    tier.highlighted
+                      ? "bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+                      : "border border-border bg-background text-foreground hover:bg-muted transition-colors"
+                  }`}
+                  aria-label={`Subscribe to ${tier.name}, billed ${billing}`}
+                >
+                  Get {tier.name}
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </CheckoutButton>
+              )}
             </div>
           )
         })}

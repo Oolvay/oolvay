@@ -21,6 +21,7 @@ export const publicRoutes = new Set([
   "/support",
   "/credits",
   "/contact",
+  "/success",
   "/robots.txt",
   "/sitemap.xml",
   "/manifest.json",
