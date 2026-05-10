@@ -13,7 +13,6 @@ import * as t from "drizzle-orm/pg-core"
 import { user } from "@/db/auth-schema"
 import type { ProviderName } from "@/db/types/payment-provider"
 import type { NormalizedSubscriptionStatus } from "@/db/types/subscription-status"
-import type { TierKey } from "@/db/types/tier"
 
 export const subscriptions = pgTable(
   "subscriptions",
