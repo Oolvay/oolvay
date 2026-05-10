@@ -32,7 +32,7 @@ export const TIERS: Record<TierKey, TierConfig> = {
   starter: {
     key: "starter",
     name: "Starter",
-    description: "Everything you need to get started, free forever.",
+    description: "Everything you need to get started, free forever",
     priceId: {
       monthly: null,
       annual: null,
@@ -53,7 +53,7 @@ export const TIERS: Record<TierKey, TierConfig> = {
   pro: {
     key: "pro",
     name: "Pro",
-    description: "For individuals and small teams moving fast.",
+    description: "For individuals and small teams moving fast",
     priceId: {
       monthly: "pro_monthly",
       annual: "pro_yearly",
@@ -75,7 +75,7 @@ export const TIERS: Record<TierKey, TierConfig> = {
   business: {
     key: "business",
     name: "Business",
-    description: "For growing teams that need scale and control.",
+    description: "For growing teams that need scale and control",
     priceId: {
       monthly: "business_monthly",
       annual: "business_yearly",

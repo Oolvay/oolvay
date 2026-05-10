@@ -39,10 +39,10 @@ export function PricingTable() {
           {billing === "annual" ? (
             <>
               <span className="text-xl font-bold text-primary">Save 20%</span> —
-              billed as one annual payment.
+              billed as one annual payment
             </>
           ) : (
-            "Billed month to month."
+            "Billed month to month"
           )}
         </p>
       </div>
@@ -101,14 +101,16 @@ export function PricingTable() {
                     {tier.displayPrice.monthly.amount}
                   </span>
                 )}
-                <span className="text-4xl font-bold text-foreground">
-                  {price.amount}
-                </span>
-                {price.period && (
-                  <span className="text-muted-foreground text-sm">
-                    {price.period}
+                <span className="flex items-baseline">
+                  <span className="text-4xl font-bold text-foreground">
+                    {price.amount}
                   </span>
-                )}
+                  {price.period && (
+                    <span className="text-muted-foreground text-sm">
+                      {price.period}
+                    </span>
+                  )}
+                </span>
               </div>
 
               <ul
