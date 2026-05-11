@@ -103,6 +103,13 @@ export const siteConfig = {
           },
           autosave: { max: 120, interval: "1m" },
         },
+        payments: {
+          checkout: { max: 10, interval: "1m" },
+          verify: { max: 10, interval: "1m" },
+          subscriptionRead: { max: 30, interval: "1m" },
+          subscriptionMutate: { max: 5, interval: "1m" },
+          billingPortal: { max: 5, interval: "1m" },
+        },
       },
     },
   },

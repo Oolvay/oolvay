@@ -11,6 +11,7 @@ import { ajAuth } from "@/lib/arcjet"
 import { slidingWindow } from "@arcjet/next"
 import { env } from "@/env"
 import { ProviderCapabilityError } from "@/db/types/payments/payment-errors"
+import { siteConfig } from "@/config/site"
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession()
@@ -20,7 +21,15 @@ export async function POST(req: NextRequest) {
 
   if (env.ARCJET_KEY) {
     const decision = await ajAuth
-      .withRule(slidingWindow({ mode: "LIVE", interval: 60, max: 5 }))
+      .withRule(
+        slidingWindow({
+          mode: "LIVE",
+          interval:
+            siteConfig.security.arcjet.rateLimits.payments.billingPortal
+              .interval,
+          max: siteConfig.security.arcjet.rateLimits.payments.billingPortal.max,
+        })
+      )
       .protect(req, { userIdOrIp: session.user.id })
     if (decision.isDenied()) {
       return NextResponse.json({ error: "Too many requests." }, { status: 429 })

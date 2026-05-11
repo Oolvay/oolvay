@@ -26,7 +26,14 @@ export async function POST(req: NextRequest) {
 
   if (env.ARCJET_KEY) {
     const decision = await ajAuth
-      .withRule(slidingWindow({ mode: "LIVE", interval: 60, max: 10 }))
+      .withRule(
+        slidingWindow({
+          mode: "LIVE",
+          interval:
+            siteConfig.security.arcjet.rateLimits.payments.checkout.interval,
+          max: siteConfig.security.arcjet.rateLimits.payments.checkout.max,
+        })
+      )
       .protect(req, { userIdOrIp: session.user.id })
     if (decision.isDenied()) {
       return NextResponse.json({ error: "Too many requests." }, { status: 429 })

@@ -7,6 +7,7 @@ import { ajAuth } from "@/lib/arcjet"
 import { slidingWindow } from "@arcjet/next"
 import { env } from "@/env"
 import { z } from "zod"
+import { siteConfig } from "@/config/site"
 
 const bodySchema = z.object({
   subscriptionId: z.string().min(1),
@@ -21,7 +22,16 @@ export async function POST(req: NextRequest) {
 
   if (env.ARCJET_KEY) {
     const decision = await ajAuth
-      .withRule(slidingWindow({ mode: "LIVE", interval: 60, max: 5 }))
+      .withRule(
+        slidingWindow({
+          mode: "LIVE",
+          interval:
+            siteConfig.security.arcjet.rateLimits.payments.subscriptionMutate
+              .interval,
+          max: siteConfig.security.arcjet.rateLimits.payments.subscriptionMutate
+            .max,
+        })
+      )
       .protect(req, { userIdOrIp: session.user.id })
     if (decision.isDenied()) {
       return NextResponse.json({ error: "Too many requests." }, { status: 429 })
