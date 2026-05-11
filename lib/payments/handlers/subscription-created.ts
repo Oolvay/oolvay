@@ -3,8 +3,8 @@ import { subscriptions } from "@/db/payments-schema"
 import { user } from "@/db/auth-schema"
 import { providerPromise } from "@/lib/payments"
 import { eq } from "drizzle-orm"
-import { resolveTierFromInternalPriceId } from "@/lib/payments/price-map"
-import type { InternalPriceId } from "@/lib/payments/price-map"
+import { resolveTierFromInternalPriceId } from "@/lib/payments/tier-utils"
+import type { InternalPriceId } from "@/config/pricing"
 import type { NormalizedEvent } from "@/db/types/payments/webhook-events"
 
 type SubscriptionCreatedEvent = Extract<

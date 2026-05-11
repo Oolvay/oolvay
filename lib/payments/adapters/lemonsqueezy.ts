@@ -30,7 +30,7 @@ import { WebhookSignatureError } from "@/db/types/payments/payment-errors"
 import {
   resolveProviderPriceId,
   resolveInternalPriceId,
-} from "@/lib/payments/price-map"
+} from "@/lib/payments/tier-utils"
 
 if (!env.LEMONSQUEEZY_API_KEY) {
   throw new Error(

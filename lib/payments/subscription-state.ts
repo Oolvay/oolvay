@@ -1,10 +1,10 @@
 import { db } from "@/db/drizzle"
 import { subscriptions, orders } from "@/db/payments-schema"
-import { TIERS } from "@/config/tiers"
+import { TIERS } from "@/config/pricing"
 import { TIERS_KEYS } from "@/db/types/payments/tier"
 import { SUBSCRIPTION_STATUSES } from "@/db/types/payments/subscription-status"
 import type { TierKey } from "@/db/types/payments/tier"
-import type { TierConfig } from "@/config/tiers"
+import type { TierConfig } from "@/config/pricing"
 import { eq, desc, and } from "drizzle-orm"
 
 export interface UserAccessLevel {

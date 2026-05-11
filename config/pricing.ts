@@ -1,10 +1,13 @@
 import type { TierKey } from "@/db/types/payments/tier"
+import type { ProviderName } from "@/db/types/payments/payment-provider"
 
+// ── Currency ──────────────────────────────────────────────────────────────────
 // The currency symbol displayed on the pricing page.
 // Change this to match your payment provider's billing currency.
 // Examples: "$" for USD, "₹" for INR, "€" for EUR, "£" for GBP
 export const PRICING_CURRENCY = "₹"
 
+// ── Tier Types ────────────────────────────────────────────────────────────────
 export interface TierDisplayPrice {
   amount: string // numeric only, e.g. "29" not "$29"
   period: string
@@ -33,6 +36,9 @@ export interface TierConfig {
   highlighted: boolean
 }
 
+// ── Tiers ─────────────────────────────────────────────────────────────────────
+// priceId values here are internal keys — they must match keys in PRICE_MAP below.
+// null means free (no payment required).
 export const TIERS: Record<TierKey, TierConfig> = {
   starter: {
     key: "starter",
@@ -100,3 +106,36 @@ export const TIERS: Record<TierKey, TierConfig> = {
     highlighted: false,
   },
 }
+
+// ── Price Map ─────────────────────────────────────────────────────────────────
+// Maps internal price IDs to each provider's actual dashboard IDs.
+//
+// Stripe:        price_xxx  (Products → your plan → Pricing)
+// LemonSqueezy:  variant ID as a string  (Store → Products → Variants)
+// Razorpay:      plan_xxx for subscriptions
+// ─────────────────────────────────────────────────────────────────────────────
+export const PRICE_MAP = {
+  pro_monthly: {
+    stripe: "price_REPLACE_ME",
+    lemonsqueezy: "1634972",
+    razorpay: "plan_REPLACE_ME",
+  },
+  pro_yearly: {
+    stripe: "price_REPLACE_ME",
+    lemonsqueezy: "1634976",
+    razorpay: "plan_REPLACE_ME",
+  },
+  business_monthly: {
+    stripe: "price_REPLACE_ME",
+    lemonsqueezy: "1634970",
+    razorpay: "plan_REPLACE_ME",
+  },
+  business_yearly: {
+    stripe: "price_REPLACE_ME",
+    lemonsqueezy: "1634984",
+    razorpay: "plan_REPLACE_ME",
+  },
+} satisfies Record<string, Record<ProviderName, string>>
+
+// Derived type — no manual maintenance needed when adding/removing plans
+export type InternalPriceId = keyof typeof PRICE_MAP

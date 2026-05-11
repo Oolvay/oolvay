@@ -5,7 +5,7 @@ import Link from "next/link"
 import { ArrowRight, Check } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { TIERS, PRICING_CURRENCY } from "@/config/tiers"
+import { TIERS, PRICING_CURRENCY } from "@/config/pricing"
 import { CheckoutButton } from "@/app/(main)/pricing/components/checkout-button"
 
 type BillingPeriod = "monthly" | "annual"

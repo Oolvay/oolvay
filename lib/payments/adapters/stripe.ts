@@ -23,7 +23,7 @@ import { WebhookSignatureError } from "@/db/types/payments/payment-errors"
 import {
   resolveProviderPriceId,
   resolveInternalPriceId,
-} from "@/lib/payments/price-map"
+} from "@/lib/payments/tier-utils"
 
 if (!env.STRIPE_SECRET_KEY) {
   throw new Error("STRIPE_SECRET_KEY is not set but PAYMENT_PROVIDER=stripe.")
