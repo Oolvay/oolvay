@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { initiateCheckout } from "@/lib/payments/client"
+import { initiateCheckout, verifyCheckout } from "@/lib/payments/client"
 import { Button } from "@/components/ui/button"
 import { LoadingSwap } from "@/components/ui/loading-swap"
 import type { ComponentProps } from "react"
@@ -17,6 +17,23 @@ interface CheckoutButtonProps {
   size?: ButtonSize
   className?: string
   "aria-label"?: string
+}
+
+declare global {
+  interface Window {
+    Razorpay: new (options: Record<string, unknown>) => { open(): void }
+  }
+}
+
+async function loadRazorpayScript(): Promise<void> {
+  if (typeof window.Razorpay !== "undefined") return
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script")
+    script.src = "https://checkout.razorpay.com/v1/checkout.js"
+    script.onload = () => resolve()
+    script.onerror = () => reject(new Error("Razorpay script failed to load"))
+    document.body.appendChild(script)
+  })
 }
 
 export function CheckoutButton({
@@ -37,10 +54,48 @@ export function CheckoutButton({
 
       if (result.mode === "redirect") {
         window.location.href = result.url
-        return
+        return // keep loading=true — navigation is in progress
       }
 
-      // result.mode === "modal" — Razorpay, implemented in Phase 21
+      if (result.mode === "modal") {
+        await loadRazorpayScript()
+
+        await new Promise<void>((resolve, reject) => {
+          const rzp = new window.Razorpay({
+            key: result.keyId,
+            subscription_id:
+              type === "subscription" ? result.orderId : undefined,
+            order_id: type === "one_time" ? result.orderId : undefined,
+            amount: result.amount,
+            currency: result.currency,
+            prefill: result.prefill ?? {},
+            handler: async (response: {
+              razorpay_payment_id: string
+              razorpay_order_id: string
+              razorpay_signature: string
+            }) => {
+              try {
+                await verifyCheckout({
+                  razorpayPaymentId: response.razorpay_payment_id,
+                  razorpayOrderId: response.razorpay_order_id,
+                  razorpaySignature: response.razorpay_signature,
+                })
+                window.location.href = "/dashboard"
+                resolve()
+              } catch (err) {
+                reject(err)
+              }
+            },
+            modal: {
+              ondismiss: () => {
+                setLoading(false)
+                resolve()
+              },
+            },
+          })
+          rzp.open()
+        })
+      }
     } catch (err) {
       console.error("Checkout failed:", err)
       setLoading(false)
