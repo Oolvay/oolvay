@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { ArrowRight, Check } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -9,6 +9,7 @@ import { TIERS, PRICING_CURRENCY } from "@/config/pricing"
 import { CheckoutButton } from "@/app/(main)/pricing/components/checkout-button"
 import { TIERS_KEYS } from "@/db/types/payments/tier"
 import type { TierKey } from "@/db/types/payments/tier"
+import { getSubscriptionStatus } from "@/lib/payments/client"
 
 type BillingPeriod = "monthly" | "annual"
 
@@ -23,6 +24,23 @@ type TierAction = "current" | "upgrade" | "downgrade" | "free" | "signup"
 
 export function PricingTable({ isLoggedIn, userTier }: PricingTableProps) {
   const [billing, setBilling] = useState<BillingPeriod>("annual")
+  const [periodEnd, setPeriodEnd] = useState<Date | null>(null)
+  const [cancelAtPeriodEnd, setCancelAtPeriodEnd] = useState(false)
+
+  useEffect(() => {
+    if (!isLoggedIn || !userTier || userTier === TIERS_KEYS.STARTER) return
+    getSubscriptionStatus()
+      .then((data) => {
+        if (data.currentPeriodEnd) {
+          setPeriodEnd(new Date(data.currentPeriodEnd))
+        }
+        setCancelAtPeriodEnd(data.cancelAtPeriodEnd ?? false)
+      })
+      .catch(() => {
+        // non-critical — silently ignore
+      })
+  }, [isLoggedIn, userTier])
+
   const tiers = Object.values(TIERS).filter((tier) => {
     if (!userTier) return true
     return TIER_ORDER.indexOf(tier.key) >= TIER_ORDER.indexOf(userTier)
@@ -103,7 +121,7 @@ export function PricingTable({ isLoggedIn, userTier }: PricingTableProps) {
                     : "border-border bg-card"
                 }`}
               >
-                {tier.highlighted && (
+                {tier.highlighted && action !== "current" && (
                   <div
                     className="absolute -top-3 left-1/2 -translate-x-1/2"
                     aria-label="Most popular plan"
@@ -169,21 +187,34 @@ export function PricingTable({ isLoggedIn, userTier }: PricingTableProps) {
                 </ul>
 
                 {action === "current" && (
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="lg"
-                    className="w-full"
-                    aria-label={`You are on the ${tier.name} plan — go to dashboard`}
-                  >
-                    <Link href="/dashboard">
-                      Go to dashboard
-                      <ArrowRight
-                        className="w-4 h-4 shrink-0"
-                        aria-hidden="true"
-                      />
-                    </Link>
-                  </Button>
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="w-full"
+                      disabled
+                      aria-label={`${tier.name} is your current plan`}
+                    >
+                      Your current plan
+                    </Button>
+                    {periodEnd && (
+                      <p className="text-xs text-center text-muted-foreground">
+                        {cancelAtPeriodEnd ? "Expires" : "Renews"}{" "}
+                        <time dateTime={periodEnd.toISOString()}>
+                          {periodEnd.toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          })}
+                        </time>
+                        {cancelAtPeriodEnd && (
+                          <span className="block text-destructive mt-0.5">
+                            Cancellation scheduled
+                          </span>
+                        )}
+                      </p>
+                    )}
+                  </div>
                 )}
 
                 {action === "free" && (
