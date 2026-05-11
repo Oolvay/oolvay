@@ -94,6 +94,21 @@ export const auth = betterAuth({
         required: false,
         input: true,
       },
+      paymentProvider: {
+        type: "string",
+        required: false,
+        input: false,
+      },
+      providerCustomerId: {
+        type: "string",
+        required: false,
+        input: false,
+      },
+      tier: {
+        type: "string",
+        required: false,
+        input: false,
+      },
     },
   },
   session: {

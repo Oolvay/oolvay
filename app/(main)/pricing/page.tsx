@@ -3,6 +3,7 @@ import { siteConfig } from "@/config/site"
 import type { Metadata } from "next"
 import { getServerSession } from "@/lib/auth/get-server-session"
 import { PricingFaq } from "@/app/(main)/pricing/components/pricing-faq"
+import { TierKey } from "@/db/types/payments/tier"
 
 export const metadata: Metadata = {
   title: siteConfig.seo.metaData.pricing.title,
@@ -27,8 +28,10 @@ export default async function PricingPage() {
       </div>
 
       {/* Plans */}
-      <PricingTable isLoggedIn={!!session?.user} />
-
+      <PricingTable
+        isLoggedIn={!!session?.user}
+        userTier={(session?.user.tier as TierKey) ?? null}
+      />
       <PricingFaq />
     </div>
   )
