@@ -86,6 +86,21 @@ export function CheckoutButton({
                     "",
                   razorpaySignature: response.razorpay_signature,
                 })
+                // Poll until tier changes in DB (webhook may take a few seconds)
+                const pollForTierChange = async () => {
+                  for (let i = 0; i < 10; i++) {
+                    await new Promise((r) => setTimeout(r, 2000))
+                    const status = await fetch("/api/payments/subscription")
+                    if (status.ok) {
+                      const data = await status.json()
+                      if (data.tier && data.tier !== "starter") {
+                        break
+                      }
+                    }
+                  }
+                }
+
+                await pollForTierChange()
                 router.refresh()
                 setLoading(false)
                 resolve()
