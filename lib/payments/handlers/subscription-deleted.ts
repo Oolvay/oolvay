@@ -12,18 +12,7 @@ type SubscriptionDeletedEvent = Extract<
 >
 
 export async function handle(event: SubscriptionDeletedEvent): Promise<void> {
-  const userId = event.customerId
-  const [existingUser] = await db
-    .select()
-    .from(user)
-    .where(eq(user.providerCustomerId, userId))
-
-  if (!existingUser) {
-    throw new Error(
-      `No user found for provider customer ID: "${event.customerId}"`
-    )
-  }
-
+  // First update the subscription status — we always have the subscriptionId
   await db
     .update(subscriptions)
     .set({
@@ -33,8 +22,35 @@ export async function handle(event: SubscriptionDeletedEvent): Promise<void> {
     })
     .where(eq(subscriptions.providerSubscriptionId, event.subscriptionId))
 
+  // Find the user via the subscriptions table (works even when customerId is null)
+  const [existingSubscription] = await db
+    .select({ userId: subscriptions.userId })
+    .from(subscriptions)
+    .where(eq(subscriptions.providerSubscriptionId, event.subscriptionId))
+
+  if (!existingSubscription) {
+    // Fall back to customerId lookup if subscription row not found
+    if (event.customerId) {
+      const [existingUser] = await db
+        .select()
+        .from(user)
+        .where(eq(user.providerCustomerId, event.customerId))
+
+      if (existingUser) {
+        await db
+          .update(user)
+          .set({ tier: TIERS_KEYS.STARTER })
+          .where(eq(user.id, existingUser.id))
+        return
+      }
+    }
+    throw new Error(
+      `No subscription or user found for subscription ID: "${event.subscriptionId}"`
+    )
+  }
+
   await db
     .update(user)
     .set({ tier: TIERS_KEYS.STARTER })
-    .where(eq(user.id, existingUser.id))
+    .where(eq(user.id, existingSubscription.userId))
 }

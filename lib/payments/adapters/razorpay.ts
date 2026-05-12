@@ -67,6 +67,7 @@ interface RazorpaySubscription {
   trial_start: number | null
   trial_end: number | null
   notes?: Record<string, string | number | boolean | undefined>
+  has_scheduled_changes?: boolean
 }
 
 interface RazorpayWebhookPayload {
@@ -295,13 +296,25 @@ export class RazorpayAdapter implements PaymentProvider {
     subscriptionId: string,
     opts?: { immediately?: boolean }
   ): Promise<NormalizedSubscription> {
-    const cancelAtCycleEnd = opts?.immediately ? 0 : 1
+    const credentials = Buffer.from(
+      `${env.RAZORPAY_KEY_ID}:${env.RAZORPAY_KEY_SECRET}`
+    ).toString("base64")
 
-    const sub = (await razorpay.subscriptions.cancel(
-      subscriptionId,
-      cancelAtCycleEnd === 1
-    )) as unknown as RazorpaySubscription
+    const response = await fetch(
+      `https://api.razorpay.com/v1/subscriptions/${subscriptionId}/cancel`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Basic ${credentials}`,
+        },
+        body: JSON.stringify({
+          cancel_at_cycle_end: opts?.immediately ? false : true,
+        }),
+      }
+    )
 
+    const sub = (await response.json()) as RazorpaySubscription
     return this.normalizeSubscription(sub)
   }
 
@@ -527,7 +540,8 @@ export class RazorpayAdapter implements PaymentProvider {
       currentPeriodEnd: sub.current_end
         ? new Date(sub.current_end * 1000)
         : new Date(),
-      cancelAtPeriodEnd: sub.cancel_at_cycle_end === 1,
+      cancelAtPeriodEnd:
+        sub.cancel_at_cycle_end === 1 || sub.has_scheduled_changes === true,
       trialEnd: sub.trial_end ? new Date(sub.trial_end * 1000) : null,
       metadata: normalizedMetadata,
     }
