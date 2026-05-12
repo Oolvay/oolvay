@@ -191,9 +191,6 @@ export class RazorpayAdapter implements PaymentProvider {
       const isYearlyPlan = params.priceId.includes("yearly")
       const totalCount = isYearlyPlan ? 29 : 300
 
-      console.log("DEBUG plan ID:", providerPlanId)
-      console.log("DEBUG customer ID:", params.customerId)
-
       const subscription = (await razorpay.subscriptions.create({
         plan_id: providerPlanId,
         customer_notify: 1,

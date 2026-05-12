@@ -118,7 +118,7 @@ export const PRICE_MAP = {
   pro_monthly: {
     stripe: "price_REPLACE_ME",
     lemonsqueezy: "1634972",
-    razorpay: "plan_So2e7hexouYBNt",
+    razorpay: "plan_SoLUORCD9B8L22",
   },
   pro_yearly: {
     stripe: "price_REPLACE_ME",
