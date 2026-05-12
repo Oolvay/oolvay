@@ -4,6 +4,7 @@ export interface NormalizedSubscription {
   id: string
   providerId: string
   customerId: string
+  customerEmail?: string
   planId: string
   status: NormalizedSubscriptionStatus
   currentPeriodStart: Date

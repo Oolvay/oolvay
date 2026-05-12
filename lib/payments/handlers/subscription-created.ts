@@ -2,7 +2,7 @@ import { db } from "@/db/drizzle"
 import { subscriptions } from "@/db/payments-schema"
 import { user } from "@/db/auth-schema"
 import { providerPromise } from "@/lib/payments"
-import { eq } from "drizzle-orm"
+import { eq, or } from "drizzle-orm"
 import { resolveTierFromInternalPriceId } from "@/lib/payments/tier-utils"
 import type { InternalPriceId } from "@/config/pricing"
 import type { NormalizedEvent } from "@/db/types/payments/webhook-events"
@@ -15,12 +15,18 @@ type SubscriptionCreatedEvent = Extract<
 export async function handle(event: SubscriptionCreatedEvent): Promise<void> {
   const { subscription, customerId } = event
 
-  const userId = event.subscription.metadata.user_id
+  const userId = subscription.metadata?.user_id
+  const customerEmail = subscription.customerEmail
+
   const [existingUser] = await db
     .select()
     .from(user)
     .where(
-      userId ? eq(user.id, userId) : eq(user.providerCustomerId, customerId)
+      or(
+        userId ? eq(user.id, userId) : undefined,
+        customerId ? eq(user.providerCustomerId, customerId) : undefined,
+        customerEmail ? eq(user.email, customerEmail) : undefined
+      )
     )
 
   if (!existingUser) {

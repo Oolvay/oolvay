@@ -10,7 +10,12 @@ const posthogAssetHost = posthogHost.replace(
 
 const CSP_DIRECTIVES = {
   "default-src": ["'self'"],
-  "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+  "script-src": [
+    "'self'",
+    "'unsafe-inline'",
+    "'unsafe-eval'",
+    "https://checkout.razorpay.com",
+  ],
   "style-src": ["'self'", "'unsafe-inline'"],
   "img-src": [
     "'self'",
@@ -28,9 +33,16 @@ const CSP_DIRECTIVES = {
     "https://*.ingest.us.sentry.io",
     posthogHost,
     posthogAssetHost,
+    "https://checkout.razorpay.com",
+    "https://api.razorpay.com",
+    "https://lumberjack.razorpay.com",
   ],
   "worker-src": ["'self'", "blob:"],
-  "frame-src": ["'self'"],
+  "frame-src": [
+    "'self'",
+    "https://api.razorpay.com",
+    "https://checkout.razorpay.com",
+  ],
   "frame-ancestors": ["'none'"],
   "form-action": ["'self'"],
   ...(process.env.NODE_ENV === "production" &&

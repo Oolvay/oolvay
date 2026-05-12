@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
   const result = await provider.initiateCheckout({
     ...body,
     customerId,
-    successUrl: `${appUrl}/${siteConfig.authAndSession.callbackAfterLogin}`,
+    successUrl: `${appUrl}/pricing`,
     cancelUrl: `${appUrl}/pricing`,
     metadata: {
       userId: currentUser.id,

@@ -15,7 +15,7 @@ import { z } from "zod"
 
 const bodySchema = z.object({
   razorpayPaymentId: z.string().min(1),
-  razorpayOrderId: z.string().min(1),
+  razorpayOrderId: z.string(),
   razorpaySignature: z.string().min(1),
 })
 
@@ -48,10 +48,13 @@ export async function POST(req: NextRequest) {
     const result = await provider.verifyCheckout(body)
 
     // Mark any pending order as paid
-    await db
-      .update(orders)
-      .set({ status: "paid", providerPaymentId: result.paymentId })
-      .where(eq(orders.providerOrderId, body.razorpayOrderId))
+    // Only update orders table for one-time payments, not subscriptions
+    if (!body.razorpayOrderId.startsWith("sub_")) {
+      await db
+        .update(orders)
+        .set({ status: "paid", providerPaymentId: result.paymentId })
+        .where(eq(orders.providerOrderId, body.razorpayOrderId))
+    }
 
     return NextResponse.json(result)
   } catch (err) {

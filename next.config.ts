@@ -25,6 +25,7 @@ const nextConfig: NextConfig = {
       bodySizeLimit: `10mb`,
     },
   },
+  allowedDevOrigins: ["*.ngrok-free.dev", "*.ngrok-free.app"],
   images: {
     remotePatterns: [
       {

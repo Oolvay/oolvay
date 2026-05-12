@@ -1,9 +1,12 @@
+import { getServerSession } from "@/lib/auth/get-server-session"
+import { db } from "@/db/drizzle"
+import { user } from "@/db/auth-schema"
+import { eq } from "drizzle-orm"
+import type { TierKey } from "@/db/types/payments/tier"
 import { PricingTable } from "@/app/(main)/pricing/components/pricing-table"
 import { siteConfig } from "@/config/site"
 import type { Metadata } from "next"
-import { getServerSession } from "@/lib/auth/get-server-session"
 import { PricingFaq } from "@/app/(main)/pricing/components/pricing-faq"
-import { TierKey } from "@/db/types/payments/tier"
 
 export const metadata: Metadata = {
   title: siteConfig.seo.metaData.pricing.title,
@@ -12,6 +15,14 @@ export const metadata: Metadata = {
 
 export default async function PricingPage() {
   const session = await getServerSession()
+  let userTier: TierKey | null = null
+  if (session?.user) {
+    const [currentUser] = await db
+      .select({ tier: user.tier })
+      .from(user)
+      .where(eq(user.id, session.user.id))
+    userTier = (currentUser?.tier as TierKey) ?? null
+  }
 
   return (
     <div className="flex flex-col gap-20 py-16">
@@ -28,10 +39,7 @@ export default async function PricingPage() {
       </div>
 
       {/* Plans */}
-      <PricingTable
-        isLoggedIn={!!session?.user}
-        userTier={(session?.user.tier as TierKey) ?? null}
-      />
+      <PricingTable isLoggedIn={!!session?.user} userTier={userTier} />
       <PricingFaq />
     </div>
   )

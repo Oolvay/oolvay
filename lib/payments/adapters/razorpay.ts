@@ -58,6 +58,7 @@ interface RazorpaySubscription {
   plan_id: string
   customer_id: string
   status: string
+  customer_email?: string
   current_start: number | null
   current_end: number | null
   ended_at: number | null
@@ -65,6 +66,24 @@ interface RazorpaySubscription {
   cancel_at_cycle_end: number
   trial_start: number | null
   trial_end: number | null
+  notes?: Record<string, string | number | boolean | undefined>
+}
+
+interface RazorpayWebhookPayload {
+  subscription?: {
+    entity: RazorpaySubscription
+  }
+  payment?: {
+    entity: {
+      email?: string
+      customer_id?: string
+    }
+  }
+  customer?: {
+    entity: {
+      email?: string
+    }
+  }
 }
 
 interface RazorpayOrder {
@@ -72,6 +91,15 @@ interface RazorpayOrder {
   amount: number
   currency: string
   receipt?: string
+}
+
+interface RazorpayError {
+  statusCode: number
+  error: {
+    code: string
+    description: string
+    field?: string
+  }
 }
 
 export class RazorpayAdapter implements PaymentProvider {
@@ -91,16 +119,51 @@ export class RazorpayAdapter implements PaymentProvider {
   // ── Customer ───────────────────────────────────────────────────────────────
 
   async createCustomer(params: CreateCustomerParams): Promise<Customer> {
-    const customer = (await razorpay.customers.create({
-      name: params.name ?? "",
-      email: params.email,
-      fail_existing: 0, // return existing customer if email already exists
-    })) as unknown as RazorpayCustomer
+    try {
+      const customer = (await razorpay.customers.create({
+        name: params.name ?? "",
+        email: params.email,
+        fail_existing: 0,
+      })) as unknown as RazorpayCustomer
+
+      return {
+        id: customer.id,
+        email: customer.email,
+        name: customer.name,
+      }
+    } catch (err: unknown) {
+      const error = err as RazorpayError
+      // Razorpay throws a 400 even with fail_existing: 0
+      // if the email is already in their system.
+      if (
+        error.statusCode === 400 &&
+        error.error?.description?.includes("already exists")
+      ) {
+        // We need to fetch the existing customer instead
+        // Note: Some versions of the SDK return the ID in the error,
+        // but fetching is the safest way to get the full object.
+        return await this.getCustomerByEmail(params.email)
+      }
+      throw error
+    }
+  }
+
+  private async getCustomerByEmail(email: string): Promise<Customer> {
+    const response = (await razorpay.customers.all({
+      count: 1,
+      // Razorpay doesn't have a direct 'getByEmail', so we filter the list
+    })) as unknown as { items: RazorpayCustomer[] }
+
+    const existing = response.items.find((c) => c.email === email)
+
+    if (!existing) {
+      throw new Error(`Customer with email ${email} disappeared during fetch.`)
+    }
 
     return {
-      id: customer.id,
-      email: customer.email,
-      name: customer.name,
+      id: existing.id,
+      email: existing.email,
+      name: existing.name,
     }
   }
 
@@ -125,20 +188,28 @@ export class RazorpayAdapter implements PaymentProvider {
         "razorpay"
       )
 
+      const isYearlyPlan = params.priceId.includes("yearly")
+      const totalCount = isYearlyPlan ? 29 : 300
+
+      console.log("DEBUG plan ID:", providerPlanId)
+      console.log("DEBUG customer ID:", params.customerId)
+
       const subscription = (await razorpay.subscriptions.create({
         plan_id: providerPlanId,
         customer_notify: 1,
         quantity: 1,
-        total_count: 120, // max billing cycles — effectively unlimited
+        total_count: totalCount,
         addons: [],
-        notes: params.metadata ?? {},
+        notes: {
+          userId: String(params.metadata?.userId || ""),
+        },
       })) as unknown as RazorpaySubscription
 
       return {
         mode: "modal",
         orderId: subscription.id,
         keyId: env.RAZORPAY_KEY_ID!,
-        amount: 0, // amount is determined by the plan — not needed for subscriptions
+        amount: 0,
         currency: "INR",
         prefill: {
           name: params.metadata?.userName,
@@ -153,7 +224,6 @@ export class RazorpayAdapter implements PaymentProvider {
       "razorpay"
     )
 
-    // For one-time payments, razorpay entry in PRICE_MAP is the amount in paise
     const amount = parseInt(providerPriceId, 10)
 
     const order = (await razorpay.orders.create({
@@ -183,8 +253,15 @@ export class RazorpayAdapter implements PaymentProvider {
       throw new CheckoutVerificationError("RAZORPAY_KEY_SECRET is not set.")
     }
 
+    // For subscriptions, Razorpay signs "subscription_id|payment_id"
+    // For one-time orders, it signs "order_id|payment_id"
+    const isSubscription = params.razorpayOrderId.startsWith("sub_")
+    const payload = isSubscription
+      ? `${params.razorpayPaymentId}|${params.razorpayOrderId}`
+      : `${params.razorpayOrderId}|${params.razorpayPaymentId}`
+
     const expectedSignature = createHmac("sha256", env.RAZORPAY_KEY_SECRET)
-      .update(`${params.razorpayOrderId}|${params.razorpayPaymentId}`)
+      .update(payload)
       .digest("hex")
 
     const expected = Buffer.from(expectedSignature, "hex")
@@ -323,13 +400,15 @@ export class RazorpayAdapter implements PaymentProvider {
       }
 
       case "subscription.activated": {
-        const sub = (
-          event.payload.subscription as { entity: RazorpaySubscription }
-        ).entity
+        const payload = event.payload as RazorpayWebhookPayload
+        const sub = payload.subscription?.entity
+        if (!sub) return null
+        const email =
+          payload.customer?.entity?.email || payload.payment?.entity?.email
         return {
           type: "subscription.created",
           customerId: sub.customer_id,
-          subscription: this.normalizeSubscription(sub),
+          subscription: this.normalizeSubscription(sub, email),
         }
       }
 
@@ -408,7 +487,8 @@ export class RazorpayAdapter implements PaymentProvider {
   // ── Private helpers ────────────────────────────────────────────────────────
 
   private normalizeSubscription(
-    sub: RazorpaySubscription
+    sub: RazorpaySubscription,
+    email?: string
   ): NormalizedSubscription {
     const internalPlanId =
       resolveInternalPriceId(sub.plan_id, "razorpay") ?? "pro_monthly"
@@ -427,10 +507,21 @@ export class RazorpayAdapter implements PaymentProvider {
 
     const status = statusMap[sub.status] ?? SUBSCRIPTION_STATUSES.INCOMPLETE
 
+    const normalizedMetadata: Record<string, string> = {}
+
+    if (sub.notes) {
+      for (const [key, value] of Object.entries(sub.notes)) {
+        if (value !== undefined && value !== null) {
+          normalizedMetadata[key] = String(value)
+        }
+      }
+    }
+
     return {
       id: sub.id,
       providerId: sub.id,
       customerId: sub.customer_id,
+      customerEmail: email || sub.customer_email,
       planId: internalPlanId,
       status,
       currentPeriodStart: sub.current_start
@@ -441,7 +532,7 @@ export class RazorpayAdapter implements PaymentProvider {
         : new Date(),
       cancelAtPeriodEnd: sub.cancel_at_cycle_end === 1,
       trialEnd: sub.trial_end ? new Date(sub.trial_end * 1000) : null,
-      metadata: {},
+      metadata: normalizedMetadata,
     }
   }
 }

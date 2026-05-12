@@ -118,22 +118,22 @@ export const PRICE_MAP = {
   pro_monthly: {
     stripe: "price_REPLACE_ME",
     lemonsqueezy: "1634972",
-    razorpay: "plan_SnzGrSZLZkRYde",
+    razorpay: "plan_So2e7hexouYBNt",
   },
   pro_yearly: {
     stripe: "price_REPLACE_ME",
     lemonsqueezy: "1634976",
-    razorpay: "plan_SnzJPIf4toJtFa",
+    razorpay: "plan_So2evMsaw2Wb2b",
   },
   business_monthly: {
     stripe: "price_REPLACE_ME",
     lemonsqueezy: "1634970",
-    razorpay: "plan_SnzKhCPGgFt4Ou",
+    razorpay: "plan_So2fx5mSXAs6SS",
   },
   business_yearly: {
     stripe: "price_REPLACE_ME",
     lemonsqueezy: "1634984",
-    razorpay: "plan_SnzKCn5fWDQgyC",
+    razorpay: "plan_So2fW9jrBwgX9n",
   },
 } satisfies Record<string, Record<ProviderName, string>>
 

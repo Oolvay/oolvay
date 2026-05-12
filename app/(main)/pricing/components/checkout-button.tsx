@@ -5,6 +5,7 @@ import { initiateCheckout, verifyCheckout } from "@/lib/payments/client"
 import { Button } from "@/components/ui/button"
 import { LoadingSwap } from "@/components/ui/loading-swap"
 import type { ComponentProps } from "react"
+import { useRouter } from "next/navigation"
 
 type ButtonVariant = ComponentProps<typeof Button>["variant"]
 type ButtonSize = ComponentProps<typeof Button>["size"]
@@ -46,6 +47,7 @@ export function CheckoutButton({
   "aria-label": ariaLabel,
 }: CheckoutButtonProps) {
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   async function handleClick() {
     setLoading(true)
@@ -71,16 +73,21 @@ export function CheckoutButton({
             prefill: result.prefill ?? {},
             handler: async (response: {
               razorpay_payment_id: string
-              razorpay_order_id: string
+              razorpay_order_id?: string
+              razorpay_subscription_id?: string
               razorpay_signature: string
             }) => {
               try {
                 await verifyCheckout({
                   razorpayPaymentId: response.razorpay_payment_id,
-                  razorpayOrderId: response.razorpay_order_id,
+                  razorpayOrderId:
+                    response.razorpay_order_id ??
+                    response.razorpay_subscription_id ??
+                    "",
                   razorpaySignature: response.razorpay_signature,
                 })
-                window.location.href = "/dashboard"
+                router.refresh()
+                setLoading(false)
                 resolve()
               } catch (err) {
                 reject(err)
