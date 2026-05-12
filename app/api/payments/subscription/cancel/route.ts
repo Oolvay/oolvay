@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
   const body = bodySchema.parse(await req.json())
   const provider = await providerPromise
   const result = await provider.cancelSubscription(body.subscriptionId, {
-    immediately: body.immediately,
+    immediately: body.immediately ?? false,
   })
 
   return NextResponse.json(result)
