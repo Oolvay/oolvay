@@ -5,6 +5,7 @@ import { PricingTable } from "@/app/(main)/pricing/components/pricing-table"
 import { siteConfig } from "@/config/site"
 import type { Metadata } from "next"
 import { PricingFaq } from "@/app/(main)/pricing/components/pricing-faq"
+import { CheckoutListener } from "@/app/(main)/pricing/components/checkout-listener"
 
 export const metadata: Metadata = {
   title: siteConfig.seo.metaData.pricing.title,
@@ -22,6 +23,7 @@ export default async function PricingPage() {
 
   return (
     <div className="flex flex-col gap-20 py-16">
+      <CheckoutListener />
       <div className="text-center max-w-2xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
           Simple pricing, no surprises
