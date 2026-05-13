@@ -158,7 +158,7 @@ export class LemonSqueezyAdapter implements PaymentProvider {
     subscriptionId: string
   ): Promise<NormalizedSubscription> {
     const { data, error } = await updateSubscription(subscriptionId, {
-      pause: null,
+      cancelled: false,
     })
     if (error ?? !data) {
       throw new Error(
