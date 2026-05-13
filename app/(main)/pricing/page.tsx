@@ -27,7 +27,7 @@ export default async function PricingPage() {
           Simple pricing, no surprises
         </h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          Start free, scale when you're ready. Cancel anytime.
+          Start free, scale when you’re ready. Cancel anytime.
         </p>
       </div>
 
