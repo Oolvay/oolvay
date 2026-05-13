@@ -34,6 +34,7 @@ export async function handle(event: SubscriptionUpdatedEvent): Promise<void> {
     throw new Error(`No user found for provider customer ID: "${customerId}"`)
   }
 
+  // Directly sync whatever the provider says is the truth
   await db
     .update(subscriptions)
     .set({
@@ -48,7 +49,7 @@ export async function handle(event: SubscriptionUpdatedEvent): Promise<void> {
     })
     .where(eq(subscriptions.providerSubscriptionId, subscription.providerId))
 
-  // Sync user tier based on new subscription status
+  // Sync user tier based on the new subscription status
   const hasAccess = ACCESS_GRANTING_STATUSES.has(subscription.status)
   const tierConfig = resolveTierFromInternalPriceId(
     subscription.planId as InternalPriceId

@@ -141,7 +141,9 @@ export class LemonSqueezyAdapter implements PaymentProvider {
   }
 
   async cancelSubscription(
-    subscriptionId: string
+    subscriptionId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    options?: { immediately?: boolean }
   ): Promise<NormalizedSubscription> {
     const { data, error } = await cancelSubscription(subscriptionId)
     if (error ?? !data) {
@@ -291,8 +293,30 @@ export class LemonSqueezyAdapter implements PaymentProvider {
         }
       }
 
-      case "subscription_cancelled":
+      case "subscription_cancelled": {
+        // LemonSqueezy fires this immediately on cancel — but the sub is still
+        // active until the period ends. Treat as an update. Our normalizer
+        // will automatically set it to 'active' because of the ends_at date.
+        const customerId = String(
+          (attrs.customer_id as number | undefined) ?? ""
+        )
+        const metaCustomData = (raw.meta as Record<string, unknown>)
+          ?.custom_data as Record<string, string> | undefined
+        const normalized = this.normalizeSubscriptionFromAttrs(
+          String(data?.id ?? ""),
+          attrs,
+          metaCustomData
+        )
+        return {
+          type: "subscription.updated",
+          customerId,
+          subscription: normalized,
+        }
+      }
+
       case "subscription_expired": {
+        // This fires when the billing period actually ends after a cancel.
+        // Only now should we treat the sub as deleted/revoked.
         const customerId = String(
           (attrs.customer_id as number | undefined) ?? ""
         )
@@ -361,7 +385,14 @@ export class LemonSqueezyAdapter implements PaymentProvider {
     const internalPlanId =
       resolveInternalPriceId(variantId, "lemonsqueezy") ?? "pro_monthly"
 
-    const status = this.normalizeStatus(attrs.status as string | undefined)
+    const rawStatus = attrs.status as string | undefined
+    const isCancelled = rawStatus === "cancelled"
+    const endsAt = attrs.ends_at ? new Date(attrs.ends_at as string) : null
+
+    // KEEP THIS: It's the "brain" that knows LemonSqueezy's cancelled actually means active
+    const isSoftCancel = isCancelled && endsAt !== null && endsAt > new Date()
+
+    const status = isSoftCancel ? "active" : this.normalizeStatus(rawStatus)
 
     return {
       id,
@@ -375,7 +406,7 @@ export class LemonSqueezyAdapter implements PaymentProvider {
       currentPeriodEnd: attrs.ends_at
         ? new Date(attrs.ends_at as string)
         : new Date(),
-      cancelAtPeriodEnd: attrs.cancelled === true,
+      cancelAtPeriodEnd: isCancelled, // KEEP THIS
       trialEnd: attrs.trial_ends_at
         ? new Date(attrs.trial_ends_at as string)
         : null,

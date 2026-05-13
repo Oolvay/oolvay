@@ -40,6 +40,9 @@ export async function POST(req: NextRequest) {
 
   const body = bodySchema.parse(await req.json())
   const provider = await providerPromise
+
+  // We still pass 'immediately' to the adapter, but we let the provider
+  // decide how to handle it. We no longer force a DB update here.
   const result = await provider.cancelSubscription(body.subscriptionId, {
     immediately: body.immediately ?? false,
   })
