@@ -2,7 +2,7 @@ import { db } from "@/db/drizzle"
 import { subscriptions } from "@/db/payments-schema"
 import { user } from "@/db/auth-schema"
 import { providerPromise } from "@/lib/payments"
-import { eq, or } from "drizzle-orm"
+import { eq, or, and, inArray, ne } from "drizzle-orm"
 import { resolveTierFromInternalPriceId } from "@/lib/payments/tier-utils"
 import type { InternalPriceId } from "@/config/pricing"
 import type { NormalizedEvent } from "@/db/types/payments/webhook-events"
@@ -11,6 +11,8 @@ type SubscriptionCreatedEvent = Extract<
   NormalizedEvent,
   { type: "subscription.created" }
 >
+
+const ACTIVE_STATUSES = ["active", "trialing", "past_due"] as const
 
 export async function handle(event: SubscriptionCreatedEvent): Promise<void> {
   const { subscription, customerId } = event
@@ -39,6 +41,44 @@ export async function handle(event: SubscriptionCreatedEvent): Promise<void> {
   )
   const provider = await providerPromise
 
+  // ── Cancel any other active subscriptions for this user ───────────────────
+  // Guards against double-billing if the checkout route's plan-change path
+  // was bypassed for any reason (race condition, two tabs, etc.)
+  const otherActiveSubs = await db
+    .select()
+    .from(subscriptions)
+    .where(
+      and(
+        eq(subscriptions.userId, existingUser.id),
+        inArray(subscriptions.status, [...ACTIVE_STATUSES]),
+        ne(subscriptions.providerSubscriptionId, subscription.providerId)
+      )
+    )
+
+  for (const oldSub of otherActiveSubs) {
+    try {
+      await provider.cancelSubscription(oldSub.providerSubscriptionId, {
+        immediately: true,
+      })
+      await db
+        .update(subscriptions)
+        .set({
+          status: "canceled",
+          canceledAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .where(eq(subscriptions.id, oldSub.id))
+    } catch (err) {
+      // Log but don't throw — failing to cancel an old sub must not block
+      // the new subscription from being recorded
+      console.error(
+        `Failed to cancel old subscription ${oldSub.providerSubscriptionId} during plan upgrade:`,
+        err
+      )
+    }
+  }
+
+  // ── Insert new subscription ────────────────────────────────────────────────
   await db
     .insert(subscriptions)
     .values({
