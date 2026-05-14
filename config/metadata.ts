@@ -61,6 +61,12 @@ export const metaData = {
       description: "Manage your email, connected accounts, and account data.",
       robots: { index: false, follow: false },
     },
+    billing: {
+      title: "Billing | Settings",
+      description:
+        "Manage your subscription, billing details, and payment methods.",
+      robots: { index: false, follow: false },
+    },
     notifications: {
       title: "Notifications | Settings",
       description: "Manage your notification preferences.",

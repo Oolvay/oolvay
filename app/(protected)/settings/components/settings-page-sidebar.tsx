@@ -1,12 +1,18 @@
 "use client"
 
-import { UserCogIcon, BellIcon, DatabaseIcon } from "lucide-react"
+import {
+  UserCogIcon,
+  BellIcon,
+  DatabaseIcon,
+  CreditCardIcon,
+} from "lucide-react"
 import type { auth } from "@/lib/auth/auth"
 import { AppSidebar } from "@/components/layout/app-sidebar"
 
 const navItems = [
   { href: "/settings/account", label: "Account", icon: UserCogIcon },
   { href: "/settings/notifications", label: "Notifications", icon: BellIcon },
+  { href: "/settings/billing", label: "Billing", icon: CreditCardIcon },
   { href: "/settings/data", label: "Data", icon: DatabaseIcon },
 ]
 
