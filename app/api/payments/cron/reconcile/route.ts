@@ -3,7 +3,7 @@ export const runtime = "nodejs"
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/db/drizzle"
 import { webhookEvents } from "@/db/payments-schema"
-import { providerPromise } from "@/lib/payments"
+import { getProviderByName } from "@/lib/payments/get-provider"
 import { dispatchNormalizedEvent } from "@/lib/payments/handlers"
 import { env } from "@/env"
 import { eq, and, gt } from "drizzle-orm"
@@ -33,15 +33,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ message: "No failed events to reconcile." })
   }
 
-  const provider = await providerPromise
   const results = { processed: 0, failed: 0, skipped: 0 }
 
   for (const event of failedEvents) {
-    // Only reconcile events for the active provider
-    if (event.provider !== provider.name) {
-      results.skipped++
-      continue
-    }
+    const provider = await getProviderByName(event.provider)
 
     try {
       const normalizedEvent = provider.normalizeWebhookEvent(
@@ -53,6 +48,7 @@ export async function GET(req: NextRequest) {
           .update(webhookEvents)
           .set({ status: "ignored", processedAt: new Date() })
           .where(eq(webhookEvents.id, event.id))
+
         results.skipped++
         continue
       }
@@ -67,10 +63,12 @@ export async function GET(req: NextRequest) {
       results.processed++
     } catch (err) {
       Sentry.captureException(err)
+
       await db
         .update(webhookEvents)
         .set({ error: (err as Error).message })
         .where(eq(webhookEvents.id, event.id))
+
       results.failed++
     }
   }

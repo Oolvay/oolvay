@@ -1,7 +1,7 @@
 export const runtime = "nodejs"
 
 import { NextRequest, NextResponse } from "next/server"
-import { providerPromise } from "@/lib/payments"
+import { stripeProvider } from "@/lib/payments/providers"
 import { dispatchNormalizedEvent } from "@/lib/payments/handlers"
 import { db } from "@/db/drizzle"
 import { sql } from "drizzle-orm"
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   const rawBody = Buffer.from(await req.arrayBuffer())
   const signature = req.headers.get("stripe-signature") ?? ""
 
-  const provider = await providerPromise
+  const provider = stripeProvider
 
   let rawEvent: Record<string, unknown>
   try {
