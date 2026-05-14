@@ -20,6 +20,7 @@ export interface ProviderCapabilities {
   billingPortal: boolean
   freeTrials: boolean
   proration: boolean
+  inPlacePlanChange: boolean
   automaticTax: boolean
   subscriptionPause: boolean
   idempotencyKeys: boolean

@@ -234,6 +234,7 @@ export function PricingTable({ isLoggedIn, userTier }: PricingTableProps) {
                   <CheckoutButton
                     priceId={activePriceId!}
                     type="subscription"
+                    currentTier={userTier ?? undefined}
                     variant="default"
                     size="lg"
                     className="w-full"
@@ -247,6 +248,7 @@ export function PricingTable({ isLoggedIn, userTier }: PricingTableProps) {
                   <CheckoutButton
                     priceId={activePriceId!}
                     type="subscription"
+                    currentTier={userTier ?? undefined}
                     variant="default"
                     size="lg"
                     className="w-full"

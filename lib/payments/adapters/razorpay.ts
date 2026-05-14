@@ -111,6 +111,7 @@ export class RazorpayAdapter implements PaymentProvider {
     billingPortal: false,
     freeTrials: false,
     proration: false,
+    inPlacePlanChange: false,
     automaticTax: false,
     subscriptionPause: true,
     idempotencyKeys: true,
@@ -336,16 +337,10 @@ export class RazorpayAdapter implements PaymentProvider {
   }
 
   async changeSubscriptionPlan(
-    subscriptionId: string
+    _subscriptionId: string,
+    _newPlanId: string
   ): Promise<NormalizedSubscription> {
-    // Razorpay does not support proration — cancel and resubscribe
-    // Cancel at period end, then the frontend should initiate a new checkout
-    const sub = (await razorpay.subscriptions.cancel(
-      subscriptionId,
-      true // cancel at cycle end
-    )) as unknown as RazorpaySubscription
-
-    return this.normalizeSubscription(sub)
+    throw new ProviderCapabilityError("razorpay", "inPlacePlanChange")
   }
 
   // ── Billing portal ─────────────────────────────────────────────────────────

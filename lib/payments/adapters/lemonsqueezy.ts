@@ -50,6 +50,7 @@ export class LemonSqueezyAdapter implements PaymentProvider {
     billingPortal: true,
     freeTrials: true,
     proration: false,
+    inPlacePlanChange: true,
     automaticTax: true,
     subscriptionPause: true,
     idempotencyKeys: false,

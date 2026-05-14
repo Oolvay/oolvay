@@ -58,8 +58,6 @@ export function UserDropdownContent({
     (item) => !pathname.startsWith(item.href)
   )
 
-  console.log("USER TIER: ", user.tier)
-
   return (
     <DropdownMenuContent align={align} side={side} className="w-48 space-y-2">
       {/* Show only in navbar */}

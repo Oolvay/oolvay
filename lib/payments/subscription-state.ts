@@ -85,11 +85,7 @@ export async function requireTier(
   minimumTier: TierKey
 ): Promise<void> {
   const { tier, hasActiveAccess } = await getUserAccessLevel(userId)
-  const order: TierKey[] = [
-    TIERS_KEYS.STARTER,
-    TIERS_KEYS.PRO,
-    TIERS_KEYS.BUSINESS,
-  ]
+  const order = Object.keys(TIERS) as TierKey[]
   if (!hasActiveAccess || order.indexOf(tier) < order.indexOf(minimumTier)) {
     throw new Error(`This feature requires the ${minimumTier} plan or higher.`)
   }
@@ -109,7 +105,8 @@ function buildFreeAccess(): UserAccessLevel {
 }
 
 function resolveTierKeyFromPlanId(planId: string): TierKey {
-  if (planId.startsWith("pro")) return TIERS_KEYS.PRO
-  if (planId.startsWith("business")) return TIERS_KEYS.BUSINESS
-  return TIERS_KEYS.STARTER
+  const match = Object.values(TIERS).find(
+    (tier) => tier.priceId.monthly === planId || tier.priceId.annual === planId
+  )
+  return match?.key ?? TIERS_KEYS.STARTER
 }

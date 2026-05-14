@@ -37,8 +37,9 @@ export interface TierConfig {
 }
 
 // ── Tiers ─────────────────────────────────────────────────────────────────────
-// priceId values here are internal keys — they must match keys in PRICE_MAP below.
-// null means free (no payment required).
+// ── IMPORTANT: Order matters ──────────────────────────────────────────────────
+// Tiers must be defined from lowest to highest. requireTier() uses this order
+// for access control comparisons. DO NOT reorder these keys!
 export const TIERS: Record<TierKey, TierConfig> = {
   starter: {
     key: "starter",

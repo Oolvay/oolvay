@@ -6,6 +6,13 @@ import { Button } from "@/components/ui/button"
 import { LoadingSwap } from "@/components/ui/loading-swap"
 import type { ComponentProps } from "react"
 import { useRouter } from "next/navigation"
+import { TIERS } from "@/config/pricing"
+
+// Derived once at module load — the tier with no priceId is the free tier
+const FREE_TIER_KEY =
+  Object.values(TIERS).find(
+    (t) => t.priceId.monthly === null && t.priceId.annual === null
+  )?.key ?? null
 
 type ButtonVariant = ComponentProps<typeof Button>["variant"]
 type ButtonSize = ComponentProps<typeof Button>["size"]
@@ -13,6 +20,7 @@ type ButtonSize = ComponentProps<typeof Button>["size"]
 interface CheckoutButtonProps {
   priceId: string
   type: "one_time" | "subscription"
+  currentTier?: string
   children: React.ReactNode
   variant?: ButtonVariant
   size?: ButtonSize
@@ -40,6 +48,7 @@ async function loadRazorpayScript(): Promise<void> {
 export function CheckoutButton({
   priceId,
   type,
+  currentTier,
   children,
   variant = "default",
   size = "default",
@@ -87,16 +96,23 @@ export function CheckoutButton({
                     "",
                   razorpaySignature: response.razorpay_signature,
                 })
-                // Poll until tier changes in DB (webhook may take a few seconds)
+                // Poll until tier changes from the pre-payment baseline.
+                // currentTier is passed in from the server as a prop so we
+                // always have the correct baseline — no hardcoded tier names.
+                const tierBaseline = currentTier ?? FREE_TIER_KEY
                 const pollForTierChange = async () => {
                   for (let i = 0; i < 10; i++) {
                     await new Promise((r) => setTimeout(r, 2000))
-                    const status = await fetch("/api/payments/subscription")
-                    if (status.ok) {
-                      const data = await status.json()
-                      if (data.tier && data.tier !== "starter") {
-                        break
+                    try {
+                      const res = await fetch("/api/payments/subscription")
+                      if (res.ok) {
+                        const data = await res.json()
+                        if (data.tier && data.tier !== tierBaseline) {
+                          break
+                        }
                       }
+                    } catch {
+                      // Network hiccup — keep polling
                     }
                   }
                 }

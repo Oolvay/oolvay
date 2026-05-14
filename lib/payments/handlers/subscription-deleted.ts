@@ -1,9 +1,11 @@
 import { db } from "@/db/drizzle"
 import { subscriptions } from "@/db/payments-schema"
 import { user } from "@/db/auth-schema"
-import { eq } from "drizzle-orm"
+import { eq, and, inArray, ne } from "drizzle-orm"
 import { SUBSCRIPTION_STATUSES } from "@/db/types/payments/subscription-status"
 import { TIERS_KEYS } from "@/db/types/payments/tier"
+import { resolveTierFromInternalPriceId } from "@/lib/payments/tier-utils"
+import type { InternalPriceId } from "@/config/pricing"
 import type { NormalizedEvent } from "@/db/types/payments/webhook-events"
 
 type SubscriptionDeletedEvent = Extract<
@@ -11,8 +13,10 @@ type SubscriptionDeletedEvent = Extract<
   { type: "subscription.deleted" }
 >
 
+const ACCESS_GRANTING_STATUSES = ["active", "trialing", "past_due"] as const
+
 export async function handle(event: SubscriptionDeletedEvent): Promise<void> {
-  // First update the subscription status — we always have the subscriptionId
+  // Mark the canceled subscription as such
   await db
     .update(subscriptions)
     .set({
@@ -22,35 +26,64 @@ export async function handle(event: SubscriptionDeletedEvent): Promise<void> {
     })
     .where(eq(subscriptions.providerSubscriptionId, event.subscriptionId))
 
-  // Find the user via the subscriptions table (works even when customerId is null)
+  // Find the user via the subscriptions table
   const [existingSubscription] = await db
     .select({ userId: subscriptions.userId })
     .from(subscriptions)
     .where(eq(subscriptions.providerSubscriptionId, event.subscriptionId))
 
-  if (!existingSubscription) {
-    // Fall back to customerId lookup if subscription row not found
-    if (event.customerId) {
-      const [existingUser] = await db
-        .select()
-        .from(user)
-        .where(eq(user.providerCustomerId, event.customerId))
+  let userId: string | null = null
 
-      if (existingUser) {
-        await db
-          .update(user)
-          .set({ tier: TIERS_KEYS.STARTER })
-          .where(eq(user.id, existingUser.id))
-        return
-      }
+  if (existingSubscription) {
+    userId = existingSubscription.userId
+  } else if (event.customerId) {
+    // Fall back to customerId lookup if subscription row not found
+    const [existingUser] = await db
+      .select({ id: user.id })
+      .from(user)
+      .where(eq(user.providerCustomerId, event.customerId))
+    if (existingUser) {
+      userId = existingUser.id
     }
+  }
+
+  if (!userId) {
     throw new Error(
       `No subscription or user found for subscription ID: "${event.subscriptionId}"`
     )
   }
 
+  // Check whether the user has another active subscription before
+  // downgrading — webhooks can arrive out of order, so the new sub
+  // may already be active by the time the old one's cancellation arrives
+  const [otherActiveSub] = await db
+    .select({ planId: subscriptions.planId })
+    .from(subscriptions)
+    .where(
+      and(
+        eq(subscriptions.userId, userId),
+        inArray(subscriptions.status, [...ACCESS_GRANTING_STATUSES]),
+        ne(subscriptions.providerSubscriptionId, event.subscriptionId)
+      )
+    )
+    .limit(1)
+
+  if (otherActiveSub) {
+    // Another active subscription exists — upgrade/switch is in progress.
+    // Set the tier to match that subscription instead of downgrading.
+    const tierConfig = resolveTierFromInternalPriceId(
+      otherActiveSub.planId as InternalPriceId
+    )
+    await db
+      .update(user)
+      .set({ tier: tierConfig.key })
+      .where(eq(user.id, userId))
+    return
+  }
+
+  // No other active subscription — genuinely canceled, downgrade to free tier
   await db
     .update(user)
     .set({ tier: TIERS_KEYS.STARTER })
-    .where(eq(user.id, existingSubscription.userId))
+    .where(eq(user.id, userId))
 }

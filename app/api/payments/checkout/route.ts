@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
       )
       .limit(1)
 
-    if (existingActiveSub) {
+    if (existingActiveSub && provider.capabilities.inPlacePlanChange) {
       // Resolve the tier for the requested plan to confirm it differs
       const requestedTier = resolveTierFromInternalPriceId(
         body.priceId as InternalPriceId
