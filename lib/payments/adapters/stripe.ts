@@ -41,6 +41,7 @@ export class StripeAdapter implements PaymentProvider {
     billingPortal: true,
     freeTrials: true,
     proration: true,
+    inPlacePlanChange: false,
     automaticTax: true,
     subscriptionPause: true,
     idempotencyKeys: true,

@@ -337,7 +337,9 @@ export class RazorpayAdapter implements PaymentProvider {
   }
 
   async changeSubscriptionPlan(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _subscriptionId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _newPlanId: string
   ): Promise<NormalizedSubscription> {
     throw new ProviderCapabilityError("razorpay", "inPlacePlanChange")
