@@ -136,7 +136,12 @@ export function CheckoutButton({
         })
       }
     } catch (err) {
-      console.error("Checkout failed:", err)
+      if (err instanceof Error && err.message.includes("Unauthorized")) {
+        router.push(`/login?callbackUrl=${encodeURIComponent("/pricing")}`)
+
+        return
+      }
+
       setLoading(false)
     }
   }
