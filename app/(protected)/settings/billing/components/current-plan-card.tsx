@@ -30,21 +30,32 @@ export function CurrentPlanCard({
               <p className="text-sm font-medium">{planName}</p>
 
               <p className="text-sm text-muted-foreground">
-                {cancelAtPeriodEnd
-                  ? "Your subscription will end at the current billing period"
+                {cancelAtPeriodEnd ||
+                (status === "canceled" && renewsAt && renewsAt > new Date())
+                  ? renewsAt
+                    ? `Ends ${renewsAt.toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                      })}`
+                    : "Your subscription will end at the current billing period"
                   : renewsAt
                     ? `Renews ${renewsAt.toLocaleDateString("en-US", {
                         month: "long",
                         day: "numeric",
                         year: "numeric",
                       })}`
-                    : "No renewal date available"}
+                    : "You are currently on the free plan"}
               </p>
             </div>
 
             <div className="flex flex-col space-y-4 items-end shrink-0">
               <div className="flex items-center text-muted-foreground capitalize rounded-full border pl-1 pr-2">
-                <GoDotFill className="mr-1 text-green-500" />
+                <GoDotFill
+                  className={`mr-1 ${
+                    status === "active" ? "text-green-500" : "text-amber-500"
+                  }`}
+                />
                 {status.replaceAll("_", " ")}
               </div>
 

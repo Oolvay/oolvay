@@ -3,8 +3,11 @@ import { BillingActionsCard } from "@/app/(protected)/settings/billing/component
 import { CurrentPlanCard } from "@/app/(protected)/settings/billing/components/current-plan-card"
 import { siteConfig } from "@/config/site"
 import { getServerSession } from "@/lib/auth/get-server-session"
+import { getCurrentSubscription } from "@/actions/get-current-subscription"
+import { TIERS } from "@/config/pricing"
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
+import { TierKey } from "@/db/types/payments/tier"
 
 export const metadata: Metadata = {
   title: siteConfig.seo.metaData.settings.billing.title,
@@ -20,6 +23,13 @@ export default async function SettingsBillingPage() {
     redirect("/login")
   }
 
+  const result = await getCurrentSubscription()
+  const subscription = result.success ? result.subscription : null
+
+  const tier = TIERS[(subscription?.tier ?? "starter") as TierKey]
+
+  const displayStatus = subscription?.cancelAtPeriodEnd ? "canceling" : "active"
+
   return (
     <div className="container space-y-8">
       <GatedPageTitle
@@ -27,10 +37,10 @@ export default async function SettingsBillingPage() {
         description="Manage your subscription, invoices, and billing preferences"
       />
       <CurrentPlanCard
-        planName="Pro"
-        status="active"
-        renewsAt={new Date("2026-06-14")}
-        cancelAtPeriodEnd={false}
+        planName={tier.name}
+        status={displayStatus}
+        renewsAt={subscription?.currentPeriodEnd}
+        cancelAtPeriodEnd={subscription?.cancelAtPeriodEnd ?? false}
       />
       <BillingActionsCard
         canManageBilling
