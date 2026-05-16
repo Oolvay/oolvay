@@ -1,5 +1,5 @@
 import { GatedPageTitle } from "@/app/(protected)/components/gated-page-title"
-import { BillingActionsCard } from "@/app/(protected)/settings/billing/components/billing-actions-card"
+import { SubscriptionActionsCard } from "@/app/(protected)/settings/billing/components/subscription-actions-card"
 import { CurrentPlanCard } from "@/app/(protected)/settings/billing/components/current-plan-card"
 import { siteConfig } from "@/config/site"
 import { getServerSession } from "@/lib/auth/get-server-session"
@@ -42,14 +42,14 @@ export default async function SettingsBillingPage() {
         renewsAt={subscription?.currentPeriodEnd}
         cancelAtPeriodEnd={subscription?.cancelAtPeriodEnd ?? false}
       />
-      <BillingActionsCard
-        canManageBilling
+      <SubscriptionActionsCard
+        canManageSubscription={
+          subscription?.provider === "lemonsqueezy" ||
+          subscription?.provider === "stripe"
+        }
         canCancel
         canResume={false}
         cancelAtPeriodEnd={false}
-        onManageBilling={async () => {
-          "use server"
-        }}
         onCancel={async () => {
           "use server"
         }}

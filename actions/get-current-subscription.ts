@@ -11,6 +11,7 @@ export type CurrentSubscriptionResult =
       success: true
       subscription: {
         tier: string | null
+        provider: string | null
         planId: string | null
         status: string | null
         currentPeriodEnd: Date | null
@@ -40,7 +41,7 @@ export async function getCurrentSubscription(): Promise<CurrentSubscriptionResul
     const [result] = await db
       .select({
         tier: user.tier,
-
+        provider: subscriptions.provider,
         planId: subscriptions.planId,
         status: subscriptions.status,
         currentPeriodEnd: subscriptions.currentPeriodEnd,
@@ -69,7 +70,7 @@ export async function getCurrentSubscription(): Promise<CurrentSubscriptionResul
       subscription: result
         ? {
             tier: result.tier,
-
+            provider: result.provider,
             planId: result.planId,
             status: result.status,
             currentPeriodEnd: result.currentPeriodEnd,

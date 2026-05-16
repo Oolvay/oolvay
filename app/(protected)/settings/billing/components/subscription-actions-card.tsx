@@ -1,31 +1,28 @@
 "use client"
 
 import { useTransition } from "react"
-
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-
+import { createBillingPortalSession } from "@/lib/payments/client"
 import { GatedPageSubheading } from "@/app/(protected)/components/gated-page-subheading"
 
-interface BillingActionsCardProps {
-  canManageBilling: boolean
+interface SubscriptionActionsCardProps {
+  canManageSubscription: boolean
   canCancel: boolean
   canResume: boolean
   cancelAtPeriodEnd?: boolean
-  onManageBilling: () => Promise<void>
   onCancel: () => Promise<void>
   onResume: () => Promise<void>
 }
 
-export function BillingActionsCard({
-  canManageBilling,
+export function SubscriptionActionsCard({
+  canManageSubscription,
   canCancel,
   canResume,
   cancelAtPeriodEnd,
-  onManageBilling,
   onCancel,
   onResume,
-}: BillingActionsCardProps) {
+}: SubscriptionActionsCardProps) {
   const [isPending, startTransition] = useTransition()
 
   return (
@@ -34,7 +31,7 @@ export function BillingActionsCard({
 
       <Card className="max-w-2xl">
         <CardContent className="px-6 py-2">
-          {canManageBilling && (
+          {canManageSubscription && (
             <div className="flex items-center justify-between gap-4 py-3 border-b last:border-0">
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium">Billing portal</p>
@@ -50,7 +47,8 @@ export function BillingActionsCard({
                 disabled={isPending}
                 onClick={() =>
                   startTransition(async () => {
-                    await onManageBilling()
+                    const result = await createBillingPortalSession()
+                    window.location.href = result.url
                   })
                 }
                 className="shrink-0"

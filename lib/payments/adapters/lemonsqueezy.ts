@@ -191,9 +191,9 @@ export class LemonSqueezyAdapter implements PaymentProvider {
   // ── Billing portal ─────────────────────────────────────────────────────────
 
   async createBillingPortalSession(
-    customerId: string
+    subscriptionId: string
   ): Promise<{ url: string }> {
-    const { data, error } = await getSubscription(customerId)
+    const { data, error } = await getSubscription(subscriptionId)
     if (error ?? !data) {
       throw new Error(
         `LemonSqueezy billing portal lookup failed: ${error?.message}`
