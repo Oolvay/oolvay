@@ -2,7 +2,7 @@
 
 **The Next.js SaaS starter kit built for the modern stack — and the Indian market.**
 
-Oolvay is a production-ready, fully-featured SaaS boilerplate built on Next.js 16. It ships everything a founding engineer needs to go from zero to paying customers — authentication, payments, email, analytics, security, storage, a blog, an admin dashboard, and a CI/CD pipeline — all wired together, tested, and ready to customise.
+Oolvay is a production-ready, batteries-included SaaS starter kit built on Next.js 16. It ships everything a founding engineer needs to go from zero to paying customers — authentication, payments, email, analytics, security, storage, a blog, an admin dashboard, and a CI/CD pipeline — all wired together, tested, and ready to customise.
 
 Unlike other starter kits that use yesterday's tools, Oolvay is built on the latest versions of everything: Next.js 16 with Turbopack, Tailwind CSS v4, Better Auth, Drizzle ORM, and Zod v4. It is the only major SaaS starter with first-class Razorpay support, making it the natural choice for founders building for Indian users.
 
