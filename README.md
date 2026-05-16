@@ -199,75 +199,100 @@ Unlike other starter kits that use yesterday's tools, Oolvay is built on the lat
 
 ```
 oolvay/
-├── app/
-│   ├── (auth)/                  # Sign-in, sign-up, magic link pages
-│   ├── (marketing)/             # Homepage, about, features, pricing, blog
-│   ├── (dashboard)/             # Protected dashboard pages
-│   │   ├── dashboard/
-│   │   ├── security/            # Session management
-│   │   └── billing/             # Billing management (Razorpay)
-│   ├── (admin)/                 # Admin-only pages
-│   │   └── admin/
-│   └── api/
-│       ├── auth/[...all]/       # Better Auth catch-all handler
-│       ├── admin/health/        # Health check endpoint
-│       ├── contact/             # Contact form handler
-│       └── payments/
-│           ├── checkout/        # Initiate checkout
-│           ├── checkout/verify/ # Razorpay HMAC verification
-│           ├── subscription/    # Subscription status
-│           ├── subscription/cancel/
-│           ├── subscription/resume/
-│           ├── billing-portal/  # LemonSqueezy portal
-│           ├── webhooks/
-│           │   ├── lemonsqueezy/
-│           │   └── razorpay/
-│           └── cron/
-│               └── reconcile-webhooks/
-├── components/
-│   ├── ui/                      # shadcn/ui base components
-│   ├── payments/                # CheckoutButton, PricingTable, etc.
-│   ├── blog/                    # Blog post renderer, card, list
-│   ├── auth/                    # Sign-in forms, session components
-│   └── shared/                  # Navbar, footer, theme toggle, etc.
-├── config/
-│   └── tiers.ts                 # Edit this to configure your plans
-├── db/
-│   ├── drizzle.ts               # Drizzle client
-│   └── schema/
-│       ├── auth.ts              # Users table (Better Auth managed)
-│       └── payments.ts          # Subscriptions, orders, webhook_events
-├── emails/                      # React Email templates
-├── lib/
-│   ├── auth/
-│   │   └── get-server-session.ts
-│   ├── arcjet.ts                # Shared Arcjet instance
-│   ├── redis.ts                 # Upstash Redis client
-│   ├── s3.ts                    # S3 pre-signed URL helpers
-│   └── payments/
-│       ├── index.ts             # Active provider singleton
-│       ├── types.ts             # All shared payment interfaces
-│       ├── price-map.ts         # Internal ID to provider ID mapping
-│       ├── subscription-state.ts
-│       ├── client.ts            # Typed fetch helpers for client components
-│       ├── adapters/
-│       │   ├── lemonsqueezy.ts
-│       │   └── razorpay.ts
-│       └── handlers/            # Webhook event handlers
-├── content/
-│   └── blog/                    # MDX blog posts
-├── scripts/
-│   ├── reset-db.ts              # Database reset script (dev only)
-│   ├── seed-blog.ts             # Blog seed data
-│   └── generate-env-example.ts  # Generates .env.example from env.ts
-├── cdk/                         # AWS CDK infrastructure code
-├── public/
-├── env.ts                       # Environment variable validation
-├── middleware.ts                 # Route protection middleware
-├── next.config.ts
-├── drizzle.config.ts
-└── .github/
-    └── workflows/               # GitHub Actions CI/CD
+├── .github/workflows/
+│   └── ci.yml                       # Continuous Integration pipeline
+├── .vscode/
+│   ├── mcp.json                     # Model Context Protocol settings
+│   └── settings.json
+├── actions/                         # Server Actions (Mutations)
+│   ├── change-role.ts               # RBAC management
+│   ├── consent.ts                   # Cookie/Analytics consent handling
+│   ├── create-api-key.ts, fetch-api-keys.ts # Developer API key lifecycle
+│   ├── create-post.ts, delete-post.ts       # Blog CMS operations
+│   ├── delete-own-account.ts        # Self-serve account deletion
+│   ├── export-user-data.ts          # GDPR/CCPA data export compliance
+│   ├── update-preferred-mode.ts     # Dark/Light mode preferences
+│   └── upload-avatar.ts             # Profile image management
+├── app/                             # App Router
+│   ├── (main)/                      # Public Marketing & Info Pages
+│   │   ├── about/, contact/, docs/, features/
+│   │   ├── cookies/, grievance/, privacy/, terms/ # Legal & Compliance
+│   │   └── pricing/                 # Tier selection
+│   │       ├── checkout-button.tsx
+│   │       └── pricing-table.tsx
+│   ├── (protected)/                 # Authenticated App Routes
+│   │   ├── admin/                   # Superadmin Portal
+│   │   │   ├── activity/, overview/, system/, users/
+│   │   ├── dashboard/               # Main User App
+│   │   ├── developer/               # API Key Generation UI
+│   │   ├── preferences/             # Accessibility & Display toggles
+│   │   ├── profile/                 # General, Personal, Professional info
+│   │   ├── security/                # Passkeys & Active Sessions
+│   │   └── settings/                # Account, Billing, Data, Notifications
+│   ├── api/                         # 🔌 Route Handlers (APIs & Webhooks)
+│   │   ├── admin/health/route.ts
+│   │   ├── auth/[...all]/route.ts   # Better Auth endpoint
+│   │   └── payments/
+│   │       ├── checkout/verify/     # Razorpay signature verification
+│   │       ├── cron/reconcile/      # Scheduled payment synchronization
+│   │       └── webhooks/            # Provider webhook listeners
+│   │           ├── lemonsqueezy/
+│   │           └── razorpay/
+│   ├── blog/                        # Integrated CMS
+│   │   ├── [slug]/, author/, category/ # Public reading routes
+│   │   ├── drafts/, edit/[id]/      # Private authoring routes
+│   │   └── components/
+│   │       ├── blog-feed.tsx
+│   │       ├── image-node-view.tsx  # Tiptap custom node
+│   │       └── post-settings-modal.tsx
+│   ├── login/                       # Authentication entry
+│   ├── styles/
+│   │   ├── globals.css
+│   │   └── theme-transitions.css    # Smooth dark mode toggles
+│   ├── layout.tsx, page.tsx, global-error.tsx, not-found.tsx
+│   ├── manifest.json, robots.ts, sitemap.ts # SEO & PWA
+│   └── unauthorized.tsx             # 401 redirect page
+├── components/                      # Reusable React UI
+│   ├── auth/                        # login-form, passkey-button, social-login
+│   ├── editor/                      # tiptap-editor, heading-selector
+│   ├── layout/                      # app-sidebar, mode-toggle, navbar
+│   ├── markdown/                    # markdown-renderer
+│   ├── payments/                    # billing-portal-button, subscription-status
+│   ├── providers/                   # consent, posthog, preferences, theme
+│   └── ui/                          # Shadcn core components (buttons, modals)
+├── config/                          # App Constants
+│   ├── api-keys.ts, constants.ts, pricing.ts, site.ts
+│   └── metadata.ts                  # Default SEO metadata
+├── content/                         # Static Markdown Policies
+│   ├── cookies.md, grievance.md, privacy.md, terms.md
+├── db/                              # Database & ORM (Drizzle)
+│   ├── drizzle.ts                   # DB Connection
+│   ├── api-key-schema.ts, auth-schema.ts
+│   └── blog-schema.ts, payments-schema.ts
+├── emails/                          # React Email Templates
+│   ├── magic-link.tsx, welcome.tsx, payment-failed.tsx
+├── hooks/                           # Custom Client Hooks
+│   ├── use-analytics.ts, use-autosave.ts, use-cookie-consent.ts
+├── infra/                           # Infrastructure as Code (AWS CDK)
+│   ├── constructs/
+│   │   ├── cloudfront-cdn.ts        # Asset delivery
+│   │   └── s3-storage.ts            # Avatar/Blog image storage
+│   ├── core-stack.ts                # Main CDK stack
+│   └── app.ts
+├── lib/                             # Core Business Logic
+│   ├── auth/                        # Better Auth config (auth.ts, auth-client.ts)
+│   ├── payments/
+│   │   ├── adapters/                # lemonsqueezy.ts, razorpay.ts, stripe.ts
+│   │   ├── handlers/                # Universal events (e.g., subscription-created.ts)
+│   │   └── webhooks/stripe/         # Stripe specific webhook logic
+│   ├── validations/                 # Zod Schemas for Server Actions/Forms
+│   │   ├── avatar-schema.ts, blog-schema.ts, contact-form-schema.ts
+│   ├── arcjet.ts                    # Bot protection / Rate limiting
+│   ├── redis.ts                     # Caching layer
+│   └── utils.ts
+├── public/                          # Static assets (SVGs, Icons)
+├── scripts/                         # DB seeding, environment generation
+└── [Root Config Files]              # .env, bun.lock, drizzle.config.ts, next.config.ts, tailwind.config.ts, etc.
 ```
 
 ---
