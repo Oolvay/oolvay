@@ -404,9 +404,9 @@ export class LemonSqueezyAdapter implements PaymentProvider {
       currentPeriodStart: attrs.renewed_at
         ? new Date(attrs.renewed_at as string)
         : new Date(),
-      currentPeriodEnd: attrs.ends_at
-        ? new Date(attrs.ends_at as string)
-        : new Date(),
+      currentPeriodEnd: attrs.renews_at
+        ? new Date(attrs.renews_at as string)
+        : (endsAt ?? new Date()),
       cancelAtPeriodEnd: isCancelled, // KEEP THIS
       trialEnd: attrs.trial_ends_at
         ? new Date(attrs.trial_ends_at as string)
