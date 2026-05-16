@@ -7,23 +7,32 @@ import { createBillingPortalSession } from "@/lib/payments/client"
 import { GatedPageSubheading } from "@/app/(protected)/components/gated-page-subheading"
 
 interface SubscriptionActionsCardProps {
-  canManageSubscription: boolean
-  canCancel: boolean
-  canResume: boolean
-  cancelAtPeriodEnd?: boolean
+  tier: string
+  provider: string | null
+  cancelAtPeriodEnd: boolean
   onCancel: () => Promise<void>
   onResume: () => Promise<void>
 }
 
 export function SubscriptionActionsCard({
-  canManageSubscription,
-  canCancel,
-  canResume,
+  tier,
+  provider,
   cancelAtPeriodEnd,
   onCancel,
   onResume,
 }: SubscriptionActionsCardProps) {
   const [isPending, startTransition] = useTransition()
+  const isFree = tier === "starter"
+  const supportsBillingPortal =
+    provider === "lemonsqueezy" || provider === "stripe"
+  const supportsDelayedCancellation =
+    provider === "lemonsqueezy" || provider === "stripe"
+  const showCancel = !isFree && !cancelAtPeriodEnd
+  const showResume = !isFree && supportsDelayedCancellation && cancelAtPeriodEnd
+
+  if (isFree) {
+    return null
+  }
 
   return (
     <div className="space-y-2">
@@ -31,7 +40,7 @@ export function SubscriptionActionsCard({
 
       <Card className="max-w-2xl">
         <CardContent className="px-6 py-2">
-          {canManageSubscription && (
+          {supportsBillingPortal && (
             <div className="flex items-center justify-between gap-4 py-3 border-b last:border-0">
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium">Billing portal</p>
@@ -58,14 +67,15 @@ export function SubscriptionActionsCard({
             </div>
           )}
 
-          {canCancel && !cancelAtPeriodEnd && (
+          {showCancel && (
             <div className="flex items-center justify-between gap-4 py-3 border-b last:border-0">
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium">Cancel subscription</p>
 
                 <p className="text-sm text-muted-foreground">
-                  Your subscription will remain active until the end of the
-                  current billing period
+                  {supportsDelayedCancellation
+                    ? "Your subscription will remain active until the end of the current billing period"
+                    : "Your subscription will be canceled immediately"}
                 </p>
               </div>
 
@@ -85,13 +95,14 @@ export function SubscriptionActionsCard({
             </div>
           )}
 
-          {canResume && cancelAtPeriodEnd && (
+          {showResume && (
             <div className="flex items-center justify-between gap-4 py-3 border-b last:border-0">
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium">Resume subscription</p>
 
                 <p className="text-sm text-muted-foreground">
-                  Continue your subscription without interruption
+                  Your subscription is scheduled to end at the end of the
+                  current billing period
                 </p>
               </div>
 

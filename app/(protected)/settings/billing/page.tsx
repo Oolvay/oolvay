@@ -43,13 +43,9 @@ export default async function SettingsBillingPage() {
         cancelAtPeriodEnd={subscription?.cancelAtPeriodEnd ?? false}
       />
       <SubscriptionActionsCard
-        canManageSubscription={
-          subscription?.provider === "lemonsqueezy" ||
-          subscription?.provider === "stripe"
-        }
-        canCancel
-        canResume={false}
-        cancelAtPeriodEnd={false}
+        tier={subscription?.tier ?? "starter"}
+        provider={subscription?.provider ?? null}
+        cancelAtPeriodEnd={subscription?.cancelAtPeriodEnd ?? false}
         onCancel={async () => {
           "use server"
         }}
