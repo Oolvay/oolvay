@@ -11,8 +11,11 @@ export default function Layout({ children }: { children: ReactNode }) {
         nav={{
           title: (
             <div className="flex items-center gap-2 font-semibold">
-              <BookOpen className="size-4" />
-              <span>Documentation</span>
+              <BookOpen
+                className="size-4 shrink-0"
+                style={{ color: "var(--foreground)" }}
+              />
+              <span className="text-foreground">Documentation</span>
             </div>
           ),
         }}
