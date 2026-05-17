@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import { DocsLayout } from "fumadocs-ui/layouts/docs"
-import { BookOpen } from "lucide-react"
+import { siteConfig } from "@/config/site"
 import { source } from "@/lib/source"
 
 export default function Layout({ children }: { children: ReactNode }) {
@@ -10,12 +10,16 @@ export default function Layout({ children }: { children: ReactNode }) {
         tree={source.pageTree}
         nav={{
           title: (
-            <div className="flex items-center gap-2 font-semibold">
-              <BookOpen
-                className="size-4 shrink-0"
-                style={{ color: "var(--foreground)" }}
+            <div className="flex items-center gap-2 text-foreground">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand-logo.svg"
+                alt={siteConfig.brand.name}
+                className="size-6 shrink-0"
               />
-              <span className="text-foreground">Documentation</span>
+              <span className="font-extrabold text-2xl tracking-tight">
+                {siteConfig.brand.name}
+              </span>
             </div>
           ),
         }}
