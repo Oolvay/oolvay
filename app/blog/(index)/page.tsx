@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: siteConfig.seo.metaData.blog.description,
 }
 
-export const revalidate = 3600 // Revalidate this page every 60 minutes (ISR)
+export const revalidate = 3600
 
 async function handleNewPost() {
   "use server"

@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { type DraftPost } from "@/actions/get-drafts"
 import { FileTextIcon } from "lucide-react"
@@ -9,9 +8,13 @@ import { DraftCard } from "@/app/blog/components/draft-card"
 
 interface DraftsListProps {
   drafts: DraftPost[]
+  onNewPost: () => Promise<void>
 }
 
-export function DraftsList({ drafts: initialDrafts }: DraftsListProps) {
+export function DraftsList({
+  drafts: initialDrafts,
+  onNewPost,
+}: DraftsListProps) {
   const [drafts, setDrafts] = useState(initialDrafts)
 
   const handlePublished = (id: string) => {
@@ -28,9 +31,11 @@ export function DraftsList({ drafts: initialDrafts }: DraftsListProps) {
             Posts you save without publishing will appear here.
           </span>
         </div>
-        <Button asChild variant="outline" size="sm" className="mt-2">
-          <Link href="/blog/edit/new">Create a post</Link>
-        </Button>
+        <form action={onNewPost}>
+          <Button type="submit" variant="outline" size="sm" className="mt-2">
+            Create a post
+          </Button>
+        </form>
       </div>
     )
   }

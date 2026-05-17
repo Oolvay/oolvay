@@ -7,8 +7,6 @@ import {
   UserPlusIcon,
   CalendarIcon,
   ActivityIcon,
-  ShieldUserIcon,
-  UserIcon,
 } from "lucide-react"
 
 function StatCardSkeleton({

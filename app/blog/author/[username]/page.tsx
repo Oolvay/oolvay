@@ -70,8 +70,10 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
           __html: JSON.stringify(breadcrumbJsonLd),
         }}
       />
-
-      <BlogBreadcrumbs authorName={authorName} />
+      <BlogBreadcrumbs
+        authorName={authorName}
+        className="px-4 md:px-8 pt-6 max-w-6xl mx-auto mb-0"
+      />
       <section className="flex flex-col gap-20 mx-auto max-w-6xl px-4 md:px-8 py-10">
         <header className="font-bold text-foreground text-center space-y-4">
           <h1 className="text-4xl/tight md:text-6xl">{authorName}</h1>

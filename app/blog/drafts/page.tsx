@@ -2,7 +2,14 @@ import { getServerSession } from "@/lib/auth/get-server-session"
 import { ROLES } from "@/db/types/roles"
 import { redirect } from "next/navigation"
 import { getDrafts } from "@/actions/get-drafts"
+import { createPost } from "@/actions/create-post"
 import { DraftsList } from "@/app/blog/components/drafts-list"
+
+async function handleNewPost() {
+  "use server"
+  const result = await createPost({ published: false })
+  if (result.success) redirect(`/blog/edit/${result.id}`)
+}
 
 export default async function DraftsPage() {
   const session = await getServerSession()
@@ -34,7 +41,7 @@ export default async function DraftsPage() {
             : `${result.drafts.length} unpublished ${result.drafts.length === 1 ? "post" : "posts"}`}
         </h2>
       </header>
-      <DraftsList drafts={result.drafts} />
+      <DraftsList drafts={result.drafts} onNewPost={handleNewPost} />
     </section>
   )
 }
