@@ -20,7 +20,9 @@ function MagicLinkEmail({ url }: MagicLinkEmailProps) {
       <Body>
         <Container>
           <Text>Welcome to {siteConfig.brand.name}!</Text>
-          <Text>Click the link below to log in. It expires in 15 minutes.</Text>
+          <Text>
+            {`Click the link below to log in. It expires in ${siteConfig.emails.magicLink.expiresInSeconds / 60} minutes.`}
+          </Text>
           <Link href={url}>Log in to {siteConfig.brand.name}</Link>
           <Text>
             If you didn’t request this, you can safely ignore this email.

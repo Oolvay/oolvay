@@ -4,17 +4,13 @@ import { auditLog, user } from "@/db/auth-schema"
 import { eq } from "drizzle-orm"
 import { siteConfig } from "@/config/site"
 
-const AUTH_ENDPOINTS = [
-  "/magic-link/verify",
-  "/passkey/verify",
-  "/sign-in/social",
-  "/callback",
-]
+const AUTH_ENDPOINTS = ["/magic-link/verify", "/passkey/verify"]
 
 type ReturnedContext =
   | {
-      status?: number
-      headers?: { get: (key: string) => string | null }
+      status?: number | string
+      statusCode?: number
+      headers?: { get: (key: string) => string | null } | Record<string, never>
       name?: string
     }
   | Error
@@ -28,18 +24,37 @@ export const onFailedLogin = createAuthMiddleware(async (ctx) => {
   const returned = ctx.context.returned as ReturnedContext
 
   const status = returned && "status" in returned ? returned.status : undefined
-  const isErrorStatus = status !== undefined && status >= 400
-  const isThrownError =
-    returned instanceof Error ||
-    (returned !== null && "name" in returned && returned.name === "APIError")
-
+  const statusCode =
+    returned && "statusCode" in returned ? returned.statusCode : undefined
   const headers =
-    returned && "headers" in returned ? returned.headers : undefined
+    returned && "headers" in returned && typeof returned.headers === "object"
+      ? (returned.headers as { get?: (key: string) => string | null })
+      : undefined
   const locationHeader = headers?.get ? headers.get("location") : null
+
+  // Better Auth throws an APIError with status "FOUND" for successful redirects
+  const isSuccessRedirect =
+    returned !== null &&
+    "name" in returned &&
+    returned.name === "APIError" &&
+    status === "FOUND" &&
+    !locationHeader?.includes("error=") &&
+    !locationHeader?.includes("error_code=")
+
+  const numericStatus =
+    typeof status === "number" ? status : (statusCode ?? undefined)
+
+  const isErrorStatus = numericStatus !== undefined && numericStatus >= 400
+
+  const isThrownError =
+    !isSuccessRedirect &&
+    (returned instanceof Error ||
+      (returned !== null && "name" in returned && returned.name === "APIError"))
+
   const isErrorRedirect =
-    status !== undefined &&
-    status >= 300 &&
-    status < 400 &&
+    numericStatus !== undefined &&
+    numericStatus >= 300 &&
+    numericStatus < 400 &&
     (locationHeader?.includes("error=") ||
       locationHeader?.includes("error_code="))
 
@@ -77,7 +92,7 @@ export const onFailedLogin = createAuthMiddleware(async (ctx) => {
         null,
       userAgent: ctx.headers?.get("user-agent") || null,
       path: ctx.path,
-      errorStatus: status ?? 302,
+      errorStatus: numericStatus ?? 0,
     },
     createdAt: new Date(),
     expiresAt: new Date(Date.now() + retentionMs),

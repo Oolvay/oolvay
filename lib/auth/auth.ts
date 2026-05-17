@@ -276,6 +276,7 @@ export const auth = betterAuth({
       enableMetadata: true,
     }),
     magicLink({
+      expiresIn: siteConfig.emails.magicLink.expiresInSeconds,
       sendMagicLink: async ({ email, url }) => {
         await sendEmail({
           to: email,

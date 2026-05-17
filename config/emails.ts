@@ -27,6 +27,7 @@ export const emails = {
   magicLink: {
     sender: `${BRANDNAME} Accounts`,
     fromEmail: "onboarding@resend.dev",
+    expiresInSeconds: 300, // 5 minutes
   },
 
   privacy: {
