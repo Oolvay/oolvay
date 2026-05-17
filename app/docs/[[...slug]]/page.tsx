@@ -1,3 +1,4 @@
+import { DocsBody, DocsPage } from "fumadocs-ui/page"
 import { notFound } from "next/navigation"
 
 import { source } from "@/lib/source"
@@ -20,8 +21,10 @@ export default async function Page({ params }: PageProps) {
   const MDX = page.data.body
 
   return (
-    <article className="prose prose-neutral dark:prose-invert max-w-none">
-      <MDX />
-    </article>
+    <DocsPage toc={page.data.toc} full={page.data.full}>
+      <DocsBody>
+        <MDX />
+      </DocsBody>
+    </DocsPage>
   )
 }

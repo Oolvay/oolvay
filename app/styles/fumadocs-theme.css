@@ -1,0 +1,77 @@
+.fd-wrapper {
+  --color-fd-background: var(--background);
+  --color-fd-foreground: var(--foreground);
+  --color-fd-card: var(--card);
+  --color-fd-card-foreground: var(--card-foreground);
+  --color-fd-popover: var(--popover);
+  --color-fd-popover-foreground: var(--popover-foreground);
+  --color-fd-primary: var(--primary);
+  --color-fd-primary-foreground: var(--primary-foreground);
+  --color-fd-secondary: var(--secondary);
+  --color-fd-secondary-foreground: var(--secondary-foreground);
+  --color-fd-muted: var(--muted);
+  --color-fd-muted-foreground: var(--muted-foreground);
+  --color-fd-accent: var(--accent);
+  --color-fd-accent-foreground: var(--accent-foreground);
+  --color-fd-border: var(--border);
+  --color-fd-input: var(--input);
+  --color-fd-ring: var(--ring);
+  --color-fd-sidebar: var(--sidebar);
+  --color-fd-sidebar-foreground: var(--sidebar-foreground);
+  --color-fd-sidebar-primary: var(--sidebar-primary);
+  --color-fd-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-fd-sidebar-accent: var(--sidebar-accent);
+  --color-fd-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-fd-sidebar-border: var(--sidebar-border);
+  --color-fd-sidebar-ring: var(--sidebar-ring);
+}
+
+/* Explicitly re-apply in dark mode — fumadocs' .dark selector can win on specificity */
+.dark .fd-wrapper {
+  --color-fd-background: var(--background);
+  --color-fd-foreground: var(--foreground);
+  --color-fd-card: var(--card);
+  --color-fd-card-foreground: var(--card-foreground);
+  --color-fd-popover: var(--popover);
+  --color-fd-popover-foreground: var(--popover-foreground);
+  --color-fd-primary: var(--primary);
+  --color-fd-primary-foreground: var(--primary-foreground);
+  --color-fd-secondary: var(--secondary);
+  --color-fd-secondary-foreground: var(--secondary-foreground);
+  --color-fd-muted: var(--muted);
+  --color-fd-muted-foreground: var(--muted-foreground);
+  --color-fd-accent: var(--accent);
+  --color-fd-accent-foreground: var(--accent-foreground);
+  --color-fd-border: var(--border);
+  --color-fd-input: var(--input);
+  --color-fd-ring: var(--ring);
+  --color-fd-sidebar: var(--sidebar);
+  --color-fd-sidebar-foreground: var(--sidebar-foreground);
+  --color-fd-sidebar-primary: var(--sidebar-primary);
+  --color-fd-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-fd-sidebar-accent: var(--sidebar-accent);
+  --color-fd-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-fd-sidebar-border: var(--sidebar-border);
+  --color-fd-sidebar-ring: var(--sidebar-ring);
+}
+
+/* Force prose heading and body colors — fumadocs applies these independently */
+.fd-wrapper h1,
+.fd-wrapper h2,
+.fd-wrapper h3,
+.fd-wrapper h4,
+.fd-wrapper h5,
+.fd-wrapper h6 {
+  color: var(--foreground) !important;
+}
+
+.fd-wrapper p,
+.fd-wrapper li,
+.fd-wrapper td,
+.fd-wrapper th {
+  color: var(--foreground) !important;
+}
+
+.fd-wrapper a {
+  color: var(--primary) !important;
+}
