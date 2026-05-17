@@ -6,41 +6,12 @@ import { updatePreferredMode } from "@/actions/update-preferred-mode"
 import { MODES, type Mode } from "@/db/types/modes"
 import { cn } from "@/lib/utils"
 import { GatedPageSubheading } from "@/app/(protected)/components/gated-page-subheading"
+import {
+  THEMES,
+  type Theme,
+} from "@/app/(protected)/preferences/display/constants/themes"
 
-const THEMES = [
-  {
-    value: MODES.LIGHT,
-    label: "Light",
-    preview: {
-      bg: "bg-gray-50",
-      sidebar: "bg-gray-200",
-      bar: "bg-gray-300",
-    },
-  },
-  {
-    value: MODES.DARK,
-    label: "Dark",
-    preview: {
-      bg: "bg-gray-900",
-      sidebar: "bg-gray-950",
-      bar: "bg-gray-700",
-    },
-  },
-  {
-    value: MODES.SYSTEM,
-    label: "System",
-    preview: {
-      leftBg: "bg-gray-50",
-      rightBg: "bg-gray-900",
-      leftSidebar: "bg-gray-200",
-      rightSidebar: "bg-gray-950",
-      leftBar: "bg-gray-300",
-      rightBar: "bg-gray-700",
-    },
-  },
-] as const
-
-function PreviewThumbnail({ theme }: { theme: (typeof THEMES)[number] }) {
+function PreviewThumbnail({ theme }: { theme: Theme }) {
   if (theme.value === MODES.SYSTEM) {
     const { leftBg, rightBg, leftSidebar, rightSidebar, leftBar, rightBar } =
       theme.preview as {

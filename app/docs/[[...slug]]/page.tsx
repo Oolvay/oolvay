@@ -17,7 +17,7 @@ export default async function Page({ params }: PageProps) {
   const markdown = await getDocMarkdown(slug)
   const slugPath = slug?.join("/") || "overview"
   const githubUrl = `https://github.com/Oolvay/oolvay/blob/master/content/docs/${slugPath}.mdx`
-  const markdownUrl = `/docs/raw/${slugPath}`
+  const markdownUrl = `/api/docs/raw/${slugPath}`
   const page = source.getPage(slug)
 
   if (!page) {

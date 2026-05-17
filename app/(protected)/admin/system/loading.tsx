@@ -1,101 +1,120 @@
+import { GatedPageTitle } from "@/app/(protected)/components/gated-page-title"
+import { GatedPageSubheading } from "@/app/(protected)/components/gated-page-subheading"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { RefreshCwIcon } from "lucide-react"
+import { HealthLegend } from "@/app/(protected)/admin/system/components/health-card"
 
-function SkeletonEnvColumn() {
+const DB_THRESHOLDS = { good: 200, degraded: 500 }
+const CACHE_THRESHOLDS = { good: 50, degraded: 150 }
+
+const ENV_LABELS = [
+  "Environment",
+  "Node.js Version",
+  "Platform",
+  "App Version",
+  "App URL",
+  "Auth URL",
+  "Deployment Environment",
+  "Region",
+  "Git Branch",
+  "Commit SHA",
+  "Commit Message",
+  "Deployment ID",
+]
+
+function EnvRowSkeleton({ label }: { label: string }) {
   return (
-    <div className="rounded-xl border divide-y shadow-none">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="flex items-center justify-between px-4 py-3">
-          <Skeleton className="h-4 w-28 shrink-0" />
-          <Skeleton className="h-4 w-32" />
-        </div>
-      ))}
+    <div className="flex items-center justify-between px-4 py-3 text-sm">
+      <span className="text-muted-foreground font-medium shrink-0">
+        {label}
+      </span>
+      <Skeleton className="h-3.5 w-28 rounded ml-4" aria-hidden="true" />
     </div>
   )
 }
 
-function SkeletonHealthCard() {
+function HealthCardSkeleton({ name }: { name: string }) {
   return (
-    <Card className="shadow-none">
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <Skeleton className="h-4 w-20" />
-        <Skeleton className="size-8 rounded-full" />
+        <CardTitle className="text-sm font-medium">{name}</CardTitle>
+        {/* Status dot circle */}
+        <Skeleton className="size-9 rounded-full" aria-hidden="true" />
       </CardHeader>
       <CardContent className="flex flex-col gap-1">
-        <Skeleton className="h-8 w-28" />
+        {/* "Operational" / "Degraded" / "Outage" */}
+        <Skeleton className="h-8 w-28 rounded" aria-hidden="true" />
+        {/* latency + grade badge */}
         <div className="flex items-center gap-2">
-          <Skeleton className="h-3 w-12" />
-          <Skeleton className="h-4 w-14 rounded-full" />
+          <Skeleton className="h-3 w-12 rounded" aria-hidden="true" />
+          <Skeleton className="h-4 w-14 rounded-full" aria-hidden="true" />
         </div>
       </CardContent>
     </Card>
   )
 }
 
-function SkeletonLegend() {
-  return (
-    <div className="rounded-xl border shadow-none overflow-hidden">
-      {/* Header row */}
-      <div className="grid grid-cols-4 px-4 py-2 bg-muted/50 border-b gap-4">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-3 w-16" />
-        ))}
-      </div>
-      {/* 3 data rows */}
-      {Array.from({ length: 3 }).map((_, i) => (
-        <div
-          key={i}
-          className="grid grid-cols-4 px-4 py-3 border-b last:border-b-0 gap-4 items-center"
-        >
-          <div className="flex items-center gap-2">
-            <Skeleton className="size-2 rounded-full shrink-0" />
-            <Skeleton className="h-4 w-20" />
-          </div>
-          <Skeleton className="h-4 w-40" />
-          <Skeleton className="h-4 w-20" />
-          <Skeleton className="h-4 w-20" />
-        </div>
-      ))}
-    </div>
-  )
-}
+export default function Loading() {
+  const mid = Math.ceil(ENV_LABELS.length / 2)
+  const leftLabels = ENV_LABELS.slice(0, mid)
+  const rightLabels = ENV_LABELS.slice(mid)
 
-export default function SystemLoading() {
   return (
-    <div className="flex flex-col gap-10">
-      {/* GatedPageTitle skeleton — includes mobile sidebar trigger */}
-      <div className="flex flex-col gap-1 mb-5">
-        <div className="flex items-center gap-3">
-          <Skeleton className="size-8 rounded-md md:hidden" />
-          <Skeleton className="h-9 w-40" />
-        </div>
-        <Skeleton className="h-4 w-96" />
-      </div>
+    <div className="container space-y-8">
+      <GatedPageTitle
+        title="System Info"
+        description="View environment configurations and real-time infrastructure health checks."
+      />
 
-      {/* Environment section */}
-      <section className="flex flex-col gap-4">
-        <Skeleton className="h-6 w-32" />
+      {/* EnvInfo */}
+      <div
+        className="space-y-2"
+        aria-busy="true"
+        aria-label="Loading environment info"
+      >
+        <GatedPageSubheading text="Environment" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <SkeletonEnvColumn />
-          <SkeletonEnvColumn />
+          <div className="rounded-xl border divide-y shadow-none">
+            {leftLabels.map((label) => (
+              <EnvRowSkeleton key={label} label={label} />
+            ))}
+          </div>
+          <div className="rounded-xl border divide-y shadow-none">
+            {rightLabels.map((label) => (
+              <EnvRowSkeleton key={label} label={label} />
+            ))}
+          </div>
         </div>
-      </section>
+      </div>
 
-      {/* Infrastructure section */}
-      <section className="flex flex-col gap-4">
-        {/* Section header with Refresh button */}
-        <div className="flex items-center justify-between">
-          <Skeleton className="h-6 w-36" />
-          <Skeleton className="h-8 w-24 rounded-md" />
+      {/* InfrastructureHealth */}
+      <div
+        className="flex flex-col gap-4"
+        aria-busy="true"
+        aria-label="Loading infrastructure health"
+      >
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <GatedPageSubheading text="Infrastructure" />
+            <Button variant="outline" size="sm" disabled aria-disabled="true">
+              <RefreshCwIcon className="size-3.5" aria-hidden="true" />
+              Refresh
+            </Button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <HealthCardSkeleton name="Database" />
+            <HealthCardSkeleton name="Cache" />
+          </div>
         </div>
-        {/* Health cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <SkeletonHealthCard />
-          <SkeletonHealthCard />
-        </div>
-        {/* Legend */}
-        <SkeletonLegend />
-      </section>
+
+        {/* HealthLegend — thresholds are hardcoded constants, fully static */}
+        <HealthLegend
+          dbThresholds={DB_THRESHOLDS}
+          cacheThresholds={CACHE_THRESHOLDS}
+        />
+      </div>
     </div>
   )
 }
