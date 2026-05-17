@@ -82,6 +82,9 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Generate source types
+        run: bunx fumadocs-mdx
+
       - name: Type check
         run: bun run type-check
 
