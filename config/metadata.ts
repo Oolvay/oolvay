@@ -102,6 +102,11 @@ export const metaData = {
     title: "Contact",
     description: "Get in touch with us.",
   },
+  support: {
+    title: "Support",
+    description:
+      "Get help with billing, technical issues, account access, and platform support.",
+  },
   about: {
     title: "About",
     description: `Learn more about ${BRANDNAME}.`,
