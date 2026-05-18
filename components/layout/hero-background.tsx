@@ -41,65 +41,141 @@ export function HeroBackground() {
 
       ctx.clearRect(0, 0, width, height)
 
-      /*
-       * Base background
-       */
-
-      ctx.fillStyle = isDark ? "#09090B" : "#F5F1E8"
-      ctx.fillRect(0, 0, width, height)
-
-      /*
-       * Main ambient orb
-       */
-
-      const orb = ctx.createRadialGradient(
-        width * 0.7,
-        height * 0.28,
-        0,
-        width * 0.7,
-        height * 0.28,
-        width * 0.45
-      )
-
       if (isDark) {
-        orb.addColorStop(0, "rgba(234,179,8,0.14)")
-        orb.addColorStop(0.25, "rgba(234,179,8,0.06)")
-        orb.addColorStop(1, "rgba(234,179,8,0)")
+        /*
+         * DARK MODE
+         */
+
+        ctx.fillStyle = "#050505"
+        ctx.fillRect(0, 0, width, height)
+
+        /*
+         * Gold glow
+         */
+
+        const goldGlow = ctx.createRadialGradient(
+          width * 0.72,
+          height * 0.22,
+          0,
+          width * 0.72,
+          height * 0.22,
+          width * 0.75
+        )
+
+        goldGlow.addColorStop(0, "rgba(255,190,11,0.24)")
+        goldGlow.addColorStop(0.2, "rgba(255,190,11,0.12)")
+        goldGlow.addColorStop(0.5, "rgba(255,190,11,0.04)")
+        goldGlow.addColorStop(1, "rgba(255,190,11,0)")
+
+        ctx.fillStyle = goldGlow
+        ctx.fillRect(0, 0, width, height)
+
+        /*
+         * Indigo counterglow
+         */
+
+        const blueGlow = ctx.createRadialGradient(
+          width * 0.18,
+          height * 0.15,
+          0,
+          width * 0.18,
+          height * 0.15,
+          width * 0.6
+        )
+
+        blueGlow.addColorStop(0, "rgba(59,130,246,0.10)")
+        blueGlow.addColorStop(0.4, "rgba(59,130,246,0.04)")
+        blueGlow.addColorStop(1, "rgba(59,130,246,0)")
+
+        ctx.fillStyle = blueGlow
+        ctx.fillRect(0, 0, width, height)
+
+        /*
+         * Bottom warmth
+         */
+
+        const wash = ctx.createLinearGradient(0, height, 0, height * 0.35)
+
+        wash.addColorStop(0, "rgba(180,83,9,0.20)")
+        wash.addColorStop(0.5, "rgba(180,83,9,0.06)")
+        wash.addColorStop(1, "rgba(180,83,9,0)")
+
+        ctx.fillStyle = wash
+        ctx.fillRect(0, 0, width, height)
       } else {
-        orb.addColorStop(0, "rgba(251,191,36,0.18)")
-        orb.addColorStop(0.2, "rgba(251,191,36,0.10)")
-        orb.addColorStop(0.45, "rgba(251,191,36,0.04)")
-      }
+        /*
+         * LIGHT MODE
+         */
 
-      ctx.fillStyle = orb
-      ctx.fillRect(0, 0, width, height)
+        ctx.fillStyle = "#F8F4EA"
+        ctx.fillRect(0, 0, width, height)
 
-      /*
-       * Lower atmospheric wash
-       */
+        /*
+         * Large warm sunlight glow
+         */
 
-      const wash = ctx.createLinearGradient(0, height, 0, height * 0.35)
+        const sunlight = ctx.createRadialGradient(
+          width * 0.72,
+          height * 0.12,
+          0,
+          width * 0.72,
+          height * 0.12,
+          width * 0.9
+        )
 
-      if (isDark) {
-        wash.addColorStop(0, "rgba(120,53,15,0.18)")
-        wash.addColorStop(1, "rgba(120,53,15,0)")
-      } else {
+        sunlight.addColorStop(0, "rgba(251,191,36,0.18)")
+        sunlight.addColorStop(0.25, "rgba(251,191,36,0.08)")
+        sunlight.addColorStop(0.6, "rgba(251,191,36,0.02)")
+        sunlight.addColorStop(1, "rgba(251,191,36,0)")
+
+        ctx.fillStyle = sunlight
+        ctx.fillRect(0, 0, width, height)
+
+        /*
+         * Soft ambient cream bloom
+         */
+
+        const bloom = ctx.createRadialGradient(
+          width * 0.5,
+          height * 0.25,
+          0,
+          width * 0.5,
+          height * 0.25,
+          width * 0.8
+        )
+
+        bloom.addColorStop(0, "rgba(255,255,255,0.30)")
+        bloom.addColorStop(0.4, "rgba(255,255,255,0.12)")
+        bloom.addColorStop(1, "rgba(255,255,255,0)")
+
+        ctx.fillStyle = bloom
+        ctx.fillRect(0, 0, width, height)
+
+        /*
+         * Gentle lower warmth
+         */
+
+        const wash = ctx.createLinearGradient(0, height, 0, height * 0.35)
+
         wash.addColorStop(0, "rgba(251,191,36,0.06)")
+        wash.addColorStop(0.5, "rgba(251,191,36,0.02)")
         wash.addColorStop(1, "rgba(251,191,36,0)")
+
+        ctx.fillStyle = wash
+        ctx.fillRect(0, 0, width, height)
       }
 
-      ctx.fillStyle = wash
-      ctx.fillRect(0, 0, width, height)
-
       /*
-       * Extremely subtle grain
+       * Grain
        */
 
-      for (let i = 0; i < 12000; i++) {
+      const grainCount = isDark ? 18000 : 7000
+
+      for (let i = 0; i < grainCount; i++) {
         const x = Math.random() * width
         const y = Math.random() * height
 
-        const alpha = isDark ? Math.random() * 0.03 : Math.random() * 0.02
+        const alpha = isDark ? Math.random() * 0.05 : Math.random() * 0.008
 
         ctx.fillStyle = `rgba(255,255,255,${alpha})`
         ctx.fillRect(x, y, 1, 1)
@@ -127,7 +203,7 @@ export function HeroBackground() {
         aria-hidden="true"
       />
 
-      <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-background/80" />
+      <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-background/50" />
     </>
   )
 }

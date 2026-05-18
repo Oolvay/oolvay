@@ -13,7 +13,9 @@ export default async function MarketingLayout({
   return (
     <LoginModalProvider>
       <div className="min-h-screen flex flex-col overflow-hidden">
-        <Navbar session={session} />
+        <header className="absolute inset-x-0 top-0 z-50">
+          <Navbar session={session} seeThru />
+        </header>
 
         <main className="flex-1 text-foreground">{children}</main>
 

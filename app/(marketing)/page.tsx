@@ -42,10 +42,10 @@ export default function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Hero */}
-      <section className="relative overflow-hidden min-h-[85vh]">
+      <section className="relative overflow-hidden min-h-screen">
         <HeroBackground />
 
-        <div className="relative z-10 flex flex-col items-center justify-center text-center gap-8 min-h-[85vh] max-w-3xl mx-auto px-6">
+        <div className="relative z-10 flex flex-col items-center justify-center text-center gap-8 min-h-screen max-w-3xl mx-auto px-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-background/60 backdrop-blur-sm text-muted-foreground text-sm font-medium">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
             Now in public beta — try it free
