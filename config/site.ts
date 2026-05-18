@@ -9,6 +9,11 @@ export const siteConfig = {
     domain: BRANDDOMAIN,
     url: env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
     copyrightStartYear: 2023,
+    repository: {
+      github: "https://github.com/Oolvay/oolvay",
+      defaultBranch: "master",
+      docsPath: "content/docs",
+    },
   },
 
   authAndSession: {
