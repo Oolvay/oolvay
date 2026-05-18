@@ -5,6 +5,7 @@ import { post } from "@/db/blog-schema"
 import { eq } from "drizzle-orm"
 import type { MetadataRoute } from "next"
 import { siteConfig } from "@/config/site"
+import { source } from "@/lib/source"
 
 const {
   brand: { url },
@@ -38,6 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   })
 
   const validAuthors = authors.filter((a) => a.posts.length > 0)
+  const docsPages = source.getPages()
 
   return [
     { url, lastModified: new Date(), changeFrequency: "yearly", priority: 1 },
@@ -71,6 +73,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.7,
     },
+    // Docs pages
+    ...docsPages.map((page) => ({
+      url: `${url}${page.url}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
     {
       url: `${url}/terms`,
       lastModified: new Date(),

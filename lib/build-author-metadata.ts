@@ -5,7 +5,6 @@ interface BuildAuthorMetadataInput {
   authorName: string
   username: string
   siteUrl: string
-  authorImage?: string | null
   twitterHandle?: string | null
 }
 
@@ -13,14 +12,13 @@ export function buildAuthorMetadata({
   authorName,
   username,
   siteUrl,
-  authorImage,
   twitterHandle,
 }: BuildAuthorMetadataInput): Metadata {
   const url = `${siteUrl}/blog/author/${username}`
   const title = `${authorName} | Blog`
   const socialTitle = `${title} | ${siteConfig.brand.name}`
   const description = `All posts by ${authorName}.`
-  const image = authorImage ?? `${siteConfig.brand.url}/opengraph-image.png`
+  const image = `${siteUrl}/blog/author/${username}/opengraph-image`
 
   const creator = twitterHandle ?? siteConfig.brand.socials.twitter
 

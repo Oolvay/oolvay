@@ -5,6 +5,8 @@ export function buildAuthorJsonLd(
     name: string
     bio?: string | null
     username: string
+    image?: string | null
+    twitter?: string | null
   },
   siteUrl: string
 ) {
@@ -18,19 +20,24 @@ export function buildAuthorJsonLd(
       "@type": "Person",
       name: author.name,
       description: author.bio ?? `All posts by ${author.name}`,
-
       url,
 
-      // optional future-proofing
-      // image: "...",
-      // sameAs: ["https://twitter.com/...", ...]
+      image: author.image ?? undefined,
+
+      sameAs: author.twitter
+        ? [`https://twitter.com/${author.twitter.replace(/^@/, "")}`]
+        : undefined,
     },
 
     publisher: {
       "@type": "Organization",
       name: siteConfig.brand.name,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteConfig.brand.url}/opengraph-image.png`,
+      },
     },
-
+    url,
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": url,

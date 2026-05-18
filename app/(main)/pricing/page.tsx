@@ -6,6 +6,7 @@ import { siteConfig } from "@/config/site"
 import { PricingFaq } from "@/app/(main)/pricing/components/pricing-faq"
 import { CheckoutListener } from "@/app/(main)/pricing/components/checkout-listener"
 import { buildPageMetadata } from "@/lib/build-page-metadata"
+import { buildPricingJsonLd } from "@/lib/build-pricing-jsonld"
 
 export const metadata = buildPageMetadata({
   title: siteConfig.seo.metaData.pricing.title,
@@ -14,6 +15,7 @@ export const metadata = buildPageMetadata({
 })
 
 export default async function PricingPage() {
+  const jsonLd = buildPricingJsonLd()
   const session = await getServerSession()
   let userTier: TierKey | null = null
 
@@ -23,19 +25,27 @@ export default async function PricingPage() {
   }
 
   return (
-    <div className="flex flex-col gap-20 py-16">
-      <CheckoutListener />
-      <div className="text-center max-w-2xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-          Simple pricing, no surprises
-        </h1>
-        <p className="mt-4 text-lg text-muted-foreground">
-          Start free, scale when you’re ready. Cancel anytime.
-        </p>
-      </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd),
+        }}
+      />
+      <div className="flex flex-col gap-20 py-16">
+        <CheckoutListener />
+        <div className="text-center max-w-2xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+            Simple pricing, no surprises
+          </h1>
+          <p className="mt-4 text-lg text-muted-foreground">
+            Start free, scale when you’re ready. Cancel anytime.
+          </p>
+        </div>
 
-      <PricingTable isLoggedIn={!!session?.user} userTier={userTier} />
-      <PricingFaq />
-    </div>
+        <PricingTable isLoggedIn={!!session?.user} userTier={userTier} />
+        <PricingFaq />
+      </div>
+    </>
   )
 }

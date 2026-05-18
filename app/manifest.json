@@ -10,7 +10,7 @@
   "theme_color": "#0f0f0f",
   "lang": "en",
   "dir": "ltr",
-  "categories": ["productivity", "utilities"],
+  "categories": ["developer", "productivity", "business"],
   "prefer_related_applications": false,
   "icons": [
     {
@@ -24,6 +24,12 @@
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "screenshots": []

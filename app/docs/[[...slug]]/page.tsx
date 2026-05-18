@@ -9,6 +9,7 @@ import { siteConfig } from "@/config/site"
 import { buildBreadcrumbJsonLd } from "@/lib/build-breadcrumb-jsonld"
 import type { Metadata } from "next"
 import { buildPageMetadata } from "@/lib/build-page-metadata"
+import { buildDocsJsonLd } from "@/lib/build-docs-jsonld"
 
 type PageProps = {
   params: Promise<{
@@ -44,6 +45,10 @@ export async function generateMetadata({
     description,
     canonical,
     section: "Docs",
+    image:
+      slugPath.length > 0
+        ? `${siteConfig.brand.url}/docs-og/${slugPath}`
+        : `${siteConfig.brand.url}/docs-og/overview`,
   })
 }
 
@@ -72,6 +77,12 @@ export default async function Page({ params }: PageProps) {
     ],
   })
 
+  const docsJsonLd = buildDocsJsonLd({
+    title: page.data.title,
+    description: buildDocDescription(page.data.title, page.data.description),
+    canonical,
+  })
+
   const MDX = page.data.body
 
   return (
@@ -79,6 +90,12 @@ export default async function Page({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(docsJsonLd),
+        }}
       />
       <div className="mb-6 flex items-center gap-3">
         <CopyMarkdownButton markdown={markdown} />

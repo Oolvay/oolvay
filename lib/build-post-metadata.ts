@@ -8,9 +8,7 @@ type Post = InferSelectModel<typeof post>
 export function buildPostMetadata(post: Post, url: string): Metadata {
   const description = post.excerpt || post.logline || ""
 
-  const image = post.coverImage
-    ? post.coverImage
-    : `${siteConfig.brand.url}/opengraph.png`
+  const image = `${siteConfig.brand.url}/blog/${post.slug}/opengraph-image`
 
   const fullTitle = `${post.title} | Blog | ${siteConfig.brand.name}`
 

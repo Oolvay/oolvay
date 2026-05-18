@@ -16,12 +16,13 @@ export function buildCategoryJsonLd(
 
     name: category.name,
     description: category.description ?? `Posts in ${category.name}.`,
+    image: [`${siteUrl}/blog/category/${category.slug}/opengraph-image`],
 
     url,
 
     isPartOf: {
       "@type": "Blog",
-      name: siteConfig.brand.name,
+      name: `${siteConfig.brand.name} Blog`,
       url: `${siteUrl}/blog`,
     },
 

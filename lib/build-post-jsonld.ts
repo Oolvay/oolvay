@@ -5,10 +5,12 @@ export function buildPostJsonLd(
     title: string
     excerpt?: string | null
     logline?: string | null
-    coverImage?: string | null
     createdAt: Date
     updatedAt?: Date | null
-    author?: { name: string } | null
+    author?: {
+      name: string
+      username: string
+    } | null
     slug: string
   },
   siteUrl: string
@@ -20,14 +22,21 @@ export function buildPostJsonLd(
     "@type": "Article",
     headline: post.title,
     description: post.excerpt || post.logline || "",
-    image: post.coverImage ? [post.coverImage] : [],
+    image: [`${siteConfig.brand.url}/blog/${post.slug}/opengraph-image`],
     author: {
       "@type": "Person",
       name: post.author?.name ?? "Deleted User",
+      url: post.author
+        ? `${siteUrl}/blog/author/${post.author.username}`
+        : undefined,
     },
     publisher: {
       "@type": "Organization",
       name: siteConfig.brand.name,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteConfig.brand.url}/opengraph-image.png`,
+      },
     },
     datePublished: post.createdAt.toISOString(),
     dateModified: (post.updatedAt || post.createdAt).toISOString(),
@@ -35,5 +44,6 @@ export function buildPostJsonLd(
       "@type": "WebPage",
       "@id": url,
     },
+    url,
   }
 }

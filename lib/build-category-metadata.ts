@@ -35,7 +35,7 @@ export function buildCategoryMetadata({
       siteName: siteConfig.brand.name,
       images: [
         {
-          url: `${siteConfig.brand.url}/opengraph-image.png`,
+          url: `${siteUrl}/blog/category/${categorySlug}/opengraph-image`,
           width: 1200,
           height: 630,
           alt: categoryName,
@@ -47,7 +47,7 @@ export function buildCategoryMetadata({
       card: "summary_large_image",
       title: socialTitle,
       description: desc,
-      images: [`${siteConfig.brand.url}/opengraph-image.png`],
+      images: [`${siteUrl}/blog/category/${categorySlug}/opengraph-image`],
       creator: siteConfig.brand.socials.twitter,
     },
   }
