@@ -8,6 +8,7 @@ import { guardAction } from "@/lib/guard-action"
 import { revalidatePath } from "next/cache"
 import { ROLES } from "@/db/types/roles"
 import type { NotificationType } from "@/db/types/notification-types"
+import { dispatchPostNotification } from "@/lib/notifications/dispatch-post-notification"
 
 type UpdatePostInput = {
   id: string
@@ -97,6 +98,13 @@ export async function updatePost(
     }
 
     await db.update(post).set(updates).where(eq(post.id, input.id))
+
+    const becamePublished =
+      existing.published === false && input.published === true
+
+    if (becamePublished) {
+      await dispatchPostNotification(input.id)
+    }
 
     const slug =
       typeof updates.slug === "string"
