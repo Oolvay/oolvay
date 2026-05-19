@@ -4,7 +4,7 @@ import { z } from "zod"
 export const env = createEnv({
   onValidationError: (error) => {
     console.error(
-      "❌ Invalid environment variables:",
+      "Invalid environment variables:",
       JSON.stringify(error, null, 2)
     )
     throw new Error("Invalid environment variables")
@@ -62,6 +62,9 @@ export const env = createEnv({
     RAZORPAY_KEY_ID: z.string().min(1).optional(),
     RAZORPAY_KEY_SECRET: z.string().min(1).optional(),
     RAZORPAY_WEBHOOK_SECRET: z.string().min(1).optional(),
+
+    // Ably
+    ABLY_API_KEY: z.string().min(1).optional(),
   },
 
   client: {
@@ -84,6 +87,9 @@ export const env = createEnv({
     // Payments
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1).optional(),
     NEXT_PUBLIC_RAZORPAY_KEY_ID: z.string().min(1).optional(),
+
+    // Ably
+    NEXT_PUBLIC_ABLY_CLIENT_KEY: z.string().min(1).optional(),
   },
 
   runtimeEnv: {
@@ -107,8 +113,8 @@ export const env = createEnv({
       | "production"
       | undefined,
     SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
-
     CRON_SECRET: process.env.CRON_SECRET,
+    ABLY_API_KEY: process.env.ABLY_API_KEY,
 
     // Payments
     PAYMENT_PROVIDER: process.env.PAYMENT_PROVIDER,
@@ -131,5 +137,6 @@ export const env = createEnv({
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     NEXT_PUBLIC_RAZORPAY_KEY_ID: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+    NEXT_PUBLIC_ABLY_CLIENT_KEY: process.env.NEXT_PUBLIC_ABLY_CLIENT_KEY,
   },
 })

@@ -50,6 +50,8 @@ jobs:
       RAZORPAY_WEBHOOK_SECRET: dummy
       NEXT_PUBLIC_RAZORPAY_KEY_ID: dummy
       CRON_SECRET: dummy
+      ABLY_API_KEY: dummy
+      NEXT_PUBLIC_ABLY_CLIENT_KEY: dummy
 
     steps:
       - uses: actions/checkout@v4

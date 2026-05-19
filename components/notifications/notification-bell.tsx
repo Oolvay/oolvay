@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { NotificationPanel } from "@/components/notifications/notification-panel"
+import { ablyClient } from "@/lib/ably/client"
 
 export function NotificationBell() {
   const [unreadCount, setUnreadCount] = useState(0)
@@ -29,7 +30,17 @@ export function NotificationBell() {
       void loadUnreadCount()
     }, siteConfig.notifications.pollingIntervalMs)
 
-    return () => clearInterval(interval)
+    const channel = ablyClient?.channels.get("notifications")
+
+    channel?.subscribe("new-notification", () => {
+      void loadUnreadCount()
+    })
+
+    return () => {
+      clearInterval(interval)
+
+      void channel?.unsubscribe()
+    }
   }, [])
 
   return (
