@@ -25,6 +25,7 @@ import { CustomImage } from "@/lib/custom-image"
 import { SaveStatusBadge } from "@/app/blog/components/save-status-badge"
 import { titleCase } from "title-case"
 import { TitleCaseButton } from "@/components/editor/title-case-button"
+import type { NotificationType } from "@/db/types/notification-types"
 
 interface TiptapEditorProps {
   draftId: string
@@ -35,6 +36,7 @@ interface TiptapEditorProps {
   initialExcerpt?: string
   initialCategoryId?: string
   initialCoverImage?: string
+  initialNotificationType?: NotificationType | null
 }
 
 export function TiptapEditor({
@@ -46,6 +48,7 @@ export function TiptapEditor({
   initialExcerpt = "",
   initialCategoryId = "",
   initialCoverImage = "",
+  initialNotificationType,
 }: TiptapEditorProps) {
   const [title, setTitle] = useState(initialTitle)
   const [logline, setLogline] = useState(initialLogline)
@@ -57,6 +60,8 @@ export function TiptapEditor({
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [categories, setCategories] = useState<CategoryOption[]>([])
   const [footerVisible, setFooterVisible] = useState(false)
+  const [notificationType, setNotificationType] =
+    useState<NotificationType | null>(initialNotificationType ?? null)
   const router = useRouter()
 
   useEffect(() => {
@@ -141,6 +146,7 @@ export function TiptapEditor({
       coverImage: coverImage || undefined,
       content: getMarkdown(),
       published: true,
+      notificationType,
     })
 
     if (result.success) {
@@ -233,6 +239,8 @@ export function TiptapEditor({
         onCoverImageChange={setCoverImage}
         onPublish={handlePublish}
         isPublishing={isPublishing}
+        notificationType={notificationType}
+        setNotificationType={setNotificationType}
       />
     </div>
   )

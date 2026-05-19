@@ -24,6 +24,8 @@ import { siteConfig } from "@/config/site"
 import { LoadingSwap } from "@/components/ui/loading-swap"
 import { CoverImageField } from "@/app/blog/components/cover-image-field"
 import { FormField } from "@/app/blog/components/form-field"
+import type { NotificationType } from "@/db/types/notification-types"
+import { NOTIFICATION_TYPE_META } from "@/db/types/notification-types"
 
 interface PostSettingsModalProps {
   open: boolean
@@ -40,6 +42,8 @@ interface PostSettingsModalProps {
   onCoverImageChange: (url: string) => void
   onPublish: () => void
   isPublishing: boolean
+  notificationType: NotificationType | null
+  setNotificationType: (value: NotificationType | null) => void
 }
 
 export function PostSettingsModal({
@@ -57,6 +61,8 @@ export function PostSettingsModal({
   onCoverImageChange,
   onPublish,
   isPublishing,
+  notificationType,
+  setNotificationType,
 }: PostSettingsModalProps) {
   // Track previous prop to sync state during render (React 18 approved pattern)
   const [prevSlug, setPrevSlug] = useState(slug)
@@ -144,20 +150,51 @@ export function PostSettingsModal({
             />
           </FormField>
 
-          <FormField label="Category">
-            <Select value={categoryId} onValueChange={onCategoryChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((cat) => (
-                  <SelectItem key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </FormField>
+          <div className="grid grid-cols-2 gap-4">
+            <FormField label="Category">
+              <Select value={categoryId} onValueChange={onCategoryChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormField>
+
+            <FormField label="Notification">
+              <Select
+                value={notificationType ?? "none"}
+                defaultValue="none"
+                onValueChange={(value) =>
+                  setNotificationType(
+                    value === "none" ? null : (value as NotificationType)
+                  )
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectItem value="none">No Notifications</SelectItem>
+
+                  {Object.entries(NOTIFICATION_TYPE_META).map(
+                    ([value, meta]) => (
+                      <SelectItem key={value} value={value}>
+                        {meta.label}
+                      </SelectItem>
+                    )
+                  )}
+                </SelectContent>
+              </Select>
+            </FormField>
+          </div>
 
           <CoverImageField
             coverImage={coverImage}

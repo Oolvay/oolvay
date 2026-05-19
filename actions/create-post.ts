@@ -8,6 +8,7 @@ import { guardAction } from "@/lib/guard-action"
 import { revalidatePath } from "next/cache"
 import { eq } from "drizzle-orm"
 import { ROLES } from "@/db/types/roles"
+import type { NotificationType } from "@/db/types/notification-types"
 
 type CreatePostInput = {
   title?: string
@@ -18,6 +19,7 @@ type CreatePostInput = {
   categoryId?: string
   coverImage?: string
   published?: boolean
+  notificationType?: NotificationType | null
 }
 
 type CreatePostResult =
@@ -50,6 +52,7 @@ export async function createPost(
       categoryId: input.categoryId || null,
       authorId: user.id,
       published: input.published ?? false,
+      notificationType: input.notificationType ?? null,
     })
 
     if (input.published) {

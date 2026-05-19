@@ -7,6 +7,7 @@ import { isDuplicateKeyError, resolveExcerpt } from "@/lib/blog-utils"
 import { guardAction } from "@/lib/guard-action"
 import { revalidatePath } from "next/cache"
 import { ROLES } from "@/db/types/roles"
+import type { NotificationType } from "@/db/types/notification-types"
 
 type UpdatePostInput = {
   id: string
@@ -18,6 +19,7 @@ type UpdatePostInput = {
   categoryId?: string
   coverImage?: string
   published?: boolean
+  notificationType?: NotificationType | null
 }
 
 type UpdatePostResult =
@@ -77,6 +79,9 @@ export async function updatePost(
     if (input.categoryId !== undefined)
       updates.categoryId = input.categoryId || null
     if (input.published !== undefined) updates.published = input.published
+
+    if (input.notificationType !== undefined)
+      updates.notificationType = input.notificationType
 
     if (Object.keys(updates).length === 0) {
       return { success: true, slug: input.slug?.trim() ?? "" }

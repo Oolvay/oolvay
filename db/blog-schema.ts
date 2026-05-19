@@ -8,10 +8,7 @@ import {
 } from "drizzle-orm/pg-core"
 import { relations } from "drizzle-orm"
 import { user } from "@/db/auth-schema"
-import {
-  NOTIFICATION_TYPES,
-  NOTIFICATION_TYPE_VALUES,
-} from "@/db/types/notification-types"
+import { NOTIFICATION_TYPE_VALUES } from "@/db/types/notification-types"
 
 export const notificationTypeEnum = pgEnum(
   "notification_type",
@@ -36,12 +33,7 @@ export const post = pgTable(
     excerpt: text("excerpt"),
     coverImage: text("cover_image"),
     published: boolean("published").default(false).notNull(),
-
-    notificationType: notificationTypeEnum("notification_type")
-      .default(NOTIFICATION_TYPES.ANNOUNCEMENTS)
-      .notNull(),
-
-    notifySubscribers: boolean("notify_subscribers").default(false).notNull(),
+    notificationType: notificationTypeEnum("notification_type"),
     authorId: text("author_id").references(() => user.id, {
       onDelete: "set null",
     }),

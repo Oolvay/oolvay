@@ -40,6 +40,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
         initialExcerpt={post.excerpt ?? ""}
         initialCategoryId={post.categoryId ?? ""}
         initialCoverImage={post.coverImage ?? ""}
+        initialNotificationType={post.notificationType ?? null}
       />
     </article>
   )
