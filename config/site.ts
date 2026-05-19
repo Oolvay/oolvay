@@ -49,9 +49,9 @@ export const siteConfig = {
   },
 
   notifications: {
-    pollingIntervalMs: 30000, // 30 seconds
+    pollingIntervalMs: 60000, // 30 seconds
     ably: {
-      enabled: true,
+      enabled: false,
     },
   },
 

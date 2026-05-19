@@ -12,7 +12,6 @@ import { CookieBanner } from "@/components/cookies/cookie-banner"
 import { siteConfig } from "@/config/site"
 import { JsonLd } from "@/app/json-ld"
 import { PreferencesProvider } from "@/components/providers/preferences-provider"
-import Script from "next/script"
 import { ThemeFlashGuard } from "@/components/layout/theme-flash-guard"
 import { themeSyncScript } from "@/lib/scripts/theme-sync"
 import { RootProvider } from "fumadocs-ui/provider/next"
@@ -31,9 +30,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <Script id="theme-sync" strategy="beforeInteractive">
-          {themeSyncScript}
-        </Script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: themeSyncScript,
+          }}
+        />
         <JsonLd />
         <ConsentProvider>
           <PostHogProvider>

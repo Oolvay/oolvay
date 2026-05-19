@@ -6,7 +6,7 @@ import { getEligibleUsers } from "@/lib/notifications/get-eligible-users"
 import { sendPostNotificationEmail } from "@/lib/notifications/channels/email"
 import { PostNotificationEmail } from "@/emails/post-notification-email"
 import { userNotification } from "@/db/schemas/notification-schema"
-import { ablyServer } from "@/lib/ably/server"
+import { createAblyServer } from "@/lib/ably/server"
 
 export async function dispatchPostNotification(postId: string) {
   const publishedPost = await db.query.post.findFirst({
@@ -89,10 +89,18 @@ export async function dispatchPostNotification(postId: string) {
     })
   )
 
+  const ablyServer = createAblyServer()
   if (ablyServer && inAppUsers.length > 0) {
-    await ablyServer.channels.get("notifications").publish("new-notification", {
-      postId: publishedPost.id,
-      notificationType: publishedPost.notificationType,
-    })
+    try {
+      await ablyServer.channels
+        .get("notifications")
+        .publish("new-notification", {
+          postId: publishedPost.id,
+
+          notificationType: publishedPost.notificationType,
+        })
+    } catch (error) {
+      console.error("Failed to publish Ably notification:", error)
+    }
   }
 }
