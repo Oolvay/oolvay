@@ -22,7 +22,6 @@ interface NotificationTypeCardProps {
 const CHANNEL_LABELS: Record<NotificationChannel, string> = {
   email: "Email",
   inApp: "In-App",
-  web: "Web",
 }
 
 export function NotificationTypeCard({

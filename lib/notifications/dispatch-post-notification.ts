@@ -45,11 +45,14 @@ export async function dispatchPostNotification(postId: string) {
       id: notificationEvent.id,
     })
 
-  const eligibleUsers = await getEligibleUsers(publishedPost.notificationType)
+  const inAppUsers = await getEligibleUsers(
+    publishedPost.notificationType,
+    "inApp"
+  )
 
-  if (eligibleUsers.length > 0) {
+  if (inAppUsers.length > 0) {
     await db.insert(userNotification).values(
-      eligibleUsers.map((user) => ({
+      inAppUsers.map((user) => ({
         id: crypto.randomUUID(),
 
         userId: user.id,
@@ -59,8 +62,13 @@ export async function dispatchPostNotification(postId: string) {
     )
   }
 
+  const emailUsers = await getEligibleUsers(
+    publishedPost.notificationType,
+    "email"
+  )
+
   await Promise.all(
-    eligibleUsers.map(async (user) => {
+    emailUsers.map(async (user) => {
       if (!user.email) {
         return
       }
@@ -81,7 +89,7 @@ export async function dispatchPostNotification(postId: string) {
     })
   )
 
-  if (ablyServer) {
+  if (ablyServer && inAppUsers.length > 0) {
     await ablyServer.channels.get("notifications").publish("new-notification", {
       postId: publishedPost.id,
       notificationType: publishedPost.notificationType,

@@ -1,7 +1,6 @@
 export const NOTIFICATION_CHANNELS = {
   EMAIL: "email",
   IN_APP: "inApp",
-  WEB: "web",
 } as const
 
 export type NotificationChannel =
@@ -32,13 +31,11 @@ export const NOTIFICATION_TYPE_META = {
     description: "Important account and security notifications",
     lockedChannels: [
       NOTIFICATION_CHANNELS.EMAIL,
-      NOTIFICATION_CHANNELS.WEB,
       NOTIFICATION_CHANNELS.IN_APP,
     ] as NotificationChannel[],
     defaults: {
       email: true,
       inApp: true,
-      web: true,
     },
   },
 
@@ -49,7 +46,6 @@ export const NOTIFICATION_TYPE_META = {
     defaults: {
       email: false,
       inApp: true,
-      web: false,
     },
   },
 
@@ -60,7 +56,6 @@ export const NOTIFICATION_TYPE_META = {
     defaults: {
       email: false,
       inApp: false,
-      web: false,
     },
   },
 
@@ -71,7 +66,6 @@ export const NOTIFICATION_TYPE_META = {
     defaults: {
       email: false,
       inApp: false,
-      web: false,
     },
   },
 
@@ -82,7 +76,6 @@ export const NOTIFICATION_TYPE_META = {
     defaults: {
       email: false,
       inApp: true,
-      web: false,
     },
   },
 } as const
