@@ -29,6 +29,13 @@ const CSP_DIRECTIVES = {
   "font-src": ["'self'"],
   "connect-src": [
     "'self'",
+    "https://*.ably-realtime.com",
+    "wss://*.ably-realtime.com",
+    "https://*.ably.io",
+    "wss://*.ably.io",
+    "https://*.ably.net",
+    "wss://*.ably.net",
+
     "https://*.sentry.io",
     "https://*.ingest.sentry.io",
     "https://*.ingest.us.sentry.io",

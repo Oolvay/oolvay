@@ -1,53 +1,35 @@
 "use client"
-import { useEffect, useState } from "react"
-import {
-  getNotifications,
-  type NotificationItem,
-} from "@/actions/get-notifications"
-import { markNotificationAsRead } from "@/actions/mark-notification-as-read"
+
 import Link from "next/link"
+import type { NotificationItem } from "@/actions/get-notifications"
 
-export function NotificationPanel() {
-  const [notifications, setNotifications] = useState<NotificationItem[]>([])
+interface NotificationPanelProps {
+  notifications: NotificationItem[]
 
-  useEffect(() => {
-    async function loadNotifications() {
-      const result = await getNotifications()
+  loading: boolean
 
-      if (result.success) {
-        setNotifications(result.notifications)
-      }
-    }
+  onMarkAsRead: (notificationId: string) => Promise<void>
+}
 
-    void loadNotifications()
-  }, [])
-
-  async function handleNotificationClick(notificationId: string) {
-    await markNotificationAsRead(notificationId)
-
-    setNotifications((current) =>
-      current.map((notification) =>
-        notification.id === notificationId
-          ? {
-              ...notification,
-              read: true,
-              readAt: new Date(),
-            }
-          : notification
-      )
-    )
-  }
-
+export function NotificationPanel({
+  notifications,
+  loading,
+  onMarkAsRead,
+}: NotificationPanelProps) {
   return (
-    <>
+    <section aria-label="Notifications">
       <div className="flex items-center justify-between border-b border-border px-3 py-2">
-        <h2 className="font-semibold">Notifications</h2>
+        <h2 className="font-semibold" id="notifications-heading">
+          Notifications
+        </h2>
 
-        <span className="text-xs text-muted-foreground">Latest updates</span>
+        <span className="text-xs text-muted-foreground">
+          {loading ? "Loading..." : "Latest updates"}
+        </span>
       </div>
 
       <div className="max-h-96 overflow-y-auto">
-        {notifications.length === 0 ? (
+        {!loading && notifications.length === 0 ? (
           <div className="px-3 py-6 text-center text-sm text-muted-foreground">
             No notifications yet.
           </div>
@@ -58,7 +40,7 @@ export function NotificationPanel() {
                 key={notification.id}
                 href={`/blog/${notification.event.post.slug}`}
                 onClick={() => {
-                  void handleNotificationClick(notification.id)
+                  void onMarkAsRead(notification.id)
                 }}
                 className="flex w-full flex-col gap-1 border-b border-border px-3 py-3 text-left transition-colors hover:bg-muted/50"
               >
@@ -73,13 +55,14 @@ export function NotificationPanel() {
                 </div>
 
                 <p className="text-xs text-muted-foreground">
-                  /blog/{notification.event.post.slug}
+                  /blog/
+                  {notification.event.post.slug}
                 </p>
               </Link>
             ))}
           </div>
         )}
       </div>
-    </>
+    </section>
   )
 }
