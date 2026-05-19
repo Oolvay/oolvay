@@ -48,6 +48,13 @@ export const siteConfig = {
       "Dispatches on product, performance, and scaling at the edge.",
   },
 
+  notifications: {
+    pollingIntervalMs: 30000, // 30 seconds
+    ably: {
+      enabled: false,
+    },
+  },
+
   legal: {
     grievance: {
       officerName: "Amit Schandillia",
