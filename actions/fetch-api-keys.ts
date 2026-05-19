@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/db/drizzle"
-import { apiKey } from "@/db/api-key-schema"
+import { apiKey } from "@/db/schemas/api-key-schema"
 import { eq } from "drizzle-orm"
 import { guardAction } from "@/lib/guard-action"
 

@@ -1,9 +1,9 @@
 import { env } from "@/env"
 import { drizzle } from "drizzle-orm/neon-http"
-import * as authSchema from "@/db/auth-schema"
-import * as blogSchema from "@/db/blog-schema"
-import * as apiKeySchema from "@/db/api-key-schema"
-import * as paymentsSchema from "@/db/payments-schema"
+import * as authSchema from "@/db/schemas/auth-schema"
+import * as blogSchema from "@/db/schemas/blog-schema"
+import * as apiKeySchema from "@/db/schemas/api-key-schema"
+import * as paymentsSchema from "@/db/schemas/payments-schema"
 
 export const schema = {
   ...authSchema,

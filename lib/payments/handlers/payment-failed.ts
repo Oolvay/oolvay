@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
 import { db } from "@/db/drizzle"
-import { user } from "@/db/auth-schema"
+import { user } from "@/db/schemas/auth-schema"
 import { sendEmail } from "@/lib/send-email"
 import { renderPaymentFailedEmail } from "@/emails/payment-failed"
 import { siteConfig } from "@/config/site"

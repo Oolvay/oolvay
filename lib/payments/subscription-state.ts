@@ -1,5 +1,5 @@
 import { db } from "@/db/drizzle"
-import { subscriptions, orders } from "@/db/payments-schema"
+import { subscriptions, orders } from "@/db/schemas/payments-schema"
 import { TIERS } from "@/config/pricing"
 import { TIERS_KEYS } from "@/db/types/payments/tier"
 import { SUBSCRIPTION_STATUSES } from "@/db/types/payments/subscription-status"

@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/db/drizzle"
-import { post } from "@/db/blog-schema"
+import { post } from "@/db/schemas/blog-schema"
 import { eq } from "drizzle-orm"
 import { guardAction } from "@/lib/guard-action"
 import { revalidatePath } from "next/cache"

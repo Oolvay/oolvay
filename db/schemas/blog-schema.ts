@@ -7,13 +7,9 @@ import {
   pgEnum,
 } from "drizzle-orm/pg-core"
 import { relations } from "drizzle-orm"
-import { user } from "@/db/auth-schema"
-import { NOTIFICATION_TYPE_VALUES } from "@/db/types/notification-types"
-
-export const notificationTypeEnum = pgEnum(
-  "notification_type",
-  NOTIFICATION_TYPE_VALUES
-)
+import { user } from "@/db/schemas/auth-schema"
+import { notificationEvent } from "@/db/schemas/notification-schema"
+import { notificationTypeEnum } from "@/db/schemas/enums-schema"
 
 export const category = pgTable("category", {
   id: text("id").primaryKey(),
@@ -60,13 +56,16 @@ export const categoryRelations = relations(category, ({ many }) => ({
   posts: many(post),
 }))
 
-export const postRelations = relations(post, ({ one }) => ({
+export const postRelations = relations(post, ({ one, many }) => ({
   author: one(user, {
     fields: [post.authorId],
     references: [user.id],
   }),
+
   category: one(category, {
     fields: [post.categoryId],
     references: [category.id],
   }),
+
+  notifications: many(notificationEvent),
 }))

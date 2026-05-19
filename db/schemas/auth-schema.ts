@@ -1,4 +1,4 @@
-import { post } from "@/db/blog-schema"
+import { post } from "@/db/schemas/blog-schema"
 import { ROLES, type Role } from "@/db/types/roles"
 import { MODES } from "@/db/types/modes"
 import { FONT_SIZES } from "@/db/types/font-sizes"
@@ -10,7 +10,7 @@ import {
   DEFAULT_NOTIFICATION_PREFERENCES,
   type NotificationPreferences,
 } from "@/db/types/notification-types"
-import { apiKey } from "@/db/api-key-schema"
+import { apiKey } from "@/db/schemas/api-key-schema"
 import { type ProviderName } from "@/db/types/payments/payment-provider"
 import { TIERS_KEYS, type TierKey } from "@/db/types/payments/tier"
 

@@ -1,8 +1,8 @@
 "use server"
 
 import { db } from "@/db/drizzle"
-import { user, account, passkey, auditLog } from "@/db/auth-schema"
-import { post } from "@/db/blog-schema"
+import { user, account, passkey, auditLog } from "@/db/schemas/auth-schema"
+import { post } from "@/db/schemas/blog-schema"
 import { eq } from "drizzle-orm"
 import { guardAction } from "@/lib/guard-action"
 

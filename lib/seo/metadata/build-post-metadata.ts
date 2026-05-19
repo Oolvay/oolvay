@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import type { post } from "@/db/blog-schema"
+import type { post } from "@/db/schemas/blog-schema"
 import type { InferSelectModel } from "drizzle-orm"
 import { siteConfig } from "@/config/site"
 

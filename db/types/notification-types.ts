@@ -30,7 +30,11 @@ export const NOTIFICATION_TYPE_META = {
   [NOTIFICATION_TYPES.SECURITY_ALERTS]: {
     label: "Security Alerts",
     description: "Important account and security notifications",
-    lockedChannels: [NOTIFICATION_CHANNELS.EMAIL] as NotificationChannel[],
+    lockedChannels: [
+      NOTIFICATION_CHANNELS.EMAIL,
+      NOTIFICATION_CHANNELS.WEB,
+      NOTIFICATION_CHANNELS.IN_APP,
+    ] as NotificationChannel[],
     defaults: {
       email: true,
       inApp: true,

@@ -1,8 +1,8 @@
 "use server"
 
 import { db } from "@/db/drizzle"
-import { post } from "@/db/blog-schema"
-import { user } from "@/db/auth-schema"
+import { post } from "@/db/schemas/blog-schema"
+import { user } from "@/db/schemas/auth-schema"
 import { desc, eq, lt, and } from "drizzle-orm"
 import { type GetPostsResult } from "@/actions/get-posts"
 import { PAGE_SIZE, paginate } from "@/lib/blog-pagination"

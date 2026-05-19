@@ -6,7 +6,7 @@ import { getServerSession } from "@/lib/auth/get-server-session"
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { db } from "@/db/drizzle"
-import { user as userTable } from "@/db/auth-schema"
+import { user as userTable } from "@/db/schemas/auth-schema"
 import { eq } from "drizzle-orm"
 
 export const metadata: Metadata = {

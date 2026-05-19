@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/db/drizzle"
-import { category } from "@/db/blog-schema"
+import { category } from "@/db/schemas/blog-schema"
 import { asc } from "drizzle-orm"
 
 export type CategoryOption = {

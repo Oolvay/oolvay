@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/db/drizzle"
-import { user, auditLog } from "@/db/auth-schema"
+import { user, auditLog } from "@/db/schemas/auth-schema"
 import { eq } from "drizzle-orm"
 import { guardAction } from "@/lib/guard-action"
 import { auth } from "@/lib/auth/auth"

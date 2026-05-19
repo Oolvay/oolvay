@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/db/drizzle"
-import { post, category } from "@/db/blog-schema"
+import { post, category } from "@/db/schemas/blog-schema"
 import { randomUUID } from "crypto"
 import { isDuplicateKeyError, resolveExcerpt } from "@/lib/blog-utils"
 import { guardAction } from "@/lib/guard-action"

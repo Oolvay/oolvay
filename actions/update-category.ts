@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/db/drizzle"
-import { category } from "@/db/blog-schema"
+import { category } from "@/db/schemas/blog-schema"
 import { eq } from "drizzle-orm"
 import { getDuplicateKeyField, isDuplicateKeyError } from "@/lib/blog-utils"
 import { guardAction } from "@/lib/guard-action"

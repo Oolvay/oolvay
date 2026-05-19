@@ -7,7 +7,7 @@ import {
   integer,
   index,
 } from "drizzle-orm/pg-core"
-import { user } from "@/db/auth-schema"
+import { user } from "@/db/schemas/auth-schema"
 
 export const apiKey = pgTable(
   "apikey",

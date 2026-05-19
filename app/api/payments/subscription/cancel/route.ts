@@ -4,14 +4,14 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "@/lib/auth/get-server-session"
 import { providerPromise } from "@/lib/payments"
 import { db } from "@/db/drizzle"
-import { subscriptions } from "@/db/payments-schema"
+import { subscriptions } from "@/db/schemas/payments-schema"
 import { eq, and } from "drizzle-orm"
 import { ajAuth } from "@/lib/arcjet"
 import { slidingWindow } from "@arcjet/next"
 import { env } from "@/env"
 import { z } from "zod"
 import { siteConfig } from "@/config/site"
-import { user } from "@/db/auth-schema"
+import { user } from "@/db/schemas/auth-schema"
 
 const bodySchema = z.object({
   subscriptionId: z.string().min(1),

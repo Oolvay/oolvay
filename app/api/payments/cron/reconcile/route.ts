@@ -2,7 +2,7 @@ export const runtime = "nodejs"
 
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/db/drizzle"
-import { webhookEvents } from "@/db/payments-schema"
+import { webhookEvents } from "@/db/schemas/payments-schema"
 import { getProviderByName } from "@/lib/payments/get-provider"
 import { dispatchNormalizedEvent } from "@/lib/payments/handlers"
 import { env } from "@/env"

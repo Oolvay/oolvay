@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/db/drizzle"
-import { post, category } from "@/db/blog-schema"
+import { post, category } from "@/db/schemas/blog-schema"
 import { desc, eq, lt, and } from "drizzle-orm"
 import { type GetPostsResult } from "@/actions/get-posts"
 import { PAGE_SIZE, paginate } from "@/lib/blog-pagination"

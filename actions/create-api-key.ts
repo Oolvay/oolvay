@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth/auth"
 import { headers } from "next/headers"
 import { db } from "@/db/drizzle"
-import { apiKey } from "@/db/api-key-schema"
+import { apiKey } from "@/db/schemas/api-key-schema"
 import { eq, count } from "drizzle-orm"
 import { API_KEY_MAX_PER_USER } from "@/config/api-keys"
 import type { ApiKeyScope } from "@/config/api-keys"

@@ -1,6 +1,6 @@
 import { db } from "@/db/drizzle"
-import { orders } from "@/db/payments-schema"
-import { user } from "@/db/auth-schema"
+import { orders } from "@/db/schemas/payments-schema"
+import { user } from "@/db/schemas/auth-schema"
 import { providerPromise } from "@/lib/payments"
 import { eq } from "drizzle-orm"
 import type { NormalizedEvent } from "@/db/types/payments/webhook-events"

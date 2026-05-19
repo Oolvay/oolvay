@@ -1,6 +1,6 @@
 import { db } from "@/db/drizzle"
-import { subscriptions } from "@/db/payments-schema"
-import { user } from "@/db/auth-schema"
+import { subscriptions } from "@/db/schemas/payments-schema"
+import { user } from "@/db/schemas/auth-schema"
 import { eq } from "drizzle-orm"
 import { SUBSCRIPTION_STATUSES } from "@/db/types/payments/subscription-status"
 import { TIERS_KEYS } from "@/db/types/payments/tier"

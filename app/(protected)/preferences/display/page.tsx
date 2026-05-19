@@ -6,7 +6,7 @@ import { redirect } from "next/navigation"
 import { MODES, type Mode } from "@/db/types/modes"
 import { PreferencesModeToggle } from "@/app/(protected)/preferences/display/components/preferences-mode-toggle"
 import { db } from "@/db/drizzle"
-import { user as userTable } from "@/db/auth-schema"
+import { user as userTable } from "@/db/schemas/auth-schema"
 import { eq } from "drizzle-orm"
 
 export const metadata: Metadata = {

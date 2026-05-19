@@ -1,6 +1,6 @@
 import { createAuthMiddleware } from "better-auth/api"
 import { db } from "@/db/drizzle"
-import { auditLog, user } from "@/db/auth-schema"
+import { auditLog, user } from "@/db/schemas/auth-schema"
 import { eq } from "drizzle-orm"
 import { siteConfig } from "@/config/site"
 

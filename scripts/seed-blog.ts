@@ -1,5 +1,5 @@
 import { db } from "@/db/drizzle"
-import { category, post } from "@/db/blog-schema"
+import { category, post } from "@/db/schemas/blog-schema"
 
 async function seed() {
   console.log("🌱 Seeding blog data...")

@@ -1,5 +1,5 @@
 import { db } from "@/db/drizzle"
-import { orders } from "@/db/payments-schema"
+import { orders } from "@/db/schemas/payments-schema"
 import { eq } from "drizzle-orm"
 import type { NormalizedEvent } from "@/db/types/payments/webhook-events"
 
