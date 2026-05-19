@@ -1,4 +1,5 @@
 import { UserButton } from "@/components/auth/user-button"
+import { NotificationBell } from "@/components/notifications/notification-bell"
 import Link from "next/link"
 import { siteConfig } from "@/config/site"
 import type { Session } from "@/lib/auth/auth"
@@ -54,7 +55,10 @@ export function Navbar({ session, seeThru = false }: NavbarProps) {
               </Link>
             ))}
           </nav>
-          <UserButton session={session} />
+          <>
+            {session && <NotificationBell />}
+            <UserButton session={session} />
+          </>
         </div>
       </div>
     </header>

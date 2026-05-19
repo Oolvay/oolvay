@@ -1,6 +1,12 @@
 import Link from "next/link"
 import { siteConfig } from "@/config/site"
-import { ArrowRight, Zap, Shield, BarChart3, CreditCard } from "lucide-react"
+import {
+  ArrowRightIcon,
+  ZapIcon,
+  ShieldIcon,
+  BarChart3Icon,
+  CreditCardIcon,
+} from "lucide-react"
 import { buildPageMetadata } from "@/lib/seo/metadata/build-page-metadata"
 import { HeroBackground } from "@/components/layout/hero-background"
 
@@ -13,25 +19,25 @@ export const metadata = buildPageMetadata({
 
 const highlights = [
   {
-    icon: Zap,
+    icon: ZapIcon,
     title: "Blazing fast",
     description:
       "Built on modern infrastructure so your users never wait. Every page loads instantly.",
   },
   {
-    icon: Shield,
+    icon: ShieldIcon,
     title: "Secure by default",
     description:
       "Rate limiting, CSP headers, and session protection are on from day one.",
   },
   {
-    icon: BarChart3,
+    icon: BarChart3Icon,
     title: "Built-in analytics",
     description:
       "Understand how your users behave and where they drop off — without leaving your dashboard.",
   },
   {
-    icon: CreditCard,
+    icon: CreditCardIcon,
     title: "Payments ready",
     description:
       "Accept one-time payments or subscriptions. Webhooks, receipts, and billing portals included.",
@@ -67,7 +73,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity"
             >
               Get started free
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRightIcon className="w-4 h-4" />
             </Link>
 
             <Link
@@ -169,7 +175,7 @@ export default function HomePage() {
               className="shrink-0 inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity"
             >
               View pricing
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRightIcon className="w-4 h-4" />
             </Link>
           </section>
         </div>
