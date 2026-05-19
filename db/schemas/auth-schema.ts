@@ -11,6 +11,7 @@ import {
   type NotificationPreferences,
 } from "@/db/types/notification-types"
 import { apiKey } from "@/db/schemas/api-key-schema"
+import { userNotification } from "@/db/schemas/notification-schema"
 import { type ProviderName } from "@/db/types/payments/payment-provider"
 import { TIERS_KEYS, type TierKey } from "@/db/types/payments/tier"
 
@@ -163,6 +164,7 @@ export const userRelations = relations(user, ({ many }) => ({
   posts: many(post),
   auditLogs: many(auditLog),
   apiKeys: many(apiKey),
+  notifications: many(userNotification),
 }))
 
 export const sessionRelations = relations(session, ({ one }) => ({
