@@ -34,7 +34,7 @@ export const NOTIFICATION_TYPE_META = {
     defaults: {
       email: true,
       inApp: true,
-      web: false,
+      web: true,
     },
   },
 

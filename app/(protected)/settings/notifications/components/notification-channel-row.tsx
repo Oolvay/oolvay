@@ -8,7 +8,6 @@ import { LockIcon } from "lucide-react"
 
 interface NotificationChannelRowProps {
   label: string
-  description: string
   checked: boolean
   onCheckedChange: (checked: boolean) => void
   disabled?: boolean
@@ -17,7 +16,6 @@ interface NotificationChannelRowProps {
 
 export function NotificationChannelRow({
   label,
-  description,
   checked,
   onCheckedChange,
   disabled,
@@ -28,9 +26,7 @@ export function NotificationChannelRow({
       <span className="text-xs text-muted-foreground uppercase tracking-wide w-28 shrink-0">
         {label}
       </span>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm text-foreground">{description}</p>
-      </div>
+      <div className="flex-1" />
       <div className="shrink-0 flex items-center gap-2">
         {lockedReason && (
           <Tooltip>

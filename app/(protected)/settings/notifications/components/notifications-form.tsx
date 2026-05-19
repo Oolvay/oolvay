@@ -1,11 +1,16 @@
 "use client"
 
+"use client"
+
 import { useState, useTransition } from "react"
-import { SecurityAlertsCard } from "@/app/(protected)/settings/notifications/components/security-alerts-card"
-import { ProductUpdatesCard } from "@/app/(protected)/settings/notifications/components/product-updates-card"
-import { updateNotificationPreferences } from "@/actions/update-notification-preferences"
 import { toast } from "react-hot-toast"
-import type { NotificationPreferences } from "@/db/types/notification-preferences"
+import { updateNotificationPreferences } from "@/actions/update-notification-preferences"
+import {
+  NOTIFICATION_TYPE_META,
+  type NotificationPreferences,
+  type NotificationType,
+} from "@/db/types/notification-types"
+import { NotificationTypeCard } from "@/app/(protected)/settings/notifications/components/notification-type-card"
 
 interface NotificationsFormProps {
   initialPreferences: NotificationPreferences
@@ -32,16 +37,17 @@ export function NotificationsForm({
 
   return (
     <div className="space-y-8">
-      <SecurityAlertsCard
-        preferences={preferences}
-        onChange={handleChange}
-        disabled={isPending}
-      />
-      <ProductUpdatesCard
-        preferences={preferences}
-        onChange={handleChange}
-        disabled={isPending}
-      />
+      {(Object.keys(NOTIFICATION_TYPE_META) as NotificationType[]).map(
+        (type) => (
+          <NotificationTypeCard
+            key={type}
+            type={type}
+            preferences={preferences}
+            onChange={handleChange}
+            disabled={isPending}
+          />
+        )
+      )}
     </div>
   )
 }

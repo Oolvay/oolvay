@@ -5,7 +5,7 @@ import { user } from "@/db/auth-schema"
 import { eq } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { guardAction } from "@/lib/guard-action"
-import type { NotificationPreferences } from "@/db/types/notification-preferences"
+import type { NotificationPreferences } from "@/db/types/notification-types"
 
 export async function updateNotificationPreferences(
   preferences: NotificationPreferences

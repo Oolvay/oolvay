@@ -9,7 +9,7 @@ import { redirect } from "next/navigation"
 import {
   DEFAULT_NOTIFICATION_PREFERENCES,
   type NotificationPreferences,
-} from "@/db/types/notification-preferences"
+} from "@/db/types/notification-types"
 import { NotificationsForm } from "@/app/(protected)/settings/notifications/components/notifications-form"
 
 export const metadata: Metadata = {
@@ -32,9 +32,8 @@ export default async function SettingsNotificationsPage() {
     .where(eq(user.id, u.id))
     .limit(1)
 
-  const preferences: NotificationPreferences =
-    (result[0]?.notificationPreferences as NotificationPreferences) ??
-    DEFAULT_NOTIFICATION_PREFERENCES
+  const preferences = (result[0]?.notificationPreferences ??
+    DEFAULT_NOTIFICATION_PREFERENCES) as NotificationPreferences
 
   return (
     <div className="container space-y-8">

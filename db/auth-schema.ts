@@ -6,7 +6,10 @@ import { type Socials } from "@/db/types/socials"
 import { relations } from "drizzle-orm"
 import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core"
 import * as t from "drizzle-orm/pg-core"
-import { NotificationPreferences } from "@/db/types/notification-preferences"
+import {
+  DEFAULT_NOTIFICATION_PREFERENCES,
+  type NotificationPreferences,
+} from "@/db/types/notification-types"
 import { apiKey } from "@/db/api-key-schema"
 import { type ProviderName } from "@/db/types/payments/payment-provider"
 import { TIERS_KEYS, type TierKey } from "@/db/types/payments/tier"
@@ -38,10 +41,7 @@ export const user = pgTable(
     notificationPreferences: t
       .jsonb("notification_preferences")
       .$type<NotificationPreferences>()
-      .default({
-        securityAlerts: { email: true, inApp: true, web: false },
-        productUpdates: { email: false, inApp: true, web: false },
-      }),
+      .default(DEFAULT_NOTIFICATION_PREFERENCES),
     jobTitle: text("job_title"),
     company: text("company"),
     dateOfBirth: t.date("date_of_birth", { mode: "date" }),
