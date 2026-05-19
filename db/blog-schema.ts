@@ -1,6 +1,22 @@
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core"
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  index,
+  pgEnum,
+} from "drizzle-orm/pg-core"
 import { relations } from "drizzle-orm"
 import { user } from "@/db/auth-schema"
+import {
+  NOTIFICATION_TYPES,
+  NOTIFICATION_TYPE_VALUES,
+} from "@/db/types/notification-types"
+
+export const notificationTypeEnum = pgEnum(
+  "notification_type",
+  NOTIFICATION_TYPE_VALUES
+)
 
 export const category = pgTable("category", {
   id: text("id").primaryKey(),
@@ -20,6 +36,12 @@ export const post = pgTable(
     excerpt: text("excerpt"),
     coverImage: text("cover_image"),
     published: boolean("published").default(false).notNull(),
+
+    notificationType: notificationTypeEnum("notification_type")
+      .default(NOTIFICATION_TYPES.ANNOUNCEMENTS)
+      .notNull(),
+
+    notifySubscribers: boolean("notify_subscribers").default(false).notNull(),
     authorId: text("author_id").references(() => user.id, {
       onDelete: "set null",
     }),
@@ -35,6 +57,8 @@ export const post = pgTable(
   (table) => [
     index("post_authorId_idx").on(table.authorId),
     index("post_categoryId_idx").on(table.categoryId),
+    index("post_notificationType_idx").on(table.notificationType),
+    index("post_published_idx").on(table.published),
     index("post_createdAt_idx").on(table.createdAt),
   ]
 )
