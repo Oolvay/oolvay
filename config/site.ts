@@ -57,10 +57,11 @@ export const siteConfig = {
 
   legal: {
     grievance: {
-      officerName: "Amit Schandillia",
-      designation: "Grievance Officer",
-      workingHours: "Monday through Friday, 10:00 AM to 6:00 PM IST",
-      address: "Navi Mumbai, Maharashtra, India",
+      officerName: "Saul Goodman",
+      designation: "Chief Complaints Counsel",
+      workingHours: "Monday through Friday, 8:00 AM to 6:00 PM MST",
+      address:
+        "9800 Montgomery Boulevard, Albuquerque, New Mexico, United States",
     },
   },
 
