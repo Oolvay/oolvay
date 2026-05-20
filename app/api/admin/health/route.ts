@@ -6,7 +6,6 @@ import { ajAuth } from "@/lib/arcjet"
 import { slidingWindow } from "@arcjet/next"
 import { ROLES } from "@/db/types/roles"
 import { NextRequest, NextResponse } from "next/server"
-import { env } from "@/env"
 
 async function checkDatabase() {
   try {

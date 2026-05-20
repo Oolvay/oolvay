@@ -2,7 +2,6 @@ import { getServerSession } from "@/lib/auth/get-server-session"
 import { Navbar } from "@/components/layout/navbar"
 import { LoginModalProvider } from "@/components/auth/login-modal-provider"
 import { Footer } from "@/components/layout/footer"
-import { PostHogIdentify } from "@/components/analytics/posthog-identify"
 
 export default async function MarketingLayout({
   children,
@@ -13,13 +12,6 @@ export default async function MarketingLayout({
 
   return (
     <LoginModalProvider>
-      {session?.user && (
-        <PostHogIdentify
-          userId={session.user.id}
-          email={session.user.email}
-          name={session.user.name}
-        />
-      )}
       <div className="min-h-screen flex flex-col overflow-hidden">
         <header className="absolute inset-x-0 top-0 z-50">
           <Navbar session={session} seeThru />

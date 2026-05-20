@@ -5,7 +5,6 @@ import { getServerSession } from "@/lib/auth/get-server-session"
 import { getUserAccessLevel } from "@/lib/payments/subscription-state"
 import { ajAuth } from "@/lib/arcjet"
 import { slidingWindow } from "@arcjet/next"
-import { env } from "@/env"
 import { siteConfig } from "@/config/site"
 
 export async function GET(req: NextRequest) {
