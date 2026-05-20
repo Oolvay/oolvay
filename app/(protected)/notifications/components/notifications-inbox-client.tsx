@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import type { NotificationsPageItem } from "@/actions/get-notifications-page"
 import { NotificationList } from "@/app/(protected)/notifications/components/notification-list"
 import { markNotificationAsRead } from "@/actions/mark-notification-as-read"
@@ -9,6 +9,8 @@ import { getNotificationsPage } from "@/actions/get-notifications-page"
 import { LoadingSwap } from "@/components/ui/loading-swap"
 import { markAllNotificationsAsRead } from "@/actions/mark-all-notifications-as-read"
 import { CheckCheckIcon } from "lucide-react"
+import { createAblyClient } from "@/lib/ably/client"
+import { siteConfig } from "@/config/site"
 
 interface NotificationsInboxClientProps {
   initialNotifications: NotificationsPageItem[]
@@ -61,6 +63,15 @@ export function NotificationsInboxClient({
     }
   }
 
+  async function refreshNotifications() {
+    const result = await getNotificationsPage()
+    if (!result.success) {
+      return
+    }
+    setNotifications(result.notifications)
+    setNextCursor(result.nextCursor)
+  }
+
   async function handleLoadMore() {
     if (!nextCursor) {
       return
@@ -79,6 +90,38 @@ export function NotificationsInboxClient({
       setIsLoadingMore(false)
     }
   }
+  useEffect(() => {
+    let mounted = true
+    async function refresh() {
+      if (!mounted) {
+        return
+      }
+      await refreshNotifications()
+    }
+    if (siteConfig.notifications.ably.enabled) {
+      const ablyClient = createAblyClient()
+      const channel = ablyClient?.channels.get("notifications")
+      channel?.subscribe("new-notification", () => {
+        void refresh()
+      })
+      return () => {
+        mounted = false
+        channel?.unsubscribe()
+        try {
+          ablyClient?.close()
+        } catch {
+          // noop
+        }
+      }
+    }
+    const interval = setInterval(() => {
+      void refresh()
+    }, siteConfig.notifications.pollingIntervalMs)
+    return () => {
+      mounted = false
+      clearInterval(interval)
+    }
+  }, [])
 
   const hasUnreadNotifications = notifications.some(
     (notification) => !notification.read
