@@ -1,15 +1,10 @@
 import type { Metadata } from "next"
-
 import { redirect } from "next/navigation"
-
 import { GatedPageTitle } from "@/app/(protected)/components/gated-page-title"
-
 import { siteConfig } from "@/config/site"
-
 import { getServerSession } from "@/lib/auth/get-server-session"
-
 import { getNotificationsPage } from "@/actions/get-notifications-page"
-import { NotificationList } from "@/app/(protected)/notifications/components/notification-list"
+import { NotificationsInboxClient } from "@/app/(protected)/notifications/components/notifications-inbox-client"
 
 export const metadata: Metadata = {
   title: siteConfig.seo.metaData.notifications.inbox.title,
@@ -47,7 +42,10 @@ export default async function NotificationsInboxPage() {
         description="View and manage your notification inbox"
       />
 
-      <NotificationList notifications={result.notifications} />
+      <NotificationsInboxClient
+        initialNotifications={result.notifications}
+        initialCursor={result.nextCursor}
+      />
     </div>
   )
 }
