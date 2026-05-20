@@ -49,6 +49,7 @@ export const siteConfig = {
   },
 
   notifications: {
+    retentionDays: 90,
     pollingIntervalMs: 60000, // 30 seconds
     ably: {
       enabled: false,
