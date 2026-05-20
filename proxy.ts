@@ -18,8 +18,17 @@ const createUrl = (path: string, url: URL) => new URL(path, url)
 export async function proxy(request: NextRequest) {
   const { nextUrl } = request
   const { pathname, search } = nextUrl
+  const requestId = crypto.randomUUID()
 
-  let response = NextResponse.next()
+  const requestHeaders = new Headers(request.headers)
+
+  requestHeaders.set("x-request-id", requestId)
+
+  let response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  })
 
   const redirect = routeRedirects[pathname]
   if (redirect) {
