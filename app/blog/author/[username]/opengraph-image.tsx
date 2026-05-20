@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-
 import { ImageResponse } from "next/og"
 import { siteConfig } from "@/config/site"
 import { getPostsByAuthor } from "@/actions/get-posts-by-author"
@@ -35,6 +33,7 @@ export default async function OGImage({ params }: Props) {
         color: "white",
       }}
     >
+      /* eslint-disable-next-line @next/next/no-img-element */
       <img
         src={`${siteConfig.brand.url}/brand-logo.svg`}
         alt=""
@@ -47,7 +46,6 @@ export default async function OGImage({ params }: Props) {
           opacity: 0.1,
         }}
       />
-
       <div
         style={{
           width: "100%",
@@ -105,6 +103,7 @@ export default async function OGImage({ params }: Props) {
         </div>
 
         {authorImage && (
+          /* eslint-disable-next-line @next/next/no-img-element */
           <img
             src={authorImage}
             alt=""
