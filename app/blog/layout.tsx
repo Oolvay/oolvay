@@ -2,6 +2,7 @@ import { getServerSession } from "@/lib/auth/get-server-session"
 import { Navbar } from "@/components/layout/navbar"
 import { LoginModalProvider } from "@/components/auth/login-modal-provider"
 import { Footer } from "@/components/layout/footer"
+import { PostHogIdentify } from "@/components/analytics/posthog-identify"
 
 export default async function BlogLayout({
   children,
@@ -11,6 +12,13 @@ export default async function BlogLayout({
   const session = await getServerSession()
   return (
     <LoginModalProvider>
+      {session?.user && (
+        <PostHogIdentify
+          userId={session.user.id}
+          email={session.user.email}
+          name={session.user.name}
+        />
+      )}
       <Navbar session={session} />
       <main className="flex-1 text-foreground">{children}</main>
       <Footer />

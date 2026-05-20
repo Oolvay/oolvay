@@ -4,6 +4,8 @@ import { siteConfig } from "@/config/site"
 import { source } from "@/lib/source"
 import { ModeToggle } from "@/components/layout/mode-toggle"
 import type { Metadata } from "next"
+import { getServerSession } from "@/lib/auth/get-server-session"
+import { PostHogIdentify } from "@/components/analytics/posthog-identify"
 
 export const metadata: Metadata = {
   title: {
@@ -11,9 +13,17 @@ export const metadata: Metadata = {
     default: "Docs",
   },
 }
-export default function Layout({ children }: { children: ReactNode }) {
+export default async function Layout({ children }: { children: ReactNode }) {
+  const session = await getServerSession()
   return (
     <div className="fd-wrapper">
+      {session?.user && (
+        <PostHogIdentify
+          userId={session.user.id}
+          email={session.user.email}
+          name={session.user.name}
+        />
+      )}
       <DocsLayout
         tree={source.pageTree}
         nav={{
