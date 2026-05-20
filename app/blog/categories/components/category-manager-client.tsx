@@ -30,7 +30,7 @@ export function CategoryManagerClient({
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="flex justify-end">
+      <div className="flex justify-center">
         <Button onClick={() => setIsCreating(true)}>
           <PlusIcon className="size-4" />
           New category

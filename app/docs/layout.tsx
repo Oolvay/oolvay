@@ -4,6 +4,7 @@ import { siteConfig } from "@/config/site"
 import { source } from "@/lib/source"
 import { ModeToggle } from "@/components/layout/mode-toggle"
 import type { Metadata } from "next"
+import { Badge } from "@/components/ui/badge"
 
 export const metadata: Metadata = {
   title: {
@@ -31,6 +32,12 @@ export default function Layout({ children }: { children: ReactNode }) {
               <span className="font-extrabold text-2xl tracking-tight">
                 {siteConfig.brand.name}
               </span>
+              <Badge
+                variant="secondary"
+                className="-ml-1 rounded-3xl py-2 px-3 text-xs! font-medium! uppercase tracking-wide!"
+              >
+                Docs
+              </Badge>
             </div>
           ),
         }}
