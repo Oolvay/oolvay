@@ -33,7 +33,7 @@ export default async function OGImage({ params }: Props) {
         color: "white",
       }}
     >
-      /* eslint-disable-next-line @next/next/no-img-element */
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={`${siteConfig.brand.url}/brand-logo.svg`}
         alt=""
