@@ -117,22 +117,22 @@ export const TIERS: Record<TierKey, TierConfig> = {
 // ─────────────────────────────────────────────────────────────────────────────
 export const PRICE_MAP = {
   pro_monthly: {
-    stripe: "price_REPLACE_ME",
+    stripe: "price_pro_monthly",
     lemonsqueezy: "1634972",
     razorpay: "plan_SoLUORCD9B8L22",
   },
   pro_yearly: {
-    stripe: "price_REPLACE_ME",
+    stripe: "price_pro_yearly",
     lemonsqueezy: "1634976",
     razorpay: "plan_So2evMsaw2Wb2b",
   },
   business_monthly: {
-    stripe: "price_REPLACE_ME",
+    stripe: "price_business_monthly",
     lemonsqueezy: "1634970",
     razorpay: "plan_So2fx5mSXAs6SS",
   },
   business_yearly: {
-    stripe: "price_REPLACE_ME",
+    stripe: "price_business_yearly",
     lemonsqueezy: "1634984",
     razorpay: "plan_So2fW9jrBwgX9n",
   },
