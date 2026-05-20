@@ -791,7 +791,6 @@ The failed-webhook reconciliation cron is defined in `vercel.json`. Its schedule
 
 The cron re-processes any `webhook_events` rows with `status = 'failed'` from the past 24 hours. If you are on a Hobby plan and a webhook fails, it will not be retried until midnight. For a production product handling real payments, Vercel Pro is strongly recommended.
 
-
 ### Notification retention cleanup
 
 Read notifications are automatically cleaned up by a scheduled cron route:
@@ -812,7 +811,6 @@ notifications: {
 ```
 
 Only read notifications older than the configured retention period are deleted.
-
 
 The cron route is protected by a `CRON_SECRET` header. Add this to Vercel as well:
 
@@ -1013,7 +1011,6 @@ The failed-webhook reconciliation cron is defined in `vercel.json`. Its schedule
 
 The cron re-processes any `webhook_events` rows with `status = 'failed'` from the past 24 hours. If you are on a Hobby plan and a webhook fails, it will not be retried until midnight. For a production product handling real payments, Vercel Pro is strongly recommended.
 
-
 ### Notification retention cleanup
 
 Read notifications are automatically cleaned up by a scheduled cron route:
@@ -1034,7 +1031,6 @@ notifications: {
 ```
 
 Only read notifications older than the configured retention period are deleted.
-
 
 ---
 
