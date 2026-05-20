@@ -1,7 +1,7 @@
 import { BRANDNAME, BRANDDOMAIN, EMAILSENDERNAME } from "@/config/constants"
 
 export const emails = {
-  provider: "resend", // or ses
+  provider: "resend", // resend | ses
 
   support: {
     sender: `Team ${BRANDNAME}`,
@@ -11,7 +11,7 @@ export const emails = {
   contact: {
     sender: `Team ${BRANDNAME}`,
     fromEmail: "onboarding@resend.dev",
-    toEmail: `contact@${BRANDDOMAIN}`,
+    toEmail: "amit@schandillia.com", // later change to `contact@${BRANDDOMAIN}`
   },
 
   welcome: {

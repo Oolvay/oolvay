@@ -1,8 +1,6 @@
 import { siteConfig } from "@/config/site"
-import { env } from "@/env"
-import { Resend } from "resend"
-
-const resend = new Resend(env.RESEND_API_KEY)
+import { sendWithResend } from "@/lib/email/providers/resend"
+import { sendWithSes } from "@/lib/email/providers/ses"
 
 interface SendEmailValues {
   to: string
@@ -17,10 +15,26 @@ export async function sendEmail({
   subject,
   body,
 }: SendEmailValues) {
-  await resend.emails.send({
-    from,
-    to,
-    subject,
-    html: body,
-  })
+  switch (siteConfig.emails.provider) {
+    case "resend":
+      return sendWithResend({
+        to,
+        from,
+        subject,
+        body,
+      })
+
+    case "ses":
+      return sendWithSes({
+        to,
+        from,
+        subject,
+        body,
+      })
+
+    default:
+      throw new Error(
+        `Unsupported email provider: ${siteConfig.emails.provider}`
+      )
+  }
 }
