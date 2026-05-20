@@ -10,7 +10,8 @@ import { NotificationPanel } from "@/components/notifications/notification-panel
 import { useNotifications } from "@/lib/notifications/use-notifications"
 
 export function NotificationBell() {
-  const { notifications, unreadCount, loading, markAsRead } = useNotifications()
+  const { notifications, unreadCount, loading, markAsRead, markAllAsRead } =
+    useNotifications()
 
   return (
     <Popover>
@@ -39,6 +40,7 @@ export function NotificationBell() {
           notifications={notifications}
           loading={loading}
           onMarkAsRead={markAsRead}
+          onMarkAllAsRead={markAllAsRead}
         />
       </PopoverContent>
     </Popover>

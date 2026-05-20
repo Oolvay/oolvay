@@ -8,12 +8,14 @@ import {
 import { markNotificationAsRead } from "@/actions/mark-notification-as-read"
 import { createAblyClient } from "@/lib/ably/client"
 import { siteConfig } from "@/config/site"
+import { markAllNotificationsAsRead } from "@/actions/mark-all-notifications-as-read"
 
 interface UseNotificationsResult {
   notifications: NotificationItem[]
   unreadCount: number
   loading: boolean
   markAsRead: (notificationId: string) => Promise<void>
+  markAllAsRead: () => Promise<void>
 }
 
 export function useNotifications(): UseNotificationsResult {
@@ -44,6 +46,17 @@ export function useNotifications(): UseNotificationsResult {
             }
           : notification
       )
+    )
+  }, [])
+
+  const markAllAsRead = useCallback(async () => {
+    await markAllNotificationsAsRead()
+    setNotifications((current) =>
+      current.map((notification) => ({
+        ...notification,
+        read: true,
+        readAt: new Date(),
+      }))
     )
   }, [])
 
@@ -97,5 +110,6 @@ export function useNotifications(): UseNotificationsResult {
     unreadCount,
     loading,
     markAsRead,
+    markAllAsRead,
   }
 }

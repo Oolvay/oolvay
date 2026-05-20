@@ -5,16 +5,16 @@ import type { NotificationItem } from "@/actions/get-notifications"
 
 interface NotificationPanelProps {
   notifications: NotificationItem[]
-
   loading: boolean
-
   onMarkAsRead: (notificationId: string) => Promise<void>
+  onMarkAllAsRead: () => Promise<void>
 }
 
 export function NotificationPanel({
   notifications,
   loading,
   onMarkAsRead,
+  onMarkAllAsRead,
 }: NotificationPanelProps) {
   return (
     <section aria-label="Notifications">
@@ -23,12 +23,18 @@ export function NotificationPanel({
           Notifications
         </h2>
 
-        <span className="text-xs text-muted-foreground">
-          {loading ? "Loading..." : "Latest updates"}
-        </span>
+        <button
+          type="button"
+          onClick={() => {
+            void onMarkAllAsRead()
+          }}
+          className="text-xs text-muted-foreground transition-colors hover:text-foreground cursor-pointer"
+        >
+          Mark all as read
+        </button>
       </div>
 
-      <div className="max-h-96 overflow-y-auto">
+      <div className="max-h-96 pretty-scrollbar">
         {!loading && notifications.length === 0 ? (
           <div className="px-3 py-6 text-center text-sm text-muted-foreground">
             No notifications yet.
