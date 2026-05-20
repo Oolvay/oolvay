@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (env.ARCJET_KEY) {
+  if (ajAuth) {
     const decision = await ajAuth
       .withRule(
         slidingWindow({

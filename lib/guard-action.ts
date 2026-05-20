@@ -2,7 +2,6 @@ import { getServerSession } from "@/lib/auth/get-server-session"
 import { ajAuth } from "@/lib/arcjet"
 import { slidingWindow } from "@arcjet/next"
 import { request } from "@arcjet/next"
-import { env } from "@/env"
 import { siteConfig } from "@/config/site"
 
 const { read, write, autosave } =
@@ -21,7 +20,7 @@ export async function guardAction(options?: {
       user: null,
     }
 
-  if (env.ARCJET_KEY) {
+  if (ajAuth) {
     const defaults =
       options?.type === "read"
         ? read

@@ -23,7 +23,7 @@ export async function sendContactEmailAction(values: unknown) {
     const { name, email, subject, message } = parsed.data
 
     // 2. Arcjet protection
-    if (siteConfig.security.arcjet.enabled) {
+    if (aj) {
       const headersList = await headers()
       const decision = await aj
         .withRule(

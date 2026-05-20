@@ -1,12 +1,17 @@
 import arcjet, { shield } from "@arcjet/next"
 import { env } from "@/env"
+import { siteConfig } from "@/config/site"
+
+const arcjetEnabled = siteConfig.security.arcjet.enabled && !!env.ARCJET_KEY
 
 // 1. Standard Instance: Uses default IP tracking (for contact forms, public routes)
-export const aj = arcjet({
-  key: env.ARCJET_KEY!,
-  characteristics: ["ip.src"],
-  rules: [shield({ mode: "LIVE" })],
-})
+export const aj = arcjetEnabled
+  ? arcjet({
+      key: env.ARCJET_KEY as string,
+      characteristics: ["ip.src"],
+      rules: [shield({ mode: "LIVE" })],
+    })
+  : null
 
 // 2. Auth Instance: Uses custom User ID or IP fingerprinting (for auth routes)
 export const ajAuth = arcjet({

@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (env.ARCJET_KEY) {
+  if (ajAuth) {
     const decision = await ajAuth
       .withRule(slidingWindow({ mode: "LIVE", interval: 60, max: 30 }))
       .protect(req, { userIdOrIp: session.user.id })
