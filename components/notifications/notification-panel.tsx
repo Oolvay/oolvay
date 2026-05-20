@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import type { NotificationItem } from "@/actions/get-notifications"
+import type { RecentNotificationItem } from "@/actions/get-recent-notifications"
 
 interface NotificationPanelProps {
-  notifications: NotificationItem[]
+  notifications: RecentNotificationItem[]
   loading: boolean
   onMarkAsRead: (notificationId: string) => Promise<void>
   onMarkAllAsRead: () => Promise<void>
@@ -34,7 +34,7 @@ export function NotificationPanel({
         </button>
       </div>
 
-      <div className="max-h-96 pretty-scrollbar">
+      <div className="max-h-96 overflow-y-auto pretty-scrollbar">
         {!loading && notifications.length === 0 ? (
           <div className="px-3 py-6 text-center text-sm text-muted-foreground">
             No notifications yet.
@@ -68,6 +68,15 @@ export function NotificationPanel({
             ))}
           </div>
         )}
+
+        <div className="border-t border-border px-3 py-2">
+          <Link
+            href="/notifications"
+            className="block text-center text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            View all notifications →
+          </Link>
+        </div>
       </div>
     </section>
   )

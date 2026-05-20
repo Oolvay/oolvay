@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   robots: siteConfig.seo.metaData.admin.activity.robots,
 }
 
-const PAGE_SIZE = siteConfig.admin.usersPageSize
+const PAGE_SIZE = siteConfig.pagination.admin.usersPageSize
 
 interface AdminActivityPageProps {
   searchParams: Promise<{

@@ -2,16 +2,16 @@
 
 import { useCallback, useEffect, useState } from "react"
 import {
-  getNotifications,
-  type NotificationItem,
-} from "@/actions/get-notifications"
+  getRecentNotifications,
+  type RecentNotificationItem,
+} from "@/actions/get-recent-notifications"
 import { markNotificationAsRead } from "@/actions/mark-notification-as-read"
 import { createAblyClient } from "@/lib/ably/client"
 import { siteConfig } from "@/config/site"
 import { markAllNotificationsAsRead } from "@/actions/mark-all-notifications-as-read"
 
 interface UseNotificationsResult {
-  notifications: NotificationItem[]
+  notifications: RecentNotificationItem[]
   unreadCount: number
   loading: boolean
   markAsRead: (notificationId: string) => Promise<void>
@@ -19,12 +19,14 @@ interface UseNotificationsResult {
 }
 
 export function useNotifications(): UseNotificationsResult {
-  const [notifications, setNotifications] = useState<NotificationItem[]>([])
+  const [notifications, setNotifications] = useState<RecentNotificationItem[]>(
+    []
+  )
 
   const [loading, setLoading] = useState(true)
 
   const refresh = useCallback(async () => {
-    const result = await getNotifications()
+    const result = await getRecentNotifications()
 
     if (result.success) {
       setNotifications(result.notifications)
@@ -64,7 +66,7 @@ export function useNotifications(): UseNotificationsResult {
     let mounted = true
 
     async function initialize() {
-      const result = await getNotifications()
+      const result = await getRecentNotifications()
       if (!mounted) {
         return
       }

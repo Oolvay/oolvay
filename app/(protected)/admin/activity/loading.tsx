@@ -46,7 +46,7 @@ function ActivityRowSkeleton() {
   )
 }
 
-const PAGE_SIZE = siteConfig.admin.usersPageSize
+const PAGE_SIZE = siteConfig.pagination.admin.usersPageSize
 
 export default function Loading() {
   return (

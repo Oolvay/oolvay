@@ -43,6 +43,16 @@ export const metaData = {
       robots: { index: false, follow: false },
     },
   },
+  notifications: {
+    inbox: {
+      title: "Notifications",
+      description: "View and manage your notification inbox.",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    },
+  },
   security: {
     authentication: {
       title: "Authentication | Security",

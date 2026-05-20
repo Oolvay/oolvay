@@ -135,8 +135,14 @@ export const siteConfig = {
     activityFeedLimit: 10,
   },
 
-  admin: {
-    usersPageSize: 10,
+  pagination: {
+    admin: {
+      usersPageSize: 10,
+    },
+    notifications: {
+      inbox: 20,
+      dropdown: 50,
+    },
   },
 } as const
 

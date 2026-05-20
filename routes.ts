@@ -50,6 +50,7 @@ export const routeRedirects: Record<string, string> = {
   "/settings": "/settings/account",
   "/developer": "/developer/api-keys",
   "/dashboard": "/dashboard/general",
+  "/notifications": "/notifications/inbox",
 }
 
 export const authRoutes = new Set(["/login"])
