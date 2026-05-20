@@ -119,6 +119,16 @@ Unlike other starter kits that use yesterday's tools, Oolvay is built on the lat
 - Blog SEO: OG tags, metadata, canonical URLs per post
 - Blog categories
 
+### Notifications
+
+- Real-time notifications inbox with optimistic UI updates
+- Polling fallback with optional Ably realtime transport
+- Notification dropdown with unread badge indicator
+- Dedicated `/notifications/inbox` route with cursor pagination
+- "Mark as read" and "Mark all as read" flows
+- Configurable pagination and retention policies via `siteConfig`
+- Automated cleanup cron for expired read notifications
+
 ### UI and UX
 
 - shadcn/ui component library built on Radix primitives
@@ -182,6 +192,7 @@ Unlike other starter kits that use yesterday's tools, Oolvay is built on the lat
 | Rate Limiting / Bot Protection | Arcjet                          | ^1.4.0           |
 | Error Monitoring               | Sentry                          | ^10.52.0         |
 | Analytics                      | PostHog                         | ^1.372.x         |
+| Realtime (optional)            | Ably                            | Latest           |
 | Payments (global)              | LemonSqueezy                    | ^4.0.0           |
 | Payments (India)               | Razorpay                        | ^2.9.6           |
 | Notifications                  | React Hot Toast                 | ^2.6.0           |
@@ -225,6 +236,7 @@ oolvay/
 │   │   │   ├── activity/, overview/, system/, users/
 │   │   ├── dashboard/               # Main User App
 │   │   ├── developer/               # API Key Generation UI
+│   │   ├── notifications/          # Notification inbox and realtime sync
 │   │   ├── preferences/             # Accessibility & Display toggles
 │   │   ├── profile/                 # General, Personal, Professional info
 │   │   ├── security/                # Passkeys & Active Sessions
@@ -232,6 +244,8 @@ oolvay/
 │   ├── api/                         # 🔌 Route Handlers (APIs & Webhooks)
 │   │   ├── admin/health/route.ts
 │   │   ├── auth/[...all]/route.ts   # Better Auth endpoint
+│   │   ├── notifications/
+│   │   │   └── cron/cleanup/        # Notification retention cleanup
 │   │   └── payments/
 │   │       ├── checkout/verify/     # Razorpay signature verification
 │   │       ├── cron/reconcile/      # Scheduled payment synchronization
@@ -268,11 +282,13 @@ oolvay/
 ├── db/                              # Database & ORM (Drizzle)
 │   ├── drizzle.ts                   # DB Connection
 │   ├── api-key-schema.ts, auth-schema.ts
-│   └── blog-schema.ts, payments-schema.ts
+│   ├── blog-schema.ts, notification-schema.ts
+│   └── payments-schema.ts
 ├── emails/                          # React Email Templates
 │   ├── magic-link.tsx, welcome.tsx, payment-failed.tsx
 ├── hooks/                           # Custom Client Hooks
 │   ├── use-analytics.ts, use-autosave.ts, use-cookie-consent.ts
+│   └── use-notifications.ts          # Realtime + polling notification sync
 ├── infra/                           # Infrastructure as Code (AWS CDK)
 │   ├── constructs/
 │   │   ├── cloudfront-cdn.ts        # Asset delivery
@@ -775,6 +791,29 @@ The failed-webhook reconciliation cron is defined in `vercel.json`. Its schedule
 
 The cron re-processes any `webhook_events` rows with `status = 'failed'` from the past 24 hours. If you are on a Hobby plan and a webhook fails, it will not be retried until midnight. For a production product handling real payments, Vercel Pro is strongly recommended.
 
+
+### Notification retention cleanup
+
+Read notifications are automatically cleaned up by a scheduled cron route:
+
+```json
+{
+  "path": "/api/notifications/cron/cleanup",
+  "schedule": "0 3 * * *"
+}
+```
+
+Retention duration is configured in `config/site.ts`:
+
+```ts
+notifications: {
+  retentionDays: 90,
+}
+```
+
+Only read notifications older than the configured retention period are deleted.
+
+
 The cron route is protected by a `CRON_SECRET` header. Add this to Vercel as well:
 
 ```bash
@@ -973,6 +1012,29 @@ The failed-webhook reconciliation cron is defined in `vercel.json`. Its schedule
 > ```
 
 The cron re-processes any `webhook_events` rows with `status = 'failed'` from the past 24 hours. If you are on a Hobby plan and a webhook fails, it will not be retried until midnight. For a production product handling real payments, Vercel Pro is strongly recommended.
+
+
+### Notification retention cleanup
+
+Read notifications are automatically cleaned up by a scheduled cron route:
+
+```json
+{
+  "path": "/api/notifications/cron/cleanup",
+  "schedule": "0 3 * * *"
+}
+```
+
+Retention duration is configured in `config/site.ts`:
+
+```ts
+notifications: {
+  retentionDays: 90,
+}
+```
+
+Only read notifications older than the configured retention period are deleted.
+
 
 ---
 
