@@ -42,7 +42,7 @@ const team = [
   },
 ]
 
-export default function AboutPage() {
+export default async function AboutPage() {
   const jsonLd = buildAboutJsonLd()
 
   return (

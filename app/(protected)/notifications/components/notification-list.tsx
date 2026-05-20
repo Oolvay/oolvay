@@ -1,8 +1,15 @@
 "use client"
 
 import type { NotificationsPageItem } from "@/actions/get-notifications-page"
-import { Card, CardContent } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { NotificationListItem } from "@/app/(protected)/notifications/components/notification-list-item"
+import { BellIcon } from "lucide-react"
 
 interface NotificationListProps {
   notifications: NotificationsPageItem[]
@@ -15,9 +22,17 @@ export function NotificationList({
 }: NotificationListProps) {
   if (notifications.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed p-12 text-center">
-        <p className="text-sm text-muted-foreground">No notifications yet.</p>
-      </div>
+      <Card className="max-w-2xl">
+        <CardHeader className="flex flex-col items-center py-10 text-center">
+          <BellIcon className="mb-4 h-10 w-10 text-muted-foreground" />
+
+          <CardTitle>No notifications yet</CardTitle>
+
+          <CardDescription>
+            New activity and updates will appear here.
+          </CardDescription>
+        </CardHeader>
+      </Card>
     )
   }
 
