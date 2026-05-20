@@ -7,6 +7,7 @@ import { authRoutes, publicRoutes } from "@/routes"
 
 export function SessionWatcher() {
   const router = useRouter()
+
   const pathname = usePathname()
 
   const shouldWatchSession =
@@ -19,7 +20,9 @@ export function SessionWatcher() {
   const hasRedirectedRef = useRef(false)
 
   useEffect(() => {
-    if (!shouldWatchSession) return
+    if (!shouldWatchSession) {
+      return
+    }
 
     // Reset redirect guard on route change
     hasRedirectedRef.current = false
@@ -31,39 +34,69 @@ export function SessionWatcher() {
     }
 
     // Use pointer events (covers mouse + touch, lower noise than mousemove spam)
-    window.addEventListener("pointermove", updateActivity, { passive: true })
-    window.addEventListener("keydown", updateActivity, { passive: true })
-    window.addEventListener("click", updateActivity, { passive: true })
+    window.addEventListener("pointermove", updateActivity, {
+      passive: true,
+    })
+
+    window.addEventListener("keydown", updateActivity, {
+      passive: true,
+    })
+
+    window.addEventListener("click", updateActivity, {
+      passive: true,
+    })
 
     const channel = new BroadcastChannel("auth")
+
     channel.onmessage = (event) => {
       if (event.data?.type === "LOGOUT") {
         hasRedirectedRef.current = true
+
         router.replace(`/login?callbackUrl=${encodeURIComponent(pathname)}`)
       }
     }
 
     const checkSession = async () => {
       // Prevent duplicate execution after redirect
-      if (hasRedirectedRef.current) return
+      if (hasRedirectedRef.current) {
+        return
+      }
 
       // Skip if tab not visible
-      if (document.visibilityState === "hidden") return
+      if (document.visibilityState === "hidden") {
+        return
+      }
 
       // Skip if user idle
-      if (Date.now() - lastActivityRef.current > 5 * 60 * 1000) return
+      if (Date.now() - lastActivityRef.current > 5 * 60 * 1000) {
+        return
+      }
 
-      if (pathname.startsWith("/login")) return
+      if (pathname.startsWith("/login")) {
+        return
+      }
 
-      const { data: session, error } = await authClient.getSession()
+      try {
+        const { data: session, error } = await authClient.getSession()
 
-      if (error) return // network/server issue → ignore
+        // Network/server issue → ignore
+        if (error) {
+          return
+        }
 
-      if (!session) {
-        hasRedirectedRef.current = true
-        router.replace(
-          `/login?session_expired=true&callbackUrl=${encodeURIComponent(pathname)}`
-        )
+        if (!session) {
+          hasRedirectedRef.current = true
+
+          router.replace(
+            `/login?session_expired=true&callbackUrl=${encodeURIComponent(pathname)}`
+          )
+        }
+      } catch {
+        // Ignore transient fetch failures during:
+        // - HMR
+        // - route transitions
+        // - offline states
+        // - temporary dev server recompiles
       }
     }
 
@@ -74,7 +107,8 @@ export function SessionWatcher() {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
         updateActivity()
-        checkSession()
+
+        void checkSession()
       }
     }
 
@@ -82,10 +116,15 @@ export function SessionWatcher() {
 
     return () => {
       clearInterval(intervalId)
+
       window.removeEventListener("pointermove", updateActivity)
+
       window.removeEventListener("keydown", updateActivity)
+
       window.removeEventListener("click", updateActivity)
+
       document.removeEventListener("visibilitychange", handleVisibilityChange)
+
       channel.close()
     }
   }, [shouldWatchSession, router, pathname])

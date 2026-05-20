@@ -4,7 +4,9 @@ import * as Ably from "ably"
 import { env } from "@/env"
 import { siteConfig } from "@/config/site"
 
-export function createAblyClient() {
+let ablyClientSingleton: Ably.Realtime | null = null
+
+export function getAblyClient() {
   if (
     !siteConfig.notifications.ably.enabled ||
     !env.NEXT_PUBLIC_ABLY_CLIENT_KEY
@@ -12,8 +14,12 @@ export function createAblyClient() {
     return null
   }
 
-  return new Ably.Realtime({
-    key: env.NEXT_PUBLIC_ABLY_CLIENT_KEY,
-    clientId: "anonymous",
-  })
+  if (!ablyClientSingleton) {
+    ablyClientSingleton = new Ably.Realtime({
+      key: env.NEXT_PUBLIC_ABLY_CLIENT_KEY,
+      clientId: "anonymous",
+    })
+  }
+
+  return ablyClientSingleton
 }

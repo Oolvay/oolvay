@@ -6,7 +6,7 @@ import {
   type RecentNotificationItem,
 } from "@/actions/get-recent-notifications"
 import { markNotificationAsRead } from "@/actions/mark-notification-as-read"
-import { createAblyClient } from "@/lib/ably/client"
+import { getAblyClient } from "@/lib/ably/client"
 import { siteConfig } from "@/config/site"
 import { markAllNotificationsAsRead } from "@/actions/mark-all-notifications-as-read"
 
@@ -78,7 +78,7 @@ export function useNotifications(): UseNotificationsResult {
     void initialize()
 
     if (siteConfig.notifications.ably.enabled) {
-      const ablyClient = createAblyClient()
+      const ablyClient = getAblyClient()
 
       const channel = ablyClient?.channels.get("notifications")
 

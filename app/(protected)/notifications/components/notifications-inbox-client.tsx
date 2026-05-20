@@ -9,7 +9,7 @@ import { getNotificationsPage } from "@/actions/get-notifications-page"
 import { LoadingSwap } from "@/components/ui/loading-swap"
 import { markAllNotificationsAsRead } from "@/actions/mark-all-notifications-as-read"
 import { CheckCheckIcon } from "lucide-react"
-import { createAblyClient } from "@/lib/ably/client"
+import { getAblyClient } from "@/lib/ably/client"
 import { siteConfig } from "@/config/site"
 
 interface NotificationsInboxClientProps {
@@ -99,7 +99,7 @@ export function NotificationsInboxClient({
       await refreshNotifications()
     }
     if (siteConfig.notifications.ably.enabled) {
-      const ablyClient = createAblyClient()
+      const ablyClient = getAblyClient()
       const channel = ablyClient?.channels.get("notifications")
       channel?.subscribe("new-notification", () => {
         void refresh()
@@ -107,11 +107,6 @@ export function NotificationsInboxClient({
       return () => {
         mounted = false
         channel?.unsubscribe()
-        try {
-          ablyClient?.close()
-        } catch {
-          // noop
-        }
       }
     }
     const interval = setInterval(() => {

@@ -1,9 +1,7 @@
 "use client"
 
 import { BellIcon } from "lucide-react"
-
 import type { auth } from "@/lib/auth/auth"
-
 import { AppSidebar } from "@/components/layout/app-sidebar"
 
 const navItems = [
