@@ -1,10 +1,9 @@
 "use client"
 
 import Link from "next/link"
-
 import type { NotificationsPageItem } from "@/actions/get-notifications-page"
-
 import { Button } from "@/components/ui/button"
+import { formatRelativeTime } from "@/lib/date"
 
 interface NotificationListItemProps {
   notification: NotificationsPageItem
@@ -33,10 +32,14 @@ export function NotificationListItem({
         className="min-w-0 flex-1 space-y-1"
       >
         <p className="text-sm font-medium">{notification.event.post.title}</p>
-        <p className="text-xs text-muted-foreground">
-          /blog/
-          {notification.event.post.slug}
-        </p>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <span>
+            /blog/
+            {notification.event.post.slug}
+          </span>
+          <span>•</span>
+          <span>{formatRelativeTime(notification.createdAt)}</span>
+        </div>
       </Link>
 
       {!notification.read && (
