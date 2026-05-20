@@ -110,6 +110,7 @@
     "unrs-resolver"
   ],
   "overrides": {
+    "protobufjs": "^7.5.8",
     "postcss": "^8.5.10",
     "esbuild": "^0.25.0",
     "ws": "^8.20.1"
