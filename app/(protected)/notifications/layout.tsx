@@ -1,11 +1,7 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-
 import { redirect } from "next/navigation"
-
 import { getServerSession } from "@/lib/auth/get-server-session"
-
 import { PostHogIdentify } from "@/components/analytics/posthog-identify"
-
 import { NotificationsPageSidebar } from "@/app/(protected)/notifications/components/notifications-page-sidebar"
 
 export default async function NotificationsLayout({

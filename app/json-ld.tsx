@@ -1,3 +1,4 @@
+import Script from "next/script"
 import { siteConfig } from "@/config/site"
 
 export function JsonLd() {
@@ -25,8 +26,10 @@ export function JsonLd() {
   }
 
   return (
-    <script
+    <Script
+      id="json-ld-schema"
       type="application/ld+json"
+      strategy="afterInteractive"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
     />
   )

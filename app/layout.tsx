@@ -15,6 +15,7 @@ import { PreferencesProvider } from "@/components/providers/preferences-provider
 import { ThemeFlashGuard } from "@/components/layout/theme-flash-guard"
 import { themeSyncScript } from "@/lib/scripts/theme-sync"
 import { RootProvider } from "fumadocs-ui/provider/next"
+import Script from "next/script"
 
 export const metadata: Metadata = baseMetadata
 
@@ -30,10 +31,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <script
-          dangerouslySetInnerHTML={{
-            __html: themeSyncScript,
-          }}
+        <Script
+          id="theme-sync"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: themeSyncScript }}
         />
         <JsonLd />
         <ConsentProvider>
