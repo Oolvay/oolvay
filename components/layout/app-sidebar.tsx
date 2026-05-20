@@ -28,6 +28,8 @@ import { UserInfo } from "@/components/auth/user-info"
 import { useAuthActions } from "@/hooks/use-auth-actions"
 import type { auth } from "@/lib/auth/auth"
 import { ModeToggle } from "@/components/layout/mode-toggle"
+import { NotificationBell } from "@/components/notifications/notification-bell"
+import { cn } from "@/lib/utils"
 
 export interface NavItem {
   href: string
@@ -115,7 +117,13 @@ export function AppSidebar({ user, navItems }: AppSidebarProps) {
         </SidebarContent>
 
         <SidebarFooter>
-          <div className="flex w-full justify-center pb-2">
+          <div
+            className={cn(
+              "flex w-full items-center justify-center pb-2",
+              state === "collapsed" ? "flex-col gap-2" : "flex-row gap-8"
+            )}
+          >
+            <NotificationBell />
             <ModeToggle expanded={state === "expanded"} />
           </div>
           <SidebarMenu>
