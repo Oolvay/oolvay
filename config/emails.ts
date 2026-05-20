@@ -1,7 +1,7 @@
 import { BRANDNAME, BRANDDOMAIN, EMAILSENDERNAME } from "@/config/constants"
 
 export const emails = {
-  provider: "resend", // or sendgrid or nodemailer
+  provider: "resend", // or ses
 
   support: {
     sender: `Team ${BRANDNAME}`,
